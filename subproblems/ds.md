@@ -100,7 +100,7 @@
 | Mo's, but `remove()` is hard or impossible | **rollback Mo's** — `DS/SQRT/mo_variants.cpp` [1] | fix L's block, R monotone, undo the left extension per query. Never calls remove |
 | range queries interleaved with **point assignments**, offline | **Mo's with updates (3D Mo)** — `DS/SQRT/mo_variants.cpp` [2] | third key = number of updates before the query |
 | Mo's is right but TLEs on constant factor | **Hilbert curve order** — `DS/SQRT/mo_variants.cpp` [3] | plain sqrt(n) blocks are wrong when q << n |
-| static range aggregate, **non-idempotent**, want O(1) | **sqrt tree** — O(n log log n) build, O(1) query, O(sqrt n) point update | sparse table cannot; disjoint sparse table is O(1) but static |
+| static range aggregate, **non-idempotent**, want O(1) | **sqrt tree** — NOT IN THE REPO. Usually a disjoint sparse table (`DS/sparse/disjoint_sparse_table.cpp`) is the answer you actually want | sparse table cannot; disjoint sparse table is O(1) but static |
 | insert/erase at arbitrary position + range aggregate, n <= 2e5 | **sqrt buckets / unrolled list**, rebuild every sqrt n inserts | much shorter than a treap, better cache behaviour |
 | "count <= x" with point updates, values bounded | buckets over the **value axis** (sqrt C blocks), O(1) update / O(sqrt C) query | flips the asymmetry when updates >> queries |
 
@@ -109,14 +109,14 @@
 | you see | reach for | the tell |
 |---|---|---|
 | range `a[i] = min(a[i], x)` **plus range sum** | **segment tree beats** — `DS/segment tree/beats.cpp` | chmin does not compose as a lazy tag; amortised O(n log n), O(n log^2 n) with range add |
-| `min over [l,r] of (a_i + b_i*t)`, t **non-decreasing across queries** | **kinetic segment tree** — node stores winner + melt time | one out-of-order t destroys the amortisation |
+| `min over [l,r] of (a_i + b_i*t)`, t **non-decreasing across queries** | **kinetic segment tree** — NOT IN THE REPO. Node keeps the current winner + its "melt time"; rebuild the subtree when t passes it | one out-of-order t destroys the amortisation |
 | many per-node value-indexed structures merged up a tree | **segment tree merging** — `DS/segment tree/merge/segtree_merge.cpp` | O(n log n) total because each recursion destroys a node; beats small-to-large's extra log |
 | "count of elements with **value** in [a,b]" | segment tree indexed by **value**, not position | the tell: the query range is on the value axis |
 | coordinates to 1e9 and **forced online** (queries xor'd with the last answer) | dynamic / sparse segment tree | cannot compress offline — future coordinates are unknown |
 | "as of prefix i" / "as of version t" | persistent segment tree over prefixes; subtract version l-1 from r | gives k-th, count <= x, distinct-in-range, all **online** |
 | "how many in [l,r] are <= x", static, simplest | merge sort tree O(log^2 n); + **fractional cascading** for O(log n) | binary search once at the root, push the position down in O(1) |
-| track "max value this cell ever held" under range add | **historic segment tree**: tag = (current, historic max of the tag prefix) | tags do not commute; `hist = max(hist, own_lazy + child_hist)` |
-| point update, query = a linear-recurrence / automaton DP over a range | **segment tree of matrices** | node = the transfer operator for its range; merge = matrix product, order matters |
+| track "max value this cell ever held" under range add | **historic segment tree** — NOT IN THE REPO. Tag = (current, historic max of the tag prefix); `hist = max(hist, own_lazy + child_hist)` | tags do not commute; `hist = max(hist, own_lazy + child_hist)` |
+| point update, query = a linear-recurrence / automaton DP over a range | **segment tree of matrices** — NOT IN THE REPO. Node = the transfer operator for its range; merge = matrix product, order matters | node = the transfer operator for its range; merge = matrix product, order matters |
 | range min **and how many achieve it** | node = (min, count) | needed before any beats-style trick |
 | **range assignment** dominates the operation mix | **Chtholly tree / ODT** — `DS/odt.cpp` | each assign destroys at least as many intervals as it creates. Adversarial input with no assign is O(n) per op |
 | offline deletions from an insert-only structure | segment tree over the **time axis** + rollback | each element occupies O(log q) nodes covering its live interval |
@@ -128,7 +128,7 @@
 | structure supports insert but not delete, all ops known | **offline deletion** (segment tree on time + rollback) | needs rollback and **no** path compression / no amortisation |
 | "for each query, the earliest moment it becomes satisfiable" | **parallel binary search** — `DS/offline/parallel_binary_search.cpp` | all queries share one time axis; process the common midpoint once |
 | three simultaneous inequalities / dynamic 2D counting | **CDQ divide and conquer** — `DS/offline/cdq.cpp` | sort dim 1, D&C on dim 2, BIT on dim 3. The D&C is over TIME when the problem is insert-then-query |
-| only a static structure exists but you need insertions | **logarithmic method / binary counter**: keep log n static structures of size 2^k, merge on carry | amortised O(log n) rebuilds per insert; query = fold over log n structures |
+| only a static structure exists but you need insertions | **logarithmic method / binary counter** — NOT IN THE REPO, but it is 20 lines: keep log n static structures of sizes 2^k, rebuild on carry, query = fold over all of them | amortised O(log n) rebuilds per insert; query = fold over log n structures |
 | the problem is **forced online** | persistence / dynamic segtree / LCT are the only options | Mo's, CDQ, parallel binary search and offline sweeps are all disqualified — check this FIRST |
 | "count pairs satisfying a 2D condition" | offline sweep by one coordinate + BIT on the other | the sort order IS the second dimension |
 | "number of distinct in [l,r]", offline | sort queries by r; BIT +1 at each value's latest occurrence, -1 at its previous | removes the need for Mo's entirely, O((n+q) log n) |
@@ -140,10 +140,10 @@
 | static tree, path updates + path queries | HLD, O(log^2 n) (O(log n) if the op is invertible: root-prefix subtraction) | tree edges never change |
 | static tree, **subtree** update / query | Euler tour + BIT | subtree = one contiguous range. Do not reach for HLD |
 | path **sum** with point updates | Euler tour with two entries per node (+x at tin, -x at tout+1) + BIT | root-to-node prefix; invertible ops only |
-| tree **topology changes** (link/cut) + path aggregates | link-cut tree | HLD would need full re-decomposition |
-| topology changes + **subtree** aggregates or connectivity only | Euler tour tree | LCT is path-oriented; subtree on LCT needs virtual-subtree augmentation |
+| tree **topology changes** (link/cut) + path aggregates | link-cut tree — NOT IN THE REPO. Offline? use segment-tree-on-time + rollback DSU instead | HLD would need full re-decomposition |
+| topology changes + **subtree** aggregates or connectivity only | Euler tour tree — NOT IN THE REPO. If the changes are offline, `graph/dsu/dsu_rollback.cpp` covers it | LCT is path-oriented; subtree on LCT needs virtual-subtree augmentation |
 | topology changes + BOTH path and subtree lazy | top tree / rake-compress | the only clean option, huge constant, last resort |
-| many LCA queries, offline, memory-bound | Tarjan offline LCA with DSU, O((n+q) alpha) | but binary lifting also gives k-th ancestor |
+| many LCA queries, offline, memory-bound | Tarjan offline LCA with DSU — NOT IN THE REPO; `DS/LCA/binary lifting.cpp` covers this and also gives k-th ancestor | but binary lifting also gives k-th ancestor |
 
 ## HEAPS, MONOTONE, MISC
 

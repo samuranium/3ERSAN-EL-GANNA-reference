@@ -77,9 +77,9 @@ Entries route to a section there. What we have locally is only
 |---|---|---|
 | `sum floor((a*i+b)/m)` for i in [0,n) | **floor_sum** — `math/floor_sum.cpp` | also: lattice points under a line, points in a right triangle |
 | `sum f(floor(n/i))` over i = 1..n | **divisor-block loop** — `math/floor_sum.cpp` | harmonic lemma: only ~2 sqrt n distinct quotients |
-| prefix sum of phi, mu, d, sigma for n up to 1e10 | **Dirichlet hyperbola / Du sieve**, O(n^(2/3)) | "sum over i=1..N of a multiplicative function", N far past the sieve range |
-| pi(n) or the sum of primes <= n, n up to 1e13 | **Lucy_Hedgehog** DP, O(n^(3/4)) time, O(sqrt n) memory | "count or sum primes" with n far past sieving |
-| the sum of an arbitrary multiplicative f | **Min_25 sieve** | needs f(p^k) computable fast |
+| prefix sum of phi, mu, d, sigma for n up to 1e10 | **Dirichlet hyperbola / Du sieve** — NOT IN THE REPO. Built on the divisor-block loop in `math/floor_sum.cpp` | "sum over i=1..N of a multiplicative function", N far past the sieve range |
+| pi(n) or the sum of primes <= n, n up to 1e13 | **Lucy_Hedgehog** DP — NOT IN THE REPO. Also built on the divisor blocks in `math/floor_sum.cpp` | "count or sum primes" with n far past sieving |
+| the sum of an arbitrary multiplicative f | **Min_25 sieve** — NOT IN THE REPO | needs f(p^k) computable fast |
 | any `sum over d|n of f(d) g(n/d)` | Dirichlet convolution; O(n log n), O(n) if multiplicative | sits under the Mobius inversion you have |
 | `x^2 = a (mod p)` | **Tonelli-Shanks** — `math/nt_misc.cpp` (Legendre test first) | also the constant-term step inside polynomial sqrt |
 | `x^k = a (mod p)` | discrete root: primitive root + BSGS; exactly gcd(k, p-1) solutions | reduces to a discrete log in the exponent |

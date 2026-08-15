@@ -147,7 +147,7 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 | you see | reach for | the tell |
 |---|---|---|
 | `dp[i] = min_j dp[j] + w(j,i)`, w has QI, and the transition **uses dp values** | **1D/1D optimisation**: deque of candidate intervals + binary search, O(n log n) | D&C-opt needs offline layers; this is online |
-| row minima of an implicitly defined **totally monotone** matrix | **SMAWK**, O(n+m); online version is LARSCH | D&C only needs monotone; SMAWK needs TM but is linear |
+| row minima of an implicitly defined **totally monotone** matrix | **SMAWK** — NOT IN THE REPO. `DP/optimization/D&C.cpp` needs only monotonicity and is almost always enough | D&C only needs monotone; SMAWK needs TM but is linear |
 | (max,+) convolution where **one** array is convex | SMAWK, O(n) | the standard knapsack-layer speed-up |
 | (max,+) convolution where **both** are convex | merge their difference sequences (Minkowski sum of epigraphs), O(n+m) | the slopes just get sorted |
 | lines get **mutated** (`b_i += t*a_i` on a range), queries non-monotone | kinetic segment tree | Li Chao wants static lines; CHT wants monotone queries |
@@ -165,9 +165,9 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 |---|---|---|
 | merge children arrays indexed by "#chosen in subtree" | tree knapsack, loops capped at `min(k, size)` — `DP/tree_knapsack.cpp` | each pair is charged once at its LCA — but only with the caps |
 | tree knapsack with a numeric capacity W | flatten to DFS order, **take / skip-whole-subtree (jump to tout)**, O(n*W) — `DP/tree_knapsack.cpp` | a 1D knapsack with jumps, no child merging |
-| DP arrays indexed by **depth**, merged up the tree | **long-path decomposition** with shared arrays + pointer offsets, O(n) total | each vertex is copied only at the top of its long path |
+| DP arrays indexed by **depth**, merged up the tree | **long-path decomposition** — NOT IN THE REPO. Small-to-large (`DS/dsu_on_tree.cpp`) is O(n log n) and usually enough | each vertex is copied only at the top of its long path |
 | DP arrays indexed by **value**, merged up the tree | segment tree merging — `DS/segment tree/merge/segtree_merge.cpp` | amortised by nodes destroyed during merge |
-| vertex weights point-updated, reprint the whole-tree DP each time | **dynamic DP**: transition as a (max,+) matrix, chain matrices in a segment tree over HLD, O(log^2 n) per update | recompute-from-scratch is O(n) per query |
+| vertex weights point-updated, reprint the whole-tree DP each time | **dynamic DP** — NOT IN THE REPO. Transition as a (max,+) matrix, chained in a segment tree over HLD | recompute-from-scratch is O(n) per query |
 
 ## OFFLINE / DYNAMIC DP
 

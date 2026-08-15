@@ -147,7 +147,7 @@
 | "orient every road, keep everyone reachable" | **Robbins**: possible iff bridgeless. DFS tree edges down, back edges up |
 | min edges to add for one SCC | max(#sources, #sinks) on the condensation — **0 if already one SCC** |
 | min edges to add for 2-edge-connectivity | ceil(leaves / 2) on the bridge tree |
-| who lies on EVERY path s to t | **dominator tree**; on a DAG it is idom(v) = LCA of all preds in topo order |
+| who lies on EVERY path s to t | **dominator tree** — NOT IN THE REPO (Lengauer-Tarjan is long). On a DAG it is easy: idom(v) = LCA of all predecessors in topological order, using `DS/LCA/binary lifting.cpp` |
 | remove one vertex/edge, count disconnected pairs | block-cut / bridge tree + subtree sizes, sum a*b |
 | every edge in at most one cycle | **cactus** — blocks are bridges or single cycles; path counts multiply by 2 per cycle |
 | n vertices and n edges | unicyclic: find the cycle, hang trees off it. Directed analogue = functional graph |
@@ -178,8 +178,8 @@
 | matching in a **general** graph (odd cycles) | Blossom O(n^3); size via Tutte-Berge |
 | "nobody would rather swap" — stable | Gale-Shapley — `graph/matching/gale_shapley.cpp`. The **proposing** side gets its optimum |
 | colour edges, none sharing a vertex | Konig edge colouring: exactly Delta on bipartite (Vizing: Delta or Delta+1 general) |
-| min cut with **no s and t given** | Stoer-Wagner O(n^3); also min cut <= min degree |
-| min cut between **many pairs** | Gomory-Hu tree: n-1 max flows, answer = min edge on the tree path |
+| min cut with **no s and t given** | Stoer-Wagner — `graph/flows/stoer_wagner.cpp` | min cut <= min degree |
+| min cut between **many pairs** | Gomory-Hu tree — NOT IN THE REPO. n-1 max flows build it; the answer is then the min edge on the tree path |
 | subgraph maximising edges over vertices | densest subgraph: binary search the density + min cut |
 | grid/planar "block every left-right path" | **planar duality**: min cut = shortest path in the dual (8-adjacency in grids) |
 | orient edges so in-degree <= k | bipartite flow, edge-nodes to vertex-nodes with capacity k |
@@ -207,7 +207,7 @@
 | "reach t in an even number of steps" | **bipartite double cover**: duplicate to (v,0)/(v,1) |
 | walk every road at least once and return | **Chinese postman**: pair odd-degree vertices by shortest paths + min-weight matching (bitmask if <= 20 odd) |
 | cyclic string containing every length-k word once | **de Bruijn**: Eulerian circuit on (k-1)-mers, or `strings/lyndon.cpp` `de_bruijn` |
-| "does a graph exist with these degrees" | Erdos-Gallai (test) / Havel-Hakimi (construct) — **simple graphs only** |
+| "does a graph exist with these degrees" | Erdos-Gallai / Havel-Hakimi — NOT IN THE REPO, but Havel-Hakimi is 10 lines: sort descending, remove the largest d, subtract 1 from the next d entries, repeat; fail on a negative | **simple graphs only** |
 | edges appear/vanish **online** plus path queries | link-cut tree (Euler tour tree if connectivity only). Deletions only? Reverse time and use plain DSU |
 
 ## TRANSFORMATIONS — this is secretly that

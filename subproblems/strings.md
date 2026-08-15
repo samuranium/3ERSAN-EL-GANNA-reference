@@ -91,7 +91,7 @@
 | you have SA + LCP and want suffix-tree reasoning | **Cartesian tree on the LCP array** | internal nodes = LCP intervals = suffix tree internal nodes; a min-stack sweep is often enough |
 | only equality / LCP of substrings, nothing lexicographic | hashing + binary search for LCP, O(log n) per query | the hard structure evaporates |
 | **deterministic** LCP required (hacking risk) | SA + Kasai + sparse table | use when hashing is hackable |
-| **many strings**, substring queries across the set | generalised SAM (reset last = root, WITH the clone fix), or SA of the concatenation with **distinct** separators | generalised SAM keeps endpos per string |
+| **many strings**, substring queries across the set | generalised SAM — NOT IN THE REPO; use SA of the concatenation with **distinct** separators (`strings/subsuf.cpp`) | a plain `last = root` reset is WRONG when the transition already exists |
 | n ~ 1e6, memory tight | SA over SAM | SAM costs 2n states x sigma transitions; SA is four int arrays |
 | alphabet huge / values to 1e9 | compress to ranks first | SA unchanged; SAM must switch to map transitions |
 | SA of only k chosen suffixes of a huge text | sparse suffix sorting: hash + binary search LCP, O(k log^2 n) | do not materialise the full SA |
@@ -146,8 +146,8 @@
 | k-mismatch matching, small k | "kangaroo jumping": k+1 LCE queries per alignment | O(nk) total, no FFT |
 | exact match with m <= 64 | **Shift-And / Bitap** | one word op per text char, trivial to write |
 | edit distance <= k with m <= 64 | bitap with k masks, O(nk/w) | — |
-| edit distance where the answer is known <= k | **banded DP** over diagonals with abs(i-j) <= k, O(nk) | Ukkonen; with an LCE oracle it drops to O(n + k^2) |
-| "match ignoring which letters, only the pattern of repeats" (abab ~ cdcd) | **parameterized matching**: encode each char by distance to its previous occurrence, then KMP | — |
+| edit distance where the answer is known <= k | **banded DP** over diagonals with abs(i-j) <= k, O(nk) — NOT IN THE REPO; it is the ordinary edit-distance DP with the inner loop clamped to `[i-k, i+k]` | Ukkonen; with an LCE oracle it drops to O(n + k^2) |
+| "match ignoring which letters, only the pattern of repeats" (abab ~ cdcd) | **parameterized matching** — NOT IN THE REPO. Encode each char by the distance to its previous occurrence (0 if first), then run ordinary KMP on that array | — |
 | "same relative order of values" | order-preserving matching: encode by rank-in-prefix, then KMP | "find the segment with the same shape" |
 | regex / `*` and `?` matching, both long | NFA-over-positions DP, one **bitset row per pattern position** | O(nm/64) |
 
@@ -178,8 +178,8 @@
 
 | you see | reach for | the tell |
 |---|---|---|
-| "how many times does pattern i occur", many patterns, offline | **Euler tour of the fail tree + BIT**: +1 at each visited state, answer = subtree sum | turns an outlink walk (which can be Theta(n sqrt m)) into O(1) per char |
-| "how many times does pattern i occur inside pattern j" | all patterns in one trie, same fail-tree Euler + BIT along j's root path | never build one automaton per pair |
+| "how many times does pattern i occur", many patterns, offline | **Euler tour of the fail tree + BIT** — `strings/aho_fail_tree.cpp`; the reverse-BFS version in `strings/aho_corasick.cpp` is cheaper when you only need the totals | turns an outlink walk (which can be Theta(n sqrt m)) into O(1) per char |
+| "how many times does pattern i occur inside pattern j" | all patterns in one trie, fail-tree Euler + BIT — `strings/aho_fail_tree.cpp` | never build one automaton per pair |
 | lexicographically smallest string of length L containing **exactly** k patterns | DP over (Aho state, count), edges in alphabet order | the count dimension is what stops it being a shortest path |
 | path in a grid/graph **spelling** a dictionary word | BFS/DFS over (cell, Aho state) | product graph is the generic move |
 
