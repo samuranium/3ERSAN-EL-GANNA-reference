@@ -60,3 +60,24 @@ exactly one of them. If a move can touch two, the xor rule does not apply.
   and general misère theory is much harder.
 - If the state space is large, find the period rather than the table.
 - A move that affects two components breaks the sum rule entirely.
+
+---
+
+# RESEARCH ADDITIONS
+
+
+## GAME THEORY
+
+| you see | reach for | the tell |
+|---|---|---|
+| move = remove from a pile **or split** a pile | Lasker's Nim / take-and-break; Grundy via mex over both move classes | the Grundy sequence is almost always eventually periodic — find the period |
+| remove from **up to k-1 piles** at once | **Moore's Nim_k**: losing iff at every bit the count of piles with that bit set is 0 mod k | k=2 degenerates to ordinary Nim |
+| remove at most twice the previous move | **Fibonacci Nim**: losing iff n is a Fibonacci number; strategy via Zeckendorf | the move limit depends on the last move |
+| take between 1 and k | Bash game: losing iff `n mod (k+1) == 0` | trivial but frequently disguised |
+| poset / "eat a corner and everything above it" (Chomp) | **strategy stealing**: the first player wins for any board bigger than 1x1 | the answer is "First" with no constructible strategy — do not search for one |
+| players have **different** move sets | Sprague-Grundy does NOT apply — partizan; DP the state | "Alice may only ..., Bob may only ..." |
+| draws possible, or positions repeat | retrograde analysis: BFS backwards with out-degree counters | plain memo DP mislabels draws as losses |
+| players accumulate **score** | plain minimax DP — Grundy is meaningless | Grundy only encodes who moves last |
+| a 2D turning game / product of two coordinate games | **Tartan theorem**: Grundy = nim-PRODUCT of the coordinate Grundy values | nim-product, not XOR |
+| huge N, tiny move set | brute Grundy for small N, detect the period, extrapolate | subtraction-game Grundy sequences are eventually periodic |
+| a move the opponent can immediately undo | pairing / mirroring argument | symmetry beats Grundy computation |

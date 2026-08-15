@@ -70,3 +70,35 @@ The other team keeps this as a separate printed sheet (`Manhattan Trick.pdf`).
   kept or dropped. Both conventions appear and they give different answers.
 - Degenerate cases are where the marks are: zero-length segments, duplicate
   points, all points collinear, n = 1 and 2.
+
+---
+
+# RESEARCH ADDITIONS
+
+
+## GEOMETRY
+
+| you see | reach for | the tell |
+|---|---|---|
+| "is p expressible as a + b, a in P, b in Q" for convex P, Q | **Minkowski sum**, O(\|P\|+\|Q\|), then point-in-convex-polygon O(log n) | the sum of convex sets is convex |
+| distance between two convex polygons / do they collide | Minkowski sum of P and -Q, then distance from the origin | reduces a pair problem to a single polygon |
+| intersect two convex polygons | two-pointer merge O(n+m), or half-plane intersection of all edges | — |
+| extreme point in a direction / tangents from an external point | ternary or binary search on the hull, O(log n) | enables per-query hull work |
+| smallest circle covering all points | **Welzl**, expected O(n) | determined by 2 or 3 boundary points |
+| smallest circle covering >= k points | angular sweep of a fixed-radius circle around each point, O(n^2 log n) | "radius R, maximise covered points" |
+| nearest neighbour / per-point closest other | KD-tree | when you need per-point answers, not just the global closest pair |
+| Euclidean MST | **Delaunay** triangulation, then MST on its O(n) edges | EMST is a subset of Delaunay |
+| largest empty circle, farthest-point queries | **Voronoi** — candidates are Voronoi vertices | dual of Delaunay |
+| Manhattan MST | 8-octant nearest-neighbour sweep, O(n log n) | only one candidate edge per octant is ever needed |
+| area of a union of triangles / polygons | vertical decomposition into slabs; or signed-edge cancellation | avoids computing the union boundary |
+| area of a union of circles | Green's theorem over arcs, or Simpson over x-slices | arc integration is exact |
+| any continuous 1D geometric integral | **adaptive Simpson** | needs an even interval count and a depth cap |
+| maximise a convex geometric quantity over one real parameter | ternary search with a FIXED iteration count (~200) | never loop on epsilon |
+| 3D volume / hull | incremental 3D hull O(n^2); polyhedron volume = sum of mixed products / 6 | — |
+| latitude and longitude in the input | great-circle / spherical distance | — |
+| do any two of n segments intersect | sweep line with a BST ordered by y-at-current-x | adjacent-in-BST pairs are the only candidates |
+| which polygon contains each of q query points | persistent segment tree over vertical slabs, O(log n) | offline sweep also works |
+| "how many regions do these segments create" | sort edges by angle at each vertex, walk next-edge to trace faces; Euler `V - E + F = 2` | — |
+| sorting points by angle | `half(p)` (upper vs lower) then cross product — **never atan2** | exact, fast, no precision loss |
+| fix a point, sweep a ray | radial / angular sweep, O(n^2 log n) | turns an O(n^3) triangle count into O(n^2 log n) |
+| clip a polygon by a half-plane | **Sutherland-Hodgman** | the building block of convex intersection |

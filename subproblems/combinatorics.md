@@ -71,3 +71,26 @@
 - `nCr_without_mod.cpp` overflows `int` around n = 34.
 - Off-by-one in Catalan: n triangles needs an (n+2)-gon. Check a tiny case.
 - Inclusion–exclusion with 2^k terms needs k ≤ ~20.
+
+---
+
+# RESEARCH ADDITIONS
+
+
+## COMBINATORICS
+
+| you see | reach for | the tell |
+|---|---|---|
+| count integer partitions of n | **pentagonal number theorem** recurrence, O(n sqrt n) | generalised pentagonal indices k and -k, signs cycle + + - - |
+| count labelled trees with degree constraints | Cayley / Prufer; degree-constrained is a multinomial over (d_i - 1) | Prufer turns tree counting into sequence counting |
+| count **connected** labelled structures | EGF: `C = log(All)`, or the rooted-subtraction recurrence | "connected" is almost never counted directly |
+| labelled objects, composition matters | **EGF** (divide by n!); "multiset of components" is exp, "extract components" is log | multinomials in the statement mean EGF |
+| unlabelled sequences | **OGF**, a product of series, one FFT | — |
+| count standard Young tableaux of a shape | **hook length formula**: `n! / product of hooks` | generalises ballot/Catalan to k candidates |
+| lattice paths above a slope-k line, k-ary trees | **Fuss-Catalan** `(1/(kn+1)) C(kn+n, n)`; cycle lemma | the natural extension of Catalan |
+| colourings up to rotation, unrestricted colour counts | Burnside: average fixed points, `c^cycles(g)` | the group is small and explicit |
+| colourings up to symmetry with **fixed counts of each colour** | **Polya** cycle index polynomial | Burnside alone cannot track colour multiplicities |
+| convolution indexed by **gcd or lcm** | divisor / multiple zeta-Mobius transform, O(n log log n) | same machinery as SOS, different lattice |
+| "exactly k of the properties hold" | inclusion-exclusion with `sum (-1)^(j-k) C(j,k) N_j` | different weights from "at least" |
+| balls and boxes, unsure which formula | the **twelvefold way** table (labelled/unlabelled x any/injective/surjective) | fix the four labels first |
+| sequences avoiding forbidden substrings | Aho automaton, transfer matrix, matrix power | "count strings of length N <= 1e18 avoiding S" |
