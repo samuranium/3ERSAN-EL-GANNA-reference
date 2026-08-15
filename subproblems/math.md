@@ -41,7 +41,7 @@ Number-theory specific questions (primes, divisors, factorisation) are in
 | you see | do this | file |
 |---|---|---|
 | multiply polynomials | NTT (998244353) | `math/fft_ntt.cpp` |
-| ... modulo 1e9+7 | 3 NTTs + CRT, or split FFT | `math/fft_ntt.cpp` |
+| ... modulo 1e9+7 or ANY modulus | 3 NTTs + Garner CRT | `math/convolution_anymod.cpp` |
 | ... real or floating data | FFT | `math/fft_ntt.cpp` |
 | count pairs by SUM | convolution | `math/fft_ntt.cpp` |
 | count pairs by XOR / AND / OR | FWHT, **not** FFT | `math/fwht.cpp` |

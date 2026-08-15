@@ -11,6 +11,7 @@
 | point | range any associative | iterative segment tree | `DS/segment tree/segtree_iterative.cpp` |
 | range | point | difference array, or Fenwick | `DS/BIT/rangexrange.cpp` |
 | range | range | lazy segment tree | `DS/segment tree/lazy.cpp` |
+| range | range, but 2D and sums only | four 2D Fenwicks | `DS/BIT/fenwick_2d_range.cpp` |
 | range | range, offline only | difference array + one sweep | `DS/2d partial sum.cpp` |
 | point | range, but 2D | 2D Fenwick | `DS/BIT/fenwick_2d.cpp` |
 | none | rectangle min/max | 2D sparse table | `DS/sparse/sparse_table_2d.cpp` |

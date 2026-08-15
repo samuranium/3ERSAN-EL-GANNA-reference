@@ -56,7 +56,8 @@
 |---|---|---|
 | max flow, min cut | Dinic | `graph/flows/Dinics.cpp` |
 | partition into two sides with penalties | min cut = project selection | `Dinics.cpp` |
-| bipartite matching | Kuhn | `graph/matching/kuhn.cpp` |
+| bipartite matching | Kuhn (default) | `graph/matching/kuhn.cpp` |
+| ... and Kuhn actually TLEs | Hopcroft-Karp, O(E√V) | `graph/matching/hopcroft_karp.cpp` |
 | minimum vertex cover | = max matching (König) | `kuhn.cpp` |
 | maximum independent set (bipartite) | n − max matching | `kuhn.cpp` |
 | minimum path cover of a DAG | n − matching on the split graph | `kuhn.cpp` |
@@ -92,6 +93,7 @@
 | distinct values on a path, offline | Mo's on the tree | `DS/SQRT/mo_on_tree.cpp` |
 | tree isomorphism | canonical hash of the subtree | `hashing/hash_tree.cpp` |
 | path as a string | path hash | `hashing/hash_tree.cpp` |
+| do two tree paths overlap, and where | six candidate LCAs, filter | `graph/path_intersection.cpp` |
 
 ## GRID
 
