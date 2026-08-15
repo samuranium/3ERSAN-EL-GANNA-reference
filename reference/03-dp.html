@@ -1,6 +1,17 @@
 <title>Dynamic Programming — 3ERSAN EL GANNA</title>
 <style>
+/* ---------------------------------------------------------------------------
+   LIGHT ONLY, DELIBERATELY. These documents exist to become paper, so they
+   commit to ink-on-white and do not follow the reader's OS theme -- what you
+   see on screen is what comes out of the printer. Every colour is stated
+   explicitly rather than inherited, so the page holds on any host background.
+
+   The syntax palette is chosen to survive GREYSCALE printing: hue and weight
+   both carry, so keywords stay bold-dark and comments stay light-mid even
+   with no colour at all.
+   --------------------------------------------------------------------------- */
 :root{
+  color-scheme: light;              /* stop the browser dark-inverting forms */
   --paper:#ffffff; --ink:#16181c; --soft:#5a6470; --faint:#8b939d;
   --rule:#d5dade; --rule2:#aeb6bd;
   --accent:#0d5f6b;
@@ -13,22 +24,9 @@
   --pp:#6a3d9c;       /* preprocessor       */
   --codebg:#fafbfb;
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
-    --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
-    --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
-    --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
-  }
-}
-:root[data-theme="dark"]{
-  --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
-  --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
-  --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
-  --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
-}
 
 *{box-sizing:border-box}
+html{background:var(--paper)}
 body{
   margin:0; background:var(--paper); color:var(--ink);
   font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
