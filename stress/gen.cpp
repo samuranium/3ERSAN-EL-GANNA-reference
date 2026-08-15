@@ -1,0 +1,199 @@
+// ============================================================================
+// STRESS TESTING -- generators, the compare loop, and shrinking
+// ----------------------------------------------------------------------------
+// The driver (compile two solutions, feed both, diff) is short and standard.
+// The GENERATORS are the part that decides whether stress testing finds
+// anything, and they are what is usually missing.
+//
+// ############################################################################
+// #  UNIFORM RANDOM TREES ARE SHALLOW. THEY WILL NOT FIND YOUR BUG.
+// #
+// #  A random-parent tree has depth ~O(log n). Every recursive DFS in this
+// #  reference survives it. The bug you are hunting -- stack overflow, an
+// #  O(depth) walk that is really O(n), a wrong base case at the root -- only
+// #  appears on a PATH, a STAR, or a CATERPILLAR.
+// #
+// #  Always generate several SHAPES, not just several seeds. tree_path() and
+// #  tree_star() find more real bugs than a million random trees.
+// ############################################################################
+//
+// ############################################################################
+// #  SMALL n IS WHAT FINDS BUGS, NOT LARGE n
+// #
+// #  Run with n in 1..8 first. A counterexample you can read by eye is worth
+// #  more than one with 200 nodes, and brute force is only affordable there.
+// #  Raise n ONLY after small cases pass, and then you are testing performance
+// #  and overflow, not logic.
+// #  Test n = 1 and n = 2 explicitly. Most off-by-ones live there.
+// ############################################################################
+//
+// THE DRIVER, as a shell loop (simpler than the C++ system() version):
+//     for i in $(seq 1 10000); do
+//       ./gen $i > in.txt
+//       ./brute < in.txt > b.txt
+//       ./fast  < in.txt > f.txt
+//       if ! diff -q b.txt f.txt >/dev/null; then echo "WA on seed $i"; break; fi
+//     done
+// Take the seed from argv so a failing case is reproducible: gen 4242.
+//
+// SHRINKING -- once it fails, do not debug the failing case. Shrink it:
+//   halve n and rerun the same seed; if it still fails, halve again. Stop when
+//   it stops failing, then step back up one. Two minutes of this turns a
+//   200-node counterexample into a 4-node one you can trace by hand.
+//
+// WHAT TO COMPARE AGAINST when there is no obvious brute force:
+//   an INVARIANT          the output is a tree / a permutation / sums to n
+//   a SLOWER version      O(n^2) of your own O(n log n)
+//   a DIFFERENT algorithm two independent implementations rarely share a bug
+//   ITSELF                same input in a different order must give the same
+//                         answer; a data structure vs a plain array
+//   the SAMPLES           run them first, always
+// ============================================================================
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+// reproducible: mt19937_64 rng(seed_from_argv);
+
+ll rnd(ll l, ll r) { return uniform_int_distribution<ll>(l, r)(rng); }
+
+vector<int> rnd_array(int n, int lo, int hi) {
+    vector<int> a(n);
+    for (auto &x : a) x = rnd(lo, hi);
+    return a;
+}
+vector<int> rnd_perm(int n) {            // 0-indexed permutation
+    vector<int> p(n);
+    iota(p.begin(), p.end(), 0);
+    shuffle(p.begin(), p.end(), rng);
+    return p;
+}
+string rnd_string(int n, int alpha) {    // alpha = 2 finds far more than 26
+    string s;
+    for (int i = 0; i < n; i++) s += char('a' + rnd(0, alpha - 1));
+    return s;
+}
+
+// ---------------------------------------------------------------------------
+// TREES -- edges are (parent, child), 0-indexed, always exactly n-1 edges
+// ---------------------------------------------------------------------------
+// shallow, depth ~log n. The DEFAULT, and the least useful for finding bugs.
+vector<pair<int, int>> tree_random(int n) {
+    vector<pair<int, int>> e;
+    for (int v = 1; v < n; v++) e.push_back({(int)rnd(0, v - 1), v});
+    return e;
+}
+// a single path: depth n. Finds stack overflows and O(depth) walks.
+vector<pair<int, int>> tree_path(int n) {
+    vector<pair<int, int>> e;
+    for (int v = 1; v < n; v++) e.push_back({v - 1, v});
+    return e;
+}
+// one centre, n-1 leaves: degree n-1. Finds O(deg) inner loops.
+vector<pair<int, int>> tree_star(int n) {
+    vector<pair<int, int>> e;
+    for (int v = 1; v < n; v++) e.push_back({0, v});
+    return e;
+}
+// a spine with legs -- the shape that breaks centroid/HLD assumptions
+vector<pair<int, int>> tree_caterpillar(int n) {
+    vector<pair<int, int>> e;
+    int spine = max(1, n / 2);
+    for (int v = 1; v < spine; v++) e.push_back({v - 1, v});
+    for (int v = spine; v < n; v++) e.push_back({(int)rnd(0, spine - 1), v});
+    return e;
+}
+// depth ~log n but wide; good for LCA and binary lifting
+vector<pair<int, int>> tree_binary(int n) {
+    vector<pair<int, int>> e;
+    for (int v = 1; v < n; v++) e.push_back({(v - 1) / 2, v});
+    return e;
+}
+// bushy near the root, deep at the end: mixes the failure modes
+vector<pair<int, int>> tree_broom(int n) {
+    vector<pair<int, int>> e;
+    int half = max(1, n / 2);            // max(1,..): at n=1 the tail must not start at 0
+    for (int v = 1; v < half; v++) e.push_back({0, v});
+    for (int v = half; v < n; v++) e.push_back({v - 1, v});
+    return e;
+}
+// pick a shape at random -- use this in the generator, not tree_random alone
+vector<pair<int, int>> tree_any(int n) {
+    switch (rnd(0, 5)) {
+        case 0: return tree_random(n);
+        case 1: return tree_path(n);
+        case 2: return tree_star(n);
+        case 3: return tree_caterpillar(n);
+        case 4: return tree_binary(n);
+        default: return tree_broom(n);
+    }
+}
+// relabel so the shape is not visible from the vertex numbering
+vector<pair<int, int>> relabel(vector<pair<int, int>> e, int n) {
+    auto p = rnd_perm(n);
+    for (auto &[u, v] : e) {
+        u = p[u], v = p[v];
+        if (rnd(0, 1)) swap(u, v);
+    }
+    shuffle(e.begin(), e.end(), rng);
+    return e;
+}
+
+// ---------------------------------------------------------------------------
+// GRAPHS
+// ---------------------------------------------------------------------------
+// connected: a random spanning tree first, then extra edges
+vector<pair<int, int>> graph_connected(int n, int m, bool simple = true) {
+    auto e = tree_random(n);
+    set<pair<int, int>> seen;
+    for (auto [u, v] : e) seen.insert({min(u, v), max(u, v)});
+    int guard = 0;
+    while ((int)e.size() < m && guard++ < 50 * m) {
+        int u = rnd(0, n - 1), v = rnd(0, n - 1);
+        if (u == v) continue;
+        auto key = make_pair(min(u, v), max(u, v));
+        if (simple && seen.count(key)) continue;
+        seen.insert(key), e.push_back({u, v});
+    }
+    return relabel(e, n);
+}
+// may be disconnected; allows self-loops and parallel edges on request
+vector<pair<int, int>> graph_random(int n, int m, bool loops, bool multi) {
+    vector<pair<int, int>> e;
+    set<pair<int, int>> seen;
+    int guard = 0;
+    while ((int)e.size() < m && guard++ < 50 * m + 100) {
+        int u = rnd(0, n - 1), v = rnd(0, n - 1);
+        if (u == v && !loops) continue;
+        auto key = make_pair(min(u, v), max(u, v));
+        if (!multi && seen.count(key)) continue;
+        seen.insert(key), e.push_back({u, v});
+    }
+    return e;
+}
+// acyclic by construction: every edge points from a lower to a higher label
+vector<pair<int, int>> graph_dag(int n, int m) {
+    vector<pair<int, int>> e;
+    set<pair<int, int>> seen;
+    int guard = 0;
+    while ((int)e.size() < m && guard++ < 50 * m + 100) {
+        int u = rnd(0, n - 2), v = rnd(u + 1, n - 1);
+        if (seen.count({u, v})) continue;
+        seen.insert({u, v}), e.push_back({u, v});
+    }
+    return e;                                    // do NOT relabel: that is the invariant
+}
+vector<pair<int, int>> graph_bipartite(int nl, int nr, int m) {
+    vector<pair<int, int>> e;
+    set<pair<int, int>> seen;
+    int guard = 0;
+    while ((int)e.size() < m && guard++ < 50 * m + 100) {
+        int u = rnd(0, nl - 1), v = rnd(0, nr - 1);
+        if (seen.count({u, v})) continue;
+        seen.insert({u, v}), e.push_back({u, v});
+    }
+    return e;
+}
+// weights, including negatives -- the case people forget to test
+vector<array<int, 3>> add_weights(const vector<pair<int, int>> &e, int lo, int hi) {
+    vector<array<int, 3>> w;
+    for (auto [u, v] : e) w.push_back({u, v, (int)rnd(lo, hi)});
+    return w;
+}
