@@ -40,27 +40,28 @@
 | "exactly d" and "multiple of d is easy" | invert the divisor sum |
 | "at least one of each type" | subtract the subsets that miss a type |
 | "none of these k bad properties" | 2^k signed terms, or Möbius |
-| derangements (no fixed point) | `D(n) = n!·Σ(−1)^i/i!`, or `D(n)=(n−1)(D(n−1)+D(n−2))` |
-| surjections onto k labels | `Σ(−1)^i C(k,i) (k−i)^n` |
+| derangements (no fixed point) | `D(n)=(n−1)(D(n−1)+D(n−2))` — `combinatorics/stirling.cpp` |
+| surjections onto k labels | `k!·S2(n,k)` — `combinatorics/stirling.cpp` |
 | "gcd exactly g" over a range | count multiples of g, invert downward |
 
 ## BURNSIDE / SYMMETRY
 
 | you see | do this |
 |---|---|
-| count up to rotation | Burnside: average number of fixed colourings over rotations |
-| necklaces with k colours, n beads | `(1/n) Σ_{d\|n} φ(d) k^(n/d)` |
-| up to rotation **and** reflection | add the reflection terms (n even and odd differ) |
-| count up to relabelling | Burnside over the symmetry group |
+| count up to rotation | Burnside — `combinatorics/burnside.cpp` |
+| necklaces with k colours, n beads | `(1/n) Σ_{d\|n} φ(d) k^(n/d)` — `combinatorics/burnside.cpp` |
+| up to rotation **and** reflection | bracelets, parity-split reflections — `combinatorics/burnside.cpp` |
+| count up to relabelling | Burnside over the explicit group — `combinatorics/burnside.cpp` |
 
 ## COMMON SEQUENCES
 
 | name | meaning |
 |---|---|
 | Catalan | balanced structures — `combinatorics/catalan.cpp` |
-| Stirling 2nd kind | partitions of n labelled items into k non-empty sets |
-| Bell | total partitions of an n-set = Σ Stirling |
-| Derangements | permutations with no fixed point |
+| Stirling 2nd kind | partitions of n labelled items into k non-empty sets — `combinatorics/stirling.cpp` |
+| Stirling 1st kind | permutations of n with exactly k cycles — `combinatorics/stirling.cpp` |
+| Bell | total partitions of an n-set = Σ Stirling — `combinatorics/stirling.cpp` |
+| Derangements | permutations with no fixed point — `combinatorics/stirling.cpp` |
 | Fibonacci | tilings, no-two-adjacent choices |
 | Narayana / Motzkin | Catalan relatives, see above |
 
@@ -81,16 +82,16 @@
 
 | you see | reach for | the tell |
 |---|---|---|
-| count integer partitions of n | **pentagonal number theorem** recurrence, O(n sqrt n) | generalised pentagonal indices k and -k, signs cycle + + - - |
+| count integer partitions of n | **pentagonal number theorem** recurrence — `combinatorics/stirling.cpp` | generalised pentagonal indices k and -k, signs cycle + + - - |
 | count labelled trees with degree constraints | Cayley / Prufer; degree-constrained is a multinomial over (d_i - 1) | Prufer turns tree counting into sequence counting |
 | count **connected** labelled structures | EGF: `C = log(All)`, or the rooted-subtraction recurrence | "connected" is almost never counted directly |
 | labelled objects, composition matters | **EGF** (divide by n!); "multiset of components" is exp, "extract components" is log | multinomials in the statement mean EGF |
 | unlabelled sequences | **OGF**, a product of series, one FFT | — |
 | count standard Young tableaux of a shape | **hook length formula**: `n! / product of hooks` | generalises ballot/Catalan to k candidates |
 | lattice paths above a slope-k line, k-ary trees | **Fuss-Catalan** `(1/(kn+1)) C(kn+n, n)`; cycle lemma | the natural extension of Catalan |
-| colourings up to rotation, unrestricted colour counts | Burnside: average fixed points, `c^cycles(g)` | the group is small and explicit |
-| colourings up to symmetry with **fixed counts of each colour** | **Polya** cycle index polynomial | Burnside alone cannot track colour multiplicities |
+| colourings up to rotation, unrestricted colour counts | Burnside, `c^cycles(g)` — `combinatorics/burnside.cpp` | the group is small and explicit |
+| colourings up to symmetry with **fixed counts of each colour** | **Polya** cycle index — `combinatorics/burnside.cpp` `polya_fixed_counts` | Burnside alone cannot track colour multiplicities |
 | convolution indexed by **gcd or lcm** | divisor / multiple zeta-Mobius transform, O(n log log n) | same machinery as SOS, different lattice |
 | "exactly k of the properties hold" | inclusion-exclusion with `sum (-1)^(j-k) C(j,k) N_j` | different weights from "at least" |
-| balls and boxes, unsure which formula | the **twelvefold way** table (labelled/unlabelled x any/injective/surjective) | fix the four labels first |
+| balls and boxes, unsure which formula | the **twelvefold way** table — `combinatorics/stirling.cpp` (it is in the banner) | fix the four labels first |
 | sequences avoiding forbidden substrings | Aho automaton, transfer matrix, matrix power | "count strings of length N <= 1e18 avoiding S" |

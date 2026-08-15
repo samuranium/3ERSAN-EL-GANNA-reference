@@ -97,9 +97,9 @@
 | update is trivial, the query needs a **built** form (sorted, hull, table) | **sqrt on operations**: rebuild the static structure every B ops, keep <= B pending in a buffer, answer = static + brute over the buffer | B = sqrt(q). Converts "no dynamic version exists" into "static + small patch" |
 | the aggregate has no mergeable form at all (mode, range majority) | block decomposition + **block-pair answer table** | the answer is that, or an element from the two partial blocks |
 | range **mode**, static | block-pair mode table + per-value sorted occurrence list | mode never decreases when you extend; verify candidates by binary search |
-| Mo's, but `remove()` is hard or impossible | **rollback Mo's** (add-only + undo) | fix L's block, R monotone, undo the left extension per query. Never calls remove |
-| range queries interleaved with **point assignments**, offline | **Mo's with updates (3D Mo)**, block = n^(2/3), O(n^(5/3)) | third key = number of updates before the query |
-| Mo's is right but TLEs on constant factor | **Hilbert curve order**, or block = n/sqrt(q) with alternating R direction | plain sqrt(n) blocks are wrong when q << n |
+| Mo's, but `remove()` is hard or impossible | **rollback Mo's** — `DS/SQRT/mo_variants.cpp` [1] | fix L's block, R monotone, undo the left extension per query. Never calls remove |
+| range queries interleaved with **point assignments**, offline | **Mo's with updates (3D Mo)** — `DS/SQRT/mo_variants.cpp` [2] | third key = number of updates before the query |
+| Mo's is right but TLEs on constant factor | **Hilbert curve order** — `DS/SQRT/mo_variants.cpp` [3] | plain sqrt(n) blocks are wrong when q << n |
 | static range aggregate, **non-idempotent**, want O(1) | **sqrt tree** — O(n log log n) build, O(1) query, O(sqrt n) point update | sparse table cannot; disjoint sparse table is O(1) but static |
 | insert/erase at arbitrary position + range aggregate, n <= 2e5 | **sqrt buckets / unrolled list**, rebuild every sqrt n inserts | much shorter than a treap, better cache behaviour |
 | "count <= x" with point updates, values bounded | buckets over the **value axis** (sqrt C blocks), O(1) update / O(sqrt C) query | flips the asymmetry when updates >> queries |

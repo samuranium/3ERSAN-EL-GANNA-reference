@@ -137,7 +137,7 @@ All of it: `math/bitwise.cpp`, and `DS/bitset.cpp` for the ÷64 loop shapes.
 | `max or min of abs(x_i-x_j) + abs(y_i-y_j)` | 2^d sign enumeration: `abs(a)+abs(b) = max(+-a +- b)` | generalises Manhattan-Chebyshev to d dimensions |
 | diagonal-only constraints (bishops) | rotate 45 degrees into two independent rook problems | black and white diagonals never interact |
 | "choose exactly k, cost convex in k" | aliens trick: binary search the penalty, drop the k dimension | requires convexity of cost-vs-k |
-| "distinct up to rotation/reflection" | Burnside; fixed colour counts means Polya | the group is tiny — enumerate it |
+| "distinct up to rotation/reflection" | Burnside / Polya — `combinatorics/burnside.cpp` | the group is tiny — enumerate it |
 | "count connected X" | count all X then `log` the EGF | never count connected directly |
 | "number of walks of length k" | matrix power; huge k with structured M means charpoly + Bostan-Mori | the transfer matrix is the state automaton's adjacency |
 | "does a + b = c exist across two sets" | convolution (FFT), bitset shift, or Minkowski sum | one identity, three data types |

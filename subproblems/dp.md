@@ -185,7 +185,7 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 | two parameters only ever appear via their sum or difference | merge them into one dimension | — |
 | n up to 1e9, k small, structure splits in half | **doubling DP**: build n from n/2 then increment, O(k^2 log n) | binary expansion of n |
 | the state is an unordered multiset / sorted tuple | canonicalise by sorting; state count is about p(n) ~ e^(c sqrt n) | fine to n ~ 60-100 with a hash map |
-| count configurations up to rotation/reflection | Burnside: average over group elements; "fixed by g" is its own DP over g's cycles | — |
+| count configurations up to rotation/reflection | Burnside — `combinatorics/burnside.cpp` | — |
 | boolean feasibility DP with a large inner dimension | **bitset the inner dimension** | any inner loop that is "OR of a shifted array" is bitsettable |
 | "you may reorder the items", pairwise order decides everything | **exchange argument**: derive the comparator from the n=2 case, sort, then a plain prefix DP | — |
 | count **distinct** subsequences / strings | last-occurrence subtraction: `dp[i] = 2 dp[i-1] - dp[last[c]-1]` | kills duplicates without a set |
@@ -219,7 +219,7 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 | subset-sum convolution | ordinary OR-convolution once a popcount RANK dimension is added | rank is what enforces disjointness |
 | tree knapsack with a numeric capacity | 1D knapsack over the Euler tour with skip-jumps (`DP/tree_knapsack.cpp`) | removes child merging entirely |
 | "delete one element, recompute" | D&C over the index range carrying the outside-DP | n recomputations become log n |
-| counting up to symmetry | Burnside: one DP per group element over its cycle structure | — |
+| counting up to symmetry | Burnside — `combinatorics/burnside.cpp` | — |
 | LIS via patience / BIT | DP over a segment tree indexed by value | generalises to weighted LIS |
 | alternating-player score game | longest path with alternating negation; storing the DIFFERENCE collapses both players | one array instead of two |
 
