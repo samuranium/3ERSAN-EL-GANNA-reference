@@ -78,6 +78,6 @@ exactly one of them. If a move can touch two, the xor rule does not apply.
 | players have **different** move sets | Sprague-Grundy does NOT apply — partizan; state = (pos, turn), `game/retrograde.cpp` | "Alice may only ..., Bob may only ..." |
 | draws possible, or positions repeat | retrograde analysis — `game/retrograde.cpp` | plain memo DP mislabels draws as losses |
 | players accumulate **score** | plain minimax DP — Grundy is meaningless | Grundy only encodes who moves last |
-| a 2D turning game / product of two coordinate games | **Tartan theorem**: Grundy = nim-PRODUCT of the coordinate Grundy values | nim-product, not XOR |
+| a 2D turning game / product of two coordinate games | **Tartan theorem**: Grundy = nim-PRODUCT of the coordinate Grundy values — NOT IN THE REPO; nim-product is defined recursively on Fermat 2-powers | nim-product, not XOR |
 | huge N, tiny move set | brute Grundy for small N, detect the period, extrapolate | subtraction-game Grundy sequences are eventually periodic |
 | a move the opponent can immediately undo | pairing / mirroring argument | symmetry beats Grundy computation |

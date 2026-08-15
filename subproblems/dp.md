@@ -157,7 +157,7 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 | the answer is a polynomial in n of degree <= d, n huge | brute d+1 values, **Lagrange interpolation** — `math/interpolation.cpp` | — |
 | you suspect a linear recurrence but cannot derive it | brute ~2d terms, **Berlekamp-Massey** then Kitamasa — `math/linear_recurrence.cpp` | O(d^2 log n), no matrix cube |
 | `dp[n]` depends on a convolution **containing dp itself** | **relaxed / online convolution** (CDQ + NTT), O(n log^2 n) | you cannot FFT what you have not computed |
-| counting "sets of connected pieces", recurrence full of binomials | **EGF**: `exp(C)` = sets of C, `log` inverts | — |
+| counting "sets of connected pieces", recurrence full of binomials | **EGF**: `exp(C)` = sets of C, `log` inverts — series exp/log NOT IN THE REPO; the rooted-subtraction recurrence avoids needing it | — |
 
 ## TREES
 
@@ -173,9 +173,9 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 
 | you see | reach for | the tell |
 |---|---|---|
-| "answer for the array with element i removed", for every i | **D&C over indices** carrying the DP of everything OUTSIDE the interval, O(n log n) | division / undo is unavailable for max-type DP |
+| "answer for the array with element i removed", for every i | **D&C over indices** — NOT IN THE REPO, but it is a 15-line recursion: `solve(l,r)` applies the RIGHT half to the DP then recurses left, and vice versa; at a leaf the DP holds everything except i. O(n log n) | division / undo is unavailable for max-type DP |
 | items appear and disappear over time, DP answered at each moment | segment tree over time + a rollback-able structure | the offline-dynamic-connectivity pattern applied to DP |
-| offline queries each asking the DP over an arbitrary subarray | **D&C by queries**: DP over suffixes of the left half and prefixes of the right, answer only straddling queries | — |
+| offline queries each asking the DP over an arbitrary subarray | **D&C by queries** — NOT IN THE REPO. Same shape as the row above: DP over suffixes of the left half and prefixes of the right, answer only the queries straddling the midpoint | — |
 
 ## STATE-SPACE AND REPRESENTATION
 

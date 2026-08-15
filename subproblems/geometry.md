@@ -80,25 +80,25 @@ The other team keeps this as a separate printed sheet (`Manhattan Trick.pdf`).
 
 | you see | reach for | the tell |
 |---|---|---|
-| "is p expressible as a + b, a in P, b in Q" for convex P, Q | **Minkowski sum**, O(\|P\|+\|Q\|), then point-in-convex-polygon O(log n) | the sum of convex sets is convex |
+| "is p expressible as a + b, a in P, b in Q" for convex P, Q | **Minkowski sum** — NOT IN THE REPO OR THE PDF. Normalise both to CCW starting at the bottom-most-then-left-most vertex, then merge the edge vectors by angle. Point-in-convex-polygon (§3.5) answers the query | the sum of convex sets is convex |
 | distance between two convex polygons / do they collide | Minkowski sum of P and -Q, then distance from the origin | reduces a pair problem to a single polygon |
-| intersect two convex polygons | two-pointer merge O(n+m), or half-plane intersection of all edges | — |
-| extreme point in a direction / tangents from an external point | ternary or binary search on the hull, O(log n) | enables per-query hull work |
-| smallest circle covering all points | **Welzl**, expected O(n) | determined by 2 or 3 boundary points |
-| smallest circle covering >= k points | angular sweep of a fixed-radius circle around each point, O(n^2 log n) | "radius R, maximise covered points" |
-| nearest neighbour / per-point closest other | KD-tree | when you need per-point answers, not just the global closest pair |
-| Euclidean MST | **Delaunay** triangulation, then MST on its O(n) edges | EMST is a subset of Delaunay |
-| largest empty circle, farthest-point queries | **Voronoi** — candidates are Voronoi vertices | dual of Delaunay |
-| Manhattan MST | 8-octant nearest-neighbour sweep, O(n log n) | only one candidate edge per octant is ever needed |
-| area of a union of triangles / polygons | vertical decomposition into slabs; or signed-edge cancellation | avoids computing the union boundary |
-| area of a union of circles | Green's theorem over arcs, or Simpson over x-slices | arc integration is exact |
-| any continuous 1D geometric integral | **adaptive Simpson** | needs an even interval count and a depth cap |
+| intersect two convex polygons | half-plane intersection of all edges — PDF §3.9 | — |
+| extreme point in a direction / tangents from an external point | binary search on the hull from §3.7 / §3.8, O(log n) | enables per-query hull work |
+| smallest circle covering all points | **Welzl** — NOT IN THE REPO OR THE PDF. Shuffle, then recurse: add points one at a time, and when one falls outside, rebuild with it forced onto the boundary. Expected O(n) | determined by 2 or 3 boundary points |
+| smallest circle covering >= k points | angular sweep of a fixed-radius circle around each point, O(n^2 log n) — NOT IN THE REPO | "radius R, maximise covered points" |
+| nearest neighbour / per-point closest other | KD-tree — NOT IN THE REPO. For the GLOBAL closest pair only, the PDF has it: §1.2 / §3.6 | when you need per-point answers, not just the global closest pair |
+| Euclidean MST | **Delaunay** triangulation then MST — NOT IN THE REPO OR THE PDF, and long. For n <= ~2000 just build all n^2 edges and run Kruskal (`graph/MST/kruskal with dsu.cpp`) | EMST is a subset of Delaunay |
+| largest empty circle, farthest-point queries | **Voronoi** — NOT IN THE REPO OR THE PDF. Candidates are Voronoi vertices; for small n, binary search the radius and test candidate centres directly | dual of Delaunay |
+| Manhattan MST | 8-octant nearest-neighbour sweep to get O(n) candidate edges, then Kruskal. The sweep is NOT IN THE REPO; the general "MST from a weight formula" pattern is `graph/MST/boruvka.cpp` | only one candidate edge per octant is ever needed |
+| area of a union of triangles / polygons | vertical decomposition into slabs, or signed-edge cancellation — NOT IN THE REPO. For axis-aligned RECTANGLES the PDF has it: §1.3 Rectangle Union | avoids computing the union boundary |
+| area of a union of circles | Green's theorem over arcs — NOT IN THE REPO. Circle primitives are PDF §3.4 | arc integration is exact |
+| any continuous 1D geometric integral | **adaptive Simpson** — NOT IN THE REPO, but it is 15 lines: `simpson(a,b) = (b-a)/6 * (f(a) + 4f(m) + f(b))`, recurse on both halves while `|whole - (left+right)| > 15*eps`, with a hard depth cap | split at known discontinuities first, or it recurses forever |
 | maximise a convex geometric quantity over one real parameter | ternary search with a FIXED iteration count (~200) | never loop on epsilon |
-| 3D volume / hull | incremental 3D hull O(n^2); polyhedron volume = sum of mixed products / 6 | — |
-| latitude and longitude in the input | great-circle / spherical distance | — |
-| do any two of n segments intersect | sweep line with a BST ordered by y-at-current-x | adjacent-in-BST pairs are the only candidates |
-| which polygon contains each of q query points | persistent segment tree over vertical slabs, O(log n) | offline sweep also works |
-| "how many regions do these segments create" | sort edges by angle at each vertex, walk next-edge to trace faces; Euler `V - E + F = 2` | — |
-| sorting points by angle | `half(p)` (upper vs lower) then cross product — **never atan2** | exact, fast, no precision loss |
+| 3D volume / hull | incremental 3D hull O(n^2) — NOT IN THE REPO. Polyhedron volume is just `sum of mixed products / 6` and needs no hull | — |
+| latitude and longitude in the input | great-circle distance — the formula is in `Rules Geomtry.pdf` | — |
+| do any two of n segments intersect | Bentley-Ottmann sweep with a BST ordered by y-at-current-x — NOT IN THE REPO. n <= ~2000? check all pairs with the §3.2 segment test | adjacent-in-BST pairs are the only candidates |
+| which polygon contains each of q query points | persistent segment tree over vertical slabs (`DS/segment tree/persistent/`), O(log n); the slab decomposition itself is NOT IN THE REPO | offline sweep also works |
+| "how many regions do these segments create" | Euler's formula `V - E + F = 2` is usually enough on its own; full face tracing (sort edges by angle at each vertex, walk next-edge) is NOT IN THE REPO | — |
+| sorting points by angle | `half(p)` (upper vs lower) then cross product — **never atan2**. Cross product is PDF §3.1 | exact, fast, no precision loss |
 | fix a point, sweep a ray | radial / angular sweep, O(n^2 log n) | turns an O(n^3) triangle count into O(n^2 log n) |
-| clip a polygon by a half-plane | **Sutherland-Hodgman** | the building block of convex intersection |
+| clip a polygon by a half-plane | **Sutherland-Hodgman** — NOT IN THE REPO, but it is 12 lines: walk the edges, emit the vertex if it is inside, and emit the crossing point whenever an edge changes side. PDF §3.9 uses it | the building block of convex intersection |

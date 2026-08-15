@@ -85,8 +85,8 @@
 | count integer partitions of n | **pentagonal number theorem** recurrence — `combinatorics/stirling.cpp` | generalised pentagonal indices k and -k, signs cycle + + - - |
 | count labelled trees with degree constraints | Cayley / Prufer; degree-constrained is a multinomial over (d_i - 1) | Prufer turns tree counting into sequence counting |
 | count **connected** labelled structures | EGF: `C = log(All)`, or the rooted-subtraction recurrence | "connected" is almost never counted directly |
-| labelled objects, composition matters | **EGF** (divide by n!); "multiset of components" is exp, "extract components" is log | multinomials in the statement mean EGF |
-| unlabelled sequences | **OGF**, a product of series, one FFT | — |
+| labelled objects, composition matters | **EGF** (divide by n!); exp/log of a power series is NOT IN THE REPO — Newton on top of `math/fft_ntt.cpp`, or their Math PDF | multinomials in the statement mean EGF |
+| unlabelled sequences | **OGF**, a product of series — one FFT, `math/fft_ntt.cpp` | — |
 | count standard Young tableaux of a shape | **hook length formula** — `combinatorics/counting_formulas.cpp` | generalises ballot/Catalan to k candidates |
 | lattice paths above a slope-k line, k-ary trees | **Fuss-Catalan** — `combinatorics/counting_formulas.cpp` | the natural extension of Catalan |
 | colourings up to rotation, unrestricted colour counts | Burnside, `c^cycles(g)` — `combinatorics/burnside.cpp` | the group is small and explicit |

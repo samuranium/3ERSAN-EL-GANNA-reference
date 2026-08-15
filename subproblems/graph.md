@@ -205,7 +205,7 @@
 | count triangles / common neighbours per edge | orient **low degree to high degree** and intersect lists: O(m sqrt m) |
 | the problem is about edges being adjacent to each other | **line graph**: edge colouring becomes vertex colouring, Euler in G becomes Hamiltonian in L(G). L(G) has sum(deg^2)/2 edges — explodes on stars |
 | "reach t in an even number of steps" | **bipartite double cover**: duplicate to (v,0)/(v,1) |
-| walk every road at least once and return | **Chinese postman**: pair odd-degree vertices by shortest paths + min-weight matching (bitmask if <= 20 odd) |
+| walk every road at least once and return | **Chinese postman**: pair odd-degree vertices by shortest paths + min-weight matching (bitmask DP if <= 20 odd). `graph/SCC/eulerian_path.cpp` [4] once it is Eulerian |
 | cyclic string containing every length-k word once | **de Bruijn**: Eulerian circuit on (k-1)-mers, or `strings/lyndon.cpp` `de_bruijn` |
 | "does a graph exist with these degrees" | Erdos-Gallai / Havel-Hakimi — NOT IN THE REPO, but Havel-Hakimi is 10 lines: sort descending, remove the largest d, subtract 1 from the next d entries, repeat; fail on a negative | **simple graphs only** |
 | edges appear/vanish **online** plus path queries | link-cut tree (Euler tour tree if connectivity only). Deletions only? Reverse time and use plain DSU |
@@ -222,7 +222,7 @@
 | "place items, no two share a row or column" | bipartite matching rows against columns | a rook placement IS a matching |
 | a full pairwise **distance matrix**, reconstruct the tree | MST of the matrix, then verify all distances | distance-matrix problems are MST plus validation |
 | "remove redundant edges" / "is this a valid distance matrix" | transitive reduction: (i,j) redundant iff some k has d[i][k]+d[k][j] <= d[i][j] | one Floyd pass answers both |
-| state = at most 20 booleans, a move flips a fixed set | **GF(2) linear algebra**, not BFS | reachability and min-ops both come from the basis |
+| state = at most 20 booleans, a move flips a fixed set | **GF(2) linear algebra**, not BFS — `math/gauss.cpp`, or `DP/sub-problems xorbasis.cpp` for the basis alone | reachability and min-ops both come from the basis |
 | "make all values equal by moving units between neighbours" | min-cost flow as the MODEL; on a line/tree it collapses to prefix sums | recognise the flow to prove the greedy, then do not implement it |
 | two or three tokens moving at once, small n | BFS on the product graph over (u,v) or (u,v,w) | n^2 or n^3 states is the intended solution |
 | "k centers minimising the maximum distance" | binary search the radius plus greedy cover | the phrase "minimise the maximum" |

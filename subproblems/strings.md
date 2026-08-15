@@ -88,7 +88,7 @@
 |---|---|---|
 | the string is revealed **incrementally**, answer after each char | suffix automaton or eertree | both are genuinely online, amortised O(1) per char. SA and Manacher are not |
 | you need an explicit **tree over suffixes** (subtree = occurrence set, LCA = LCP) | suffix tree, built as the **link tree of the SAM of reversed s** | avoids Ukkonen entirely |
-| you have SA + LCP and want suffix-tree reasoning | **Cartesian tree on the LCP array** | internal nodes = LCP intervals = suffix tree internal nodes; a min-stack sweep is often enough |
+| you have SA + LCP and want suffix-tree reasoning | **Cartesian tree on the LCP array** — `DS/cartesian_tree.cpp` | internal nodes = LCP intervals = suffix tree internal nodes; a min-stack sweep is often enough |
 | only equality / LCP of substrings, nothing lexicographic | hashing + binary search for LCP, O(log n) per query | the hard structure evaporates |
 | **deterministic** LCP required (hacking risk) | SA + Kasai + sparse table | use when hashing is hackable |
 | **many strings**, substring queries across the set | generalised SAM — NOT IN THE REPO; use SA of the concatenation with **distinct** separators (`strings/subsuf.cpp`) | a plain `last = root` reset is WRONG when the transition already exists |
@@ -108,7 +108,7 @@
 | min insertions/deletions to make a palindrome | `n - LCS(s, rev s)` | not a Manacher problem at all |
 | longest palindromic **subsequence** | `LCS(s, rev s)` / interval DP | subsequence != substring — the most common misroute |
 | count distinct palindromic **subsequences** | interval DP with the subtract-the-inner-block recurrence | O(n^2); no linear structure exists |
-| palindrome with <= k mismatches | two-pointer with **LCE jumps** (hash or SA+RMQ) | each mismatch costs one LCE query -> O(k) per centre |
+| palindrome with <= k mismatches | two-pointer with **LCE jumps** — `hashing/hash.cpp` + binary search, or `strings/cleansuf.cpp` (SA+RMQ) | each mismatch costs one LCE query -> O(k) per centre |
 
 ## PERIODICITY, BORDERS, LYNDON
 
@@ -123,8 +123,8 @@
 | count **distinct** rotations | `n / p` where p is the smallest period dividing n, else n | pure number theory once you have the period |
 | split into the fewest lexicographically non-increasing pieces | **Lyndon factorisation (Duval)** — `strings/lyndon.cpp` | the definition is the answer |
 | lexicographically smallest **suffix** | the last block of the Lyndon factorisation — `strings/lyndon.cpp` | O(n), no SA |
-| find all squares / tandem repeats | **Main-Lorentz**, O(n log n), output as compressed triples | the explicit list can be Theta(n^2) |
-| find all **runs** (maximal repetitions) | runs theorem via the **Lyndon array** — linear | the number of runs is < n; use it as an output-size sanity check |
+| find all squares / tandem repeats | **Main-Lorentz** — NOT IN THE REPO. n <= ~5000? for every period p, check each block boundary with an LCE forward and backward | the explicit list can be Theta(n^2) |
+| find all **runs** (maximal repetitions) | runs theorem via the **Lyndon array** — NOT IN THE REPO; `strings/lyndon.cpp` has Duval, which is the factorisation the array comes from | the number of runs is < n; use it as an output-size sanity check |
 | "every repetition in s" with n >= 1e5 | runs, not squares | squares are Theta(n^2); every square sits inside a run |
 
 ## PREFIX FUNCTION / Z BEYOND MATCHING
@@ -142,9 +142,9 @@
 | you see | reach for | the tell |
 |---|---|---|
 | pattern has **wildcards** | FFT: match at j iff `sum p_i * t_{i+j} * (p_i - t_{i+j})^2 == 0`, wildcard = 0 | three convolutions; the cubic form makes each term non-negative |
-| **Hamming distance at every alignment** | one FFT per alphabet symbol, or a bitset if sigma is small | cost sigma * n log n |
+| **Hamming distance at every alignment** | one FFT per alphabet symbol (`math/fft_ntt.cpp`), or a bitset if sigma is small (`DS/bitset.cpp`) | cost sigma * n log n |
 | k-mismatch matching, small k | "kangaroo jumping": k+1 LCE queries per alignment | O(nk) total, no FFT |
-| exact match with m <= 64 | **Shift-And / Bitap** | one word op per text char, trivial to write |
+| exact match with m <= 64 | **Shift-And / Bitap** — NOT IN THE REPO, and it is 5 lines: `mask[c]` = bits where c occurs in p; per text char `D = ((D << 1) | 1) & mask[c]`, match when bit m-1 is set | one word op per text char |
 | edit distance <= k with m <= 64 | bitap with k masks, O(nk/w) | — |
 | edit distance where the answer is known <= k | **banded DP** over diagonals with abs(i-j) <= k, O(nk) — NOT IN THE REPO; it is the ordinary edit-distance DP with the inner loop clamped to `[i-k, i+k]` | Ukkonen; with an LCE oracle it drops to O(n + k^2) |
 | "match ignoring which letters, only the pattern of repeats" (abab ~ cdcd) | **parameterized matching** — NOT IN THE REPO. Encode each char by the distance to its previous occurrence (0 if first), then run ordinary KMP on that array | — |
@@ -159,7 +159,7 @@
 | shortest string **not** a subsequence of s | DP on the subsequence automaton — `strings/subsequence_automaton.cpp` | the answer length is O(log_sigma n) |
 | count **distinct** subsequences | DP with last-occurrence subtraction — `strings/subsequence_automaton.cpp` | the subtraction IS the automaton's determinism |
 | count subsequences satisfying a **regular** constraint | product DP: subsequence automaton x DFA of the constraint | works for "divisible by k", "avoids substring", etc. |
-| LCS of two **permutations** / all-distinct strings | relabel by position in the first: **LCS becomes LIS**, O(n log n) | — |
+| LCS of two **permutations** / all-distinct strings | relabel by position in the first: **LCS becomes LIS** — `DP/lis.cpp` | — |
 | LCS with n*m ~ 1e8 | bit-parallel LCS, O(nm/64) | length only |
 | LCS where the number of matching pairs is small | Hunt-Szymanski, O((r+n) log n) | tiny alphabet overlap |
 | "min ops = insert/delete only" | `n + m - 2*LCS` | not edit distance |
