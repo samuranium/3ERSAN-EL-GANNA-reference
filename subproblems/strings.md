@@ -14,7 +14,7 @@
 | order does not matter (anagrams) | Zobrist multiset hash | `hashing/hash_ms.cpp` |
 | a 2D grid of characters | 2D hashing | `hashing/hash_2d.cpp` |
 | paths / subtrees of a tree | tree hashing | `hashing/hash_tree.cpp` |
-| prefix set, many words | trie | `DS/Trie/string_trie.cpp` |
+| prefix set, many words | trie + DFS | `strings/trie.cpp` |
 
 ## BY QUESTION
 
@@ -48,6 +48,11 @@
 | max xor / prefix questions on bit strings | binary trie | `DS/Trie/binary_trie.cpp` |
 | 2D pattern in a grid | 2D hash | `hashing/hash_2d.cpp` |
 | distinct submatrices | 2D hash | `hashing/hash_2d.cpp` |
+| all stored words in lexicographic order | DFS on the trie, term before children | `strings/trie.cpp` |
+| k-th smallest word / rank of a word | descend on subtree counts | `strings/trie.cpp` |
+| autocomplete: words under a prefix | walk to the prefix, then DFS | `strings/trie.cpp` |
+| longest stored word that prefixes q | one walk down | `strings/trie.cpp` |
+| sort strings without comparisons | insert all, then collect() | `strings/trie.cpp` |
 
 ## WHICH ONE WHEN THEY OVERLAP
 
