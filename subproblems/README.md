@@ -47,6 +47,16 @@ under pressure.
 | "minimum vertices to cover all edges" | = max matching (König) | `graph/matching/kuhn.cpp` |
 | "maximum set with no edge inside" | n − max matching | `graph/matching/kuhn.cpp` |
 | partition into two groups, penalties | min cut | `graph/flows/Dinics.cpp` |
+| "each X must be used **at least** k times" | flow with lower bounds | `graph/flows/lower_bounds.cpp` |
+| "minimise the cost **per step** around a loop" | min mean cycle | `graph/min_mean_cycle.cpp` |
+| complete graph, weight given by a **formula** | Borůvka (xor → binary trie) | `graph/MST/boruvka.cpp` |
+| "nobody would rather swap" | stable matching | `graph/matching/gale_shapley.cpp` |
+| "connect these k special nodes" | Steiner tree DP | `graph/steiner_tree.cpp` |
+| edges to a whole **range** of nodes | segment tree graph | `graph/segment_tree_graph.cpp` |
+| "min possible **max** edge on a route" | Kruskal reconstruction tree | `graph/MST/kruskal_tree.cpp` |
+| a convex piecewise-linear cost you keep adding to | slope trick | `DP/slope_trick.cpp` |
+| the game graph has **cycles** or draws | retrograde BFS | `game/retrograde.cpp` |
+| the answer is a polynomial / linear recurrence in n | interpolation / Berlekamp–Massey | `math/interpolation.cpp`, `math/linear_recurrence.cpp` |
 | "every X appears an even number of times" | GF(2) vector, xor basis | `DP/sub-problems xorbasis.cpp` |
 | "xor of a subset" | xor basis | `DP/sub-problems xorbasis.cpp` |
 | "max xor of a **pair**" | binary trie | `DS/Trie/binary_trie.cpp` |

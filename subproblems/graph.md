@@ -66,7 +66,7 @@
 | matching with **costs**, n = m | Hungarian, O(n³) | `graph/matching/hungarian.cpp` |
 | matching with costs + capacities | MCMF | `graph/flows/MCMF.cpp` |
 | minimise the **maximum** assigned cost | binary search + Kuhn, **not** Hungarian | `graph/matching/kuhn.cpp` |
-| each edge has a lower bound too | flow with lower bounds | — |
+| each edge has a lower bound too | flow with lower bounds | `graph/flows/lower_bounds.cpp` |
 | vertex capacities | split the vertex | `Dinics.cpp` |
 | matching in a **general** graph | Blossom — not in the repo | — |
 
@@ -163,8 +163,8 @@
 | path labels must match a pattern | product graph with the automaton: Dijkstra on (vertex, DFA state) |
 | at most k edges / exactly k transfers | layered Bellman-Ford dp[i][v]; **copy** the previous layer or you silently allow more than k |
 | paths of length exactly k, k <= 1e18 | adjacency matrix power; min-plus for the shortest such walk |
-| minimise cost **per step** / a ratio around a cycle | min mean cycle: binary search lambda, subtract from all edges, test for a negative cycle |
-| maximise profit - t*cost | Dinkelbach / fractional programming — binary search t, test the sign |
+| minimise cost **per step** / a ratio around a cycle | min mean cycle — `graph/min_mean_cycle.cpp` |
+| maximise profit - t*cost | Dinkelbach / fractional programming — `graph/min_mean_cycle.cpp` has the pattern |
 | expected moves / probability with cycles | linear system + Gauss; **on a tree** write E[v] = a*E[par] + b and eliminate bottom-up in O(n) |
 | shortest cycle (girth) | BFS from every vertex; through a fixed edge = delete it, shortest path between its ends |
 
@@ -172,11 +172,11 @@
 
 | you see | reach for |
 |---|---|
-| each edge must carry **at least** L | flow with lower bounds: set f=L, route excess via super source/sink, add t to s with capacity inf |
-| no source/sink, everything balances | circulation with demands — same construction, no s/t |
+| each edge must carry **at least** L | flow with lower bounds — `graph/flows/lower_bounds.cpp` |
+| no source/sink, everything balances | circulation with demands — `graph/flows/lower_bounds.cpp` |
 | k vertex- or edge-disjoint paths, general k | Menger = max flow with unit caps; split vertices for vertex-disjoint |
 | matching in a **general** graph (odd cycles) | Blossom O(n^3); size via Tutte-Berge |
-| "nobody would rather swap" — stable | Gale-Shapley O(n^2); the **proposing** side gets its optimum |
+| "nobody would rather swap" — stable | Gale-Shapley — `graph/matching/gale_shapley.cpp`. The **proposing** side gets its optimum |
 | colour edges, none sharing a vertex | Konig edge colouring: exactly Delta on bipartite (Vizing: Delta or Delta+1 general) |
 | min cut with **no s and t given** | Stoer-Wagner O(n^3); also min cut <= min degree |
 | min cut between **many pairs** | Gomory-Hu tree: n-1 max flows, answer = min edge on the tree path |
@@ -191,7 +191,7 @@
 |---|---|
 | "min possible max weight on a route", "smallest w making u,v connected", "everything reachable using edges <= w" | **Kruskal reconstruction tree** — `graph/MST/kruskal_tree.cpp`. LCA value = bottleneck; "reachable with weight <= w" becomes a SUBTREE |
 | reach everything **from the capital**, one-way | Chu-Liu / Edmonds arborescence — Kruskal is simply wrong |
-| complete graph, weights from a formula (xor, abs diff, Manhattan) | **Boruvka** + a structure giving the cheapest edge leaving a component |
+| complete graph, weights from a formula (xor, abs diff, Manhattan) | **Boruvka** — `graph/MST/boruvka.cpp` (includes XOR-MST) |
 | is edge e in **some** / **every** MST | some: endpoints in different components before its weight class; every: it is a bridge within that class |
 | connect k special cities, others optional | **Steiner tree DP** dp[mask][v], O(3^k n + 2^k(m + n log n)), k <= ~12 — `graph/steiner_tree.cpp` |
 
