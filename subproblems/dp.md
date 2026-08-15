@@ -13,14 +13,15 @@ Most failures are step 1. If the transition is awkward, the state is wrong.
 | you see | state | file |
 |---|---|---|
 | items, capacity | dp[i][cap] | — |
-| "is sum s reachable" (not how many) | bitset | `DS/bitset.cpp` [1] |
+| "is sum s reachable" (not how many) | bitset shifts | `DP/subset_sum_bitset.cpp` |
 | n ≤ 20 items, subsets | dp[mask] | see BITMASK below |
 | intervals, merge two halves | dp[l][r] | `DP/optimization/knuth.cpp` |
 | a tree, answer per subtree | dp[v] over children | `DP/rerooting.cpp` |
 | answer for **every** root | down[] + up[] | `DP/rerooting.cpp` |
 | digits of a number, count ≤ N | dp[pos][tight][...] | `DP/digit dp.cpp` |
-| digits + a divisibility/automaton rule | dp[pos][tight][autstate] | `DP/digit dp.cpp` |
-| longest increasing subsequence | patience / Fenwick | — |
+| digits + a divisibility/automaton rule | dp[pos][tight][autstate] | `DP/digit_dp_automaton.cpp` |
+| tile a grid / cell-by-cell grid DP | broken profile, O(nm·2^m) | `DP/broken_profile_dp.cpp` |
+| longest increasing subsequence | patience, O(n log n) | `DP/lis.cpp` |
 | a DAG | topological order **is** the DP order | `graph/shortest path/dag paths.cpp` [5] |
 | "at most k of something" | add k as a dimension | — |
 | two sequences | dp[i][j] | — |
@@ -30,9 +31,10 @@ Most failures are step 1. If the transition is awkward, the state is wrong.
 
 | you see | do this |
 |---|---|
-| visit every vertex once (TSP) | dp[mask][last] |
+| visit every vertex once (TSP) | dp[mask][last] — `DP/bitmask_tsp.cpp` |
 | partition into groups | iterate submasks, O(3ⁿ) |
-| "for each mask, aggregate over submasks" | SOS DP, O(2ⁿ·n) — `DP/sos.cpp` |
+| "for each mask, aggregate over submasks" | SOS DP / zeta, O(2ⁿ·n) — `DP/sos.cpp` |
+| ... and back again ("exactly" from "at least") | Mobius inverse, same loop, minus sign — `DP/sos.cpp` |
 | count pairs with `a & b == 0` | SOS over the complement |
 | assign n tasks to n people | dp[mask], the count of set bits is the row |
 | choose exactly k | Gosper's hack — `math/bitwise.cpp` |
