@@ -17,10 +17,10 @@ opened most.
 | tier | what | pages |
 |---|---|---|
 | 1 | `subproblems/` (all 10) + `template/` | ~13 |
-| 2 | `graph/shortest path/`, `graph/SCC/`, `DS/segment tree/`, `DS/BIT/`, `DS/LCA/` | ~30 |
-| 3 | `strings/`, `hashing/`, `math/` | ~40 |
-| 4 | `DP/`, `graph/flows/`, `graph/matching/`, the rest of `DS/` | ~40 |
-| 5 | `game/`, `combinatorics/`, `stress/`, `snippet/` | ~10 |
+| 2 | `graph/shortest path/`, `graph/SCC/`, `DS/segment tree/`, `DS/BIT/`, `DS/LCA/` | ~35 |
+| 3 | `strings/`, `hashing/`, `math/` | ~60 |
+| 4 | `DP/`, `graph/flows/`, `graph/matching/`, `graph/MST/`, the rest of `DS/` | ~65 |
+| 5 | `game/`, `combinatorics/`, `stress/`, `snippet/` | ~20 |
 
 ---
 
@@ -36,44 +36,56 @@ opened most.
   `floyd warshall` · `dag paths` (toposort) · `k_shortest_paths`
 - **`SCC/`** — `tarjan - bridges` (SCC + bridges + articulation + bridge tree)
   · `block_cut_tree` · `two_sat` · `eulerian_path` · `Tarjan SCC`
-- **`MST/`** — `kruskal with dsu` · `prim mst` · `second_best_mst`
-- **`flows/`** — `Dinics` · `altdinic` · `MCMF` ×2 · `edmonds karp`
-- **`matching/`** — `kuhn` (+ König) · `hopcroft_karp` · `hungarian`
+- **`MST/`** — `kruskal with dsu` · `prim mst` · `second_best_mst` ·
+  `kruskal_tree` (bottleneck→LCA) · `boruvka` (+ XOR-MST)
+- **`flows/`** — `Dinics` · `altdinic` · `MCMF` ×2 · `edmonds karp` ·
+  `lower_bounds` · `stoer_wagner` (global min cut)
+- **`matching/`** — `kuhn` (+ König) · `hopcroft_karp` · `hungarian` ·
+  `gale_shapley` (stable)
 - **`dsu/`** — `dsu parity` · `dsu_rollback` · `dsu_marking`
-- `kirchhoff` · `graph_coloring` · `inverse_graph` · `path_intersection`
+- `kirchhoff` · `graph_coloring` · `inverse_graph` · `path_intersection` ·
+  `segment_tree_graph` (range edges) · `steiner_tree` · `min_mean_cycle`
 
 ### `DS/`
 - **`segment tree/`** — `lazy` · `segtree_iterative` · `segtree_2d` ·
-  `implicit` · `persistent/` · `merge/`
+  `implicit` · `beats` (chmin+sum) · `persistent/` ·
+  `merge/` (`merge sort tree`, `segtree_merge`)
 - **`BIT/`** — `pointxrange` · `rangexrange` · `fenwick_2d` ·
   `fenwick_2d_range` · `fenwick_2d_offline` · `fenwick_kth`
 - **`sparse/`** — `Sparse Table` · `disjoint_sparse_table` · `sparse_table_2d`
 - **`LCA/`** — `binary lifting` · `virtual_tree`
-- **`HLD/`** · **`centroid/`** · **`Trie/`** · **`SQRT/`** (`mo`, `mo_on_tree`)
+- **`offline/`** — `cdq` · `parallel_binary_search`
+- **`HLD/`** · **`centroid/`** · **`Trie/`** (`binary_trie`, `string_trie`,
+  `persistent_binary_trie`) · **`SQRT/`** (`mo`, `mo_on_tree`, `mo_variants`)
 - `bitset` · `wavelet_tree` · `monotonic_stack` · `monotonic_deque` ·
-  `prefix_sum_2d` · `2d partial sum` · `bst/treap_implicit`
+  `prefix_sum_2d` · `2d partial sum` · `bst/treap_implicit` ·
+  `swag` · `cartesian_tree` · `odt` (Chtholly) · `dsu_on_tree` (sack)
 
 ### `DP/`
 `rerooting` · `incexc` · `lis` · `sos` · `subset_sum_bitset` ·
 `bitmask_tsp` · `broken_profile_dp` · `digit dp` · `digit_dp_automaton` ·
-`sub-problems xorbasis` · **`optimization/`** (`CHT`, `li_chao`, `D&C`,
-`knuth`) · **`matrix/`** (`matrix expo`, `minlenK`)
+`sub-problems xorbasis` · `submask_partition` (3^n) · `tree_knapsack` ·
+`slope_trick` · `subset_sum_convolution` · **`optimization/`** (`CHT`,
+`li_chao`, `D&C`, `knuth`) · **`matrix/`** (`matrix expo`, `minlenK`)
 
 ### `strings/` and `hashing/`
 `Z kmp` · `aho_corasick` · `suffix_automaton` · `cleansuf` (suffix array) ·
-`separate manacher` · `Z manacher` · `suffix array` · `subsuf`
+`separate manacher` · `Z manacher` · `suffix array` · `subsuf` ·
+`trie` (+DFS) · `eertree` · `lyndon` (Duval/rotations/de Bruijn) ·
+`subsequence_automaton` · `aho_fail_tree`
 — `hashing/`: `hash` · `hash_seg` · `hash_tree` · `hash_ms` · `hash_2d`
 (see `hashing/README.md`)
 
 ### `math/`
 `modular` · `extgcd` · `crt` · `phi` · `bsgs` · `gauss` · `fft_ntt` ·
 `fwht` · `convolution_anymod` · `bitwise` · `randomization` ·
-`compare_fractions`
+`compare_fractions` · `interpolation` (Lagrange) · `linear_recurrence`
+(Berlekamp-Massey + Kitamasa) · `floor_sum` · `nt_misc`
 
 ### the rest
-`combinatorics/` (`catalan`, `nCr_with_mod`, `nCr_without_mod`) ·
-`game/grundy` · `number theory/sieve` · `stress/gen` ·
-`snippet/` (`ordered_set`, `compress`)
+`combinatorics/` (`catalan`, `nCr_with_mod`, `nCr_without_mod`, `stirling`,
+`burnside`, `counting_formulas`) · `game/` (`grundy`, `retrograde`) ·
+`number theory/sieve` · `stress/gen` · `snippet/` (`ordered_set`, `compress`)
 
 ---
 
