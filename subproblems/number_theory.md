@@ -81,17 +81,17 @@ Entries route to a section there. What we have locally is only
 | pi(n) or the sum of primes <= n, n up to 1e13 | **Lucy_Hedgehog** DP, O(n^(3/4)) time, O(sqrt n) memory | "count or sum primes" with n far past sieving |
 | the sum of an arbitrary multiplicative f | **Min_25 sieve** | needs f(p^k) computable fast |
 | any `sum over d|n of f(d) g(n/d)` | Dirichlet convolution; O(n log n), O(n) if multiplicative | sits under the Mobius inversion you have |
-| `x^2 = a (mod p)` | **Tonelli-Shanks** (shortcut `a^((p+1)/4)` when p = 3 mod 4); Legendre symbol to test first | also the constant-term step inside polynomial sqrt |
+| `x^2 = a (mod p)` | **Tonelli-Shanks** — `math/nt_misc.cpp` (Legendre test first) | also the constant-term step inside polynomial sqrt |
 | `x^k = a (mod p)` | discrete root: primitive root + BSGS; exactly gcd(k, p-1) solutions | reduces to a discrete log in the exponent |
 | nCr mod a **composite** or mod p^e | factor the modulus, generalised Lucas per prime power, recombine by CRT | inverse factorials do not exist mod p^e — you must strip p's |
 | "is nCr divisible by p^k" | **Kummer**: the exponent equals the number of carries when adding r and n-r in base p | Legendre: `v_p(n!) = (n - s_p(n))/(p-1)` |
 | the largest power of p in n! | Legendre / digit-sum formula | needed for nCr mod p^e and trailing zeros |
-| best rational p/q approximating x with q <= Q | continued-fraction convergents **plus semiconvergents** | convergents alone miss the optimum on the boundary |
-| the fraction in an interval with the smallest denominator | **Stern-Brocot** descent with run-length jumps, O(log) | naive single steps are O(p+q) |
-| `x^2 - D y^2 = 1` | **Pell**: fundamental solution from the CF period of sqrt(D), then a recurrence | the fundamental solution can be astronomically large |
-| the largest amount not payable with given coins | **Frobenius**: `ab-a-b` for two coprime coins; 3+ coins is a shortest path over residues mod the smallest | no closed form beyond two |
+| best rational p/q approximating x with q <= Q | continued-fraction convergents **plus semiconvergents** — `math/nt_misc.cpp` | convergents alone miss the optimum on the boundary |
+| the fraction in an interval with the smallest denominator | **Stern-Brocot** descent — `math/nt_misc.cpp` `stern_brocot_between` | naive single steps are O(p+q) |
+| `x^2 - D y^2 = 1` | **Pell** — `math/nt_misc.cpp` | the fundamental solution can be astronomically large |
+| the largest amount not payable with given coins | **Frobenius** — `math/nt_misc.cpp` (2 coins closed form, 3+ by shortest path) | no closed form beyond two |
 | sums of two squares, or complex integer arithmetic | Gaussian integers; the norm is multiplicative | "a^2 + b^2 = n", or rotations by 90 degrees |
-| distinct non-consecutive Fibonacci decomposition | **Zeckendorf** | also the exact loss condition in Fibonacci Nim |
-| people in a circle, every k-th eliminated | **Josephus**: `J(n,k) = (J(n-1,k)+k) mod n`; O(k log n) for small k | repeated elimination with wraparound |
+| distinct non-consecutive Fibonacci decomposition | **Zeckendorf** — `math/nt_misc.cpp` | also the exact loss condition in Fibonacci Nim |
+| people in a circle, every k-th eliminated | **Josephus** — `math/nt_misc.cpp` (O(n) and the block-skipping version) | repeated elimination with wraparound |
 | the cycle length of `x -> a*x mod m` | multiplicative order: it divides phi(m); factor phi(m) and test divisors | — |
 | enumerate Pythagorean triples | `(m^2-n^2, 2mn, m^2+n^2)`, m > n, coprime, opposite parity, scaled by k | every triple exactly once |

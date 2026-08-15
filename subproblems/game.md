@@ -72,7 +72,7 @@ exactly one of them. If a move can touch two, the xor rule does not apply.
 |---|---|---|
 | move = remove from a pile **or split** a pile | Lasker's Nim / take-and-break; Grundy via mex over both move classes | the Grundy sequence is almost always eventually periodic — find the period |
 | remove from **up to k-1 piles** at once | **Moore's Nim_k**: losing iff at every bit the count of piles with that bit set is 0 mod k | k=2 degenerates to ordinary Nim |
-| remove at most twice the previous move | **Fibonacci Nim**: losing iff n is a Fibonacci number; strategy via Zeckendorf | the move limit depends on the last move |
+| remove at most twice the previous move | **Fibonacci Nim**: losing iff n is a Fibonacci number; Zeckendorf in `math/nt_misc.cpp` | the move limit depends on the last move |
 | take between 1 and k | Bash game: losing iff `n mod (k+1) == 0` | trivial but frequently disguised |
 | poset / "eat a corner and everything above it" (Chomp) | **strategy stealing**: the first player wins for any board bigger than 1x1 | the answer is "First" with no constructible strategy — do not search for one |
 | players have **different** move sets | Sprague-Grundy does NOT apply — partizan; state = (pos, turn), `game/retrograde.cpp` | "Alice may only ..., Bob may only ..." |

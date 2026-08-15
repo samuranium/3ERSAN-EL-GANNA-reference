@@ -147,7 +147,7 @@ All of it: `math/bitwise.cpp`, and `DS/bitset.cpp` for the ÷64 loop shapes.
 | "non-crossing tuples of paths / plane partitions" | LGV or hook length — `combinatorics/counting_formulas.cpp` | — |
 | "piecewise-linear convex cost, add/shift/clamp repeatedly" | slope trick — `DP/slope_trick.cpp` | each operation is a heap push |
 | "probability where states revisit each other" | linear system + Gauss, not memoisation | the cycle is the tell |
-| "closest fraction with bounded denominator" | continued fractions / Stern-Brocot | convergents plus semiconvergents |
+| "closest fraction with bounded denominator" | continued fractions / Stern-Brocot — `math/nt_misc.cpp` | convergents plus semiconvergents |
 | "constraints on base-p digits of n and r" | Lucas (mod p) / Kummer (divisibility) | digits are the native language of these theorems |
 
 ## TRAPS
