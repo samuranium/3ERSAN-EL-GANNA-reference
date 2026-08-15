@@ -1,0 +1,2670 @@
+<title>Dynamic Programming — 3ERSAN EL GANNA</title>
+<style>
+:root{
+  --paper:#ffffff; --ink:#16181c; --soft:#5a6470; --faint:#8b939d;
+  --rule:#d5dade; --rule2:#aeb6bd;
+  --accent:#0d5f6b;
+  --c:#4f7a5e;        /* comment            */
+  --cbox:#8a5a12;     /* #### box comment   */
+  --k:#1f4f9c;        /* keyword            */
+  --t:#0d6b6b;        /* type               */
+  --s:#8a4520;        /* string             */
+  --n:#8a3d6b;        /* number             */
+  --pp:#6a3d9c;       /* preprocessor       */
+  --codebg:#fafbfb;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+    --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+    --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+    --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+  --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+  --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+  --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:10.5pt; line-height:1.5;
+}
+.wrap{max-width:52rem;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+h1{font-size:1.9rem;line-height:1.15;margin:0 0 .35rem;letter-spacing:-.01em}
+.blurb{color:var(--soft);margin:0 0 .3rem;max-width:52ch}
+.meta{color:var(--faint);font-size:.85em;margin:0}
+hr{border:none;border-top:3px double var(--rule2);margin:1.6rem 0}
+
+h2{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:1.02rem;margin:0 0 .1rem;letter-spacing:-.01em;
+  color:var(--accent);
+  break-after:avoid; page-break-after:avoid;
+}
+.path{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.78em;color:var(--faint);margin:0 0 .45rem;
+  break-after:avoid; page-break-after:avoid;
+}
+.file{ margin:0 0 1.5rem; break-inside:auto; }
+
+/* ---- table of contents ---- */
+.toc{margin:0 0 1rem}
+.toc h2{color:var(--ink);font-size:1.05rem;margin-bottom:.5rem}
+.toc .grp{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--faint);margin:.75rem 0 .2rem;
+}
+.toc ol{list-style:none;margin:0;padding:0;
+  columns:2; column-gap:2rem;}
+.toc li{break-inside:avoid;margin:.08rem 0;font-size:.92em}
+.toc a{color:var(--ink);text-decoration:none;
+  display:flex;justify-content:space-between;gap:.5rem;align-items:baseline}
+.toc a:hover{color:var(--accent)}
+.toc .num{color:var(--faint);font-size:.85em;
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-variant-numeric:tabular-nums}
+
+/* ---- code ---- */
+pre{
+  margin:0; background:var(--codebg);
+  border:1px solid var(--rule); border-radius:3px;
+  padding:.6rem .75rem;
+  font-family:ui-monospace,"Cascadia Mono","DejaVu Sans Mono",Consolas,Menlo,monospace;
+  font-size:8.6pt; line-height:1.38;
+  white-space:pre-wrap;
+  overflow-wrap:break-word;
+  padding-left:2.2em; text-indent:-1.6em;   /* hanging indent on wrapped lines */
+  tab-size:4;
+}
+code{font-family:inherit}
+.c{color:var(--c)}
+.cbox{color:var(--cbox);font-weight:600}
+.k{color:var(--k);font-weight:600}
+.t{color:var(--t)}
+.s{color:var(--s)}
+.n{color:var(--n)}
+.pp{color:var(--pp)}
+
+/* ---- prose blocks (the already-markdown index files) ---- */
+.prose{font-size:.95em}
+.prose table{border-collapse:collapse;width:100%;margin:.5rem 0;font-size:.88em}
+.prose th,.prose td{border:1px solid var(--rule);padding:.28rem .5rem;
+  text-align:left;vertical-align:top}
+.prose th{background:var(--codebg);font-weight:650}
+.prose h3{font-size:1rem;margin:1rem 0 .3rem;color:var(--accent);
+  break-after:avoid;page-break-after:avoid}
+.prose h4{font-size:.92rem;margin:.8rem 0 .25rem;
+  break-after:avoid;page-break-after:avoid}
+.prose code{background:var(--codebg);padding:.05em .3em;border-radius:2px;
+  font-size:.9em;border:1px solid var(--rule)}
+.prose ul,.prose ol{padding-left:1.2rem;margin:.4rem 0}
+.prose li{margin:.15rem 0}
+.prose p{margin:.4rem 0}
+
+/* ---- print ---- */
+@page{ size:A4; margin:13mm 11mm; }
+@media print{
+  :root{
+    --paper:#fff; --ink:#000; --soft:#333; --faint:#555;
+    --rule:#bbb; --rule2:#888; --codebg:#fbfbfb; --accent:#0a4a55;
+  }
+  body{font-size:10pt}
+  .wrap{max-width:none;padding:0;margin:0}
+  .noprint{display:none !important}
+  pre{font-size:8.2pt;border-color:#ccc;break-inside:auto}
+  h2{break-after:avoid;page-break-after:avoid}
+  .path{break-after:avoid;page-break-after:avoid}
+  .file{break-inside:auto}
+  .toc{break-after:page;page-break-after:always}
+  a{color:inherit;text-decoration:none}
+  .prose tr{break-inside:avoid}
+}
+
+.hint{
+  background:var(--codebg);border:1px solid var(--rule);
+  border-left:4px double var(--rule2);
+  border-radius:3px;padding:.7rem .9rem;margin:0 0 1.4rem;
+  font-size:.9em;color:var(--soft)
+}
+.hint b{color:var(--ink)}
+</style>
+<div class="wrap">
+<h1>3. Dynamic Programming</h1>
+<p class="blurb">State design first, optimisation second.</p>
+<p class="meta">20 files · 3ERSAN EL GANNA team reference</p>
+<div class="hint noprint"><b>To make the PDF:</b> Ctrl+P → Destination <b>Save as PDF</b> → turn ON <b>Background graphics</b> (for the coloured code) and <b>Headers and footers</b> (for page numbers) → Margins <b>Default</b>. This box does not print.</div>
+<div class="toc"><h2>Contents</h2>
+<ol>
+<li><a href="#lis"><span>lis</span><span class="num">3.1</span></a></li>
+<li><a href="#incexc"><span>incexc</span><span class="num">3.2</span></a></li>
+<li><a href="#sos"><span>sos</span><span class="num">3.3</span></a></li>
+<li><a href="#subset_sum_bitset"><span>subset_sum_bitset</span><span class="num">3.4</span></a></li>
+<li><a href="#submask_partition"><span>submask_partition</span><span class="num">3.5</span></a></li>
+<li><a href="#subset_sum_convolution"><span>subset_sum_convolution</span><span class="num">3.6</span></a></li>
+<li><a href="#bitmask_tsp"><span>bitmask_tsp</span><span class="num">3.7</span></a></li>
+<li><a href="#broken_profile_dp"><span>broken_profile_dp</span><span class="num">3.8</span></a></li>
+<li><a href="#digit-dp"><span>digit dp</span><span class="num">3.9</span></a></li>
+<li><a href="#digit_dp_automaton"><span>digit_dp_automaton</span><span class="num">3.10</span></a></li>
+<li><a href="#rerooting"><span>rerooting</span><span class="num">3.11</span></a></li>
+<li><a href="#tree_knapsack"><span>tree_knapsack</span><span class="num">3.12</span></a></li>
+<li><a href="#sub-problems-xorbasis"><span>sub-problems xorbasis</span><span class="num">3.13</span></a></li>
+</ol>
+<div class="grp">optimization</div>
+<ol>
+<li><a href="#cht"><span>CHT</span><span class="num">3.14</span></a></li>
+<li><a href="#li_chao"><span>li_chao</span><span class="num">3.15</span></a></li>
+<li><a href="#dc"><span>D&amp;C</span><span class="num">3.16</span></a></li>
+<li><a href="#knuth"><span>knuth</span><span class="num">3.17</span></a></li>
+</ol>
+<ol>
+<li><a href="#slope_trick"><span>slope_trick</span><span class="num">3.18</span></a></li>
+</ol>
+<div class="grp">matrix</div>
+<ol>
+<li><a href="#matrix-expo"><span>matrix expo</span><span class="num">3.19</span></a></li>
+<li><a href="#minlenk"><span>minlenK</span><span class="num">3.20</span></a></li>
+</ol>
+</div>
+<div class="file" id="lis">
+<h2>3.1 &nbsp;lis</h2>
+<p class="path">DP/lis.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// LIS -- longest increasing subsequence, O(n log n), with reconstruction</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// tail[k] = the SMALLEST possible tail value of an increasing subsequence of</span>
+<span class="c">// length k+1 seen so far. It is sorted by construction, so each element does</span>
+<span class="c">// one binary search. tail is NOT the answer subsequence -- it is a set of best</span>
+<span class="c">// candidates, and printing it is the classic wrong output.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  STRICT vs NON-DECREASING IS ONE FUNCTION CALL</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #    strictly increasing  (a &lt; b)      lower_bound</span>
+<span class="cbox">// #    non-decreasing       (a &lt;= b)     upper_bound</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Nothing else changes. Getting it backwards is off by exactly the number</span>
+<span class="cbox">// #  of duplicate runs, so it passes samples with distinct values.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  DECREASING: negate the array, or reverse it -- do not flip comparators,</span>
+<span class="cbox">// #  because lower/upper_bound then need a custom comparator too and the two</span>
+<span class="cbox">// #  changes interact.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// RECONSTRUCTION: par[i] is the index that preceded i in the best subsequence</span>
+<span class="c">//   ending at i. It is read from tailIdx[p-1] BEFORE tailIdx[p] is overwritten</span>
+<span class="c">//   -- position p-1 is untouched by the write at p, which is why this is safe.</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Empty input: guard before touching tailIdx.back().</span>
+<span class="c">//   The returned vector holds INDICES, not values. a[i] for the values.</span>
+<span class="c">//   Ties in reconstruction pick one valid answer, not a specific one.</span>
+<span class="c">//   O(n log n) is on the LENGTH; if you need the count of distinct LIS or</span>
+<span class="c">//     weights, that is a Fenwick DP, not this.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   LIS length                          lis().size()</span>
+<span class="c">//   the subsequence itself              lis() returns indices</span>
+<span class="c">//   longest NON-DECREASING              upper_bound instead</span>
+<span class="c">//   longest DECREASING / non-increasing negate the array, then the above</span>
+<span class="c">//   number of DIFFERENT LIS             Fenwick over values keeping (len, cnt)</span>
+<span class="c">//   maximum-SUM increasing subsequence  Fenwick over values with max-sum, not</span>
+<span class="c">//                                       this greedy</span>
+<span class="c">//   LIS of a[l..r] for many queries     offline + merge sort tree, or a</span>
+<span class="c">//                                       different formulation -- greedy LIS</span>
+<span class="c">//                                       does not restrict to ranges</span>
+<span class="c">//   2D: pairs (x,y), both increasing    sort by x (ties by y DESCENDING to</span>
+<span class="c">//                                       forbid equal x), then LIS on y</span>
+<span class="c">//   3D and up                           CDQ divide and conquer, or a BIT of</span>
+<span class="c">//                                       BITs -- DS/BIT/fenwick_2d.cpp</span>
+<span class="c">//   LCS of two PERMUTATIONS             map one to positions in the other,</span>
+<span class="c">//                                       then LIS. O(n log n) instead of O(n^2)</span>
+<span class="c">//   minimum number of increasing        = longest NON-INCREASING subsequence</span>
+<span class="c">//     subsequences covering the array   (Dilworth)</span>
+<span class="c">//   minimum chains covering a poset     Dilworth again -- longest antichain</span>
+<span class="c">//   patience sorting / card piles       tail[] IS the pile tops</span>
+<span class="c">//   &quot;minimum removals to make it        n - LIS</span>
+<span class="c">//     increasing&quot;</span>
+<span class="c">// ============================================================================</span>
+
+<span class="c">// returns the INDICES of one longest strictly increasing subsequence</span>
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; lis(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;a) {
+    <span class="k">int</span> n = a.size();
+    <span class="k">if</span> (!n) <span class="k">return</span> {};
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; tail, tailIdx, par(n, -<span class="n">1</span>);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        <span class="k">int</span> p = lower_bound(tail.begin(), tail.end(), a[i]) - tail.begin();
+        <span class="c">//                  ^^^^^^^^^^^ upper_bound for NON-DECREASING</span>
+        par[i] = p ? tailIdx[p - <span class="n">1</span>] : -<span class="n">1</span>;        <span class="c">// read p-1 before writing p</span>
+        <span class="k">if</span> (p == (<span class="k">int</span>)tail.size()) tail.push_back(a[i]), tailIdx.push_back(i);
+        <span class="k">else</span> tail[p] = a[i], tailIdx[p] = i;
+    }
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; res;
+    <span class="k">for</span> (<span class="k">int</span> i = tailIdx.back(); i != -<span class="n">1</span>; i = par[i]) res.push_back(i);
+    reverse(res.begin(), res.end());
+    <span class="k">return</span> res;
+}
+<span class="k">int</span> lis_length(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;a) {           <span class="c">// length only, no bookkeeping</span>
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; tail;
+    <span class="k">for</span> (<span class="k">int</span> x : a) {
+        <span class="k">int</span> p = lower_bound(tail.begin(), tail.end(), x) - tail.begin();
+        <span class="k">if</span> (p == (<span class="k">int</span>)tail.size()) tail.push_back(x);
+        <span class="k">else</span> tail[p] = x;
+    }
+    <span class="k">return</span> tail.size();
+}</code></pre>
+</div>
+<div class="file" id="incexc">
+<h2>3.2 &nbsp;incexc</h2>
+<p class="path">DP/incexc.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// DIVISOR INVERSION / MOBIUS  -- template reference</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// WHEN TO REACH FOR THIS</span>
+<span class="c">//   You count objects tagged by an invariant g that is FORCED to divide n</span>
+<span class="c">//   (gcd of parts, gcd of a chosen subset, period of a string, ...).</span>
+<span class="c">//   &quot;invariant is a MULTIPLE of d&quot; is easy to count; &quot;invariant is EXACTLY d&quot;</span>
+<span class="c">//   is not. The exact-classes partition the whole set, so the easy quantity is</span>
+<span class="c">//   their divisor-sum -&gt; invert.</span>
+<span class="c">//</span>
+<span class="c">//   Tell: your first instinct is &quot;subtract one term per prime divisor&quot;.</span>
+<span class="c">//   The moment you write that you owe an inclusion-exclusion layer.</span>
+<span class="c">//</span>
+<span class="c">// TWO DUAL FORMS -- PICK BEFORE WRITING ANYTHING</span>
+<span class="c">//   Wrong direction still passes small tests. Decide explicitly.</span>
+<span class="c">//</span>
+<span class="c">//   FORM A -- divisor sum      F(n) = sum_{d | n} f(d)</span>
+<span class="c">//             have: F at each divisor of ONE n</span>
+<span class="c">//             iterate divisors ASCENDING</span>
+<span class="c">//             e.g. CF 900D Unusual Sequences</span>
+<span class="c">//</span>
+<span class="c">//   FORM B -- multiple sum     G(d) = sum_{d | m} f(m)</span>
+<span class="c">//             have: G[d] for ALL d &lt;= N</span>
+<span class="c">//             iterate d from N DOWN to 1</span>
+<span class="c">//             e.g. CF 803F Coprime Subsequences</span>
+<span class="c">// ============================================================================</span>
+
+<span class="pp">#include &lt;bits/stdc++.h&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> std;
+<span class="k">typedef</span> <span class="k">long</span> <span class="k">long</span> <span class="t">ll</span>;
+<span class="pp">#define fio ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);</span>
+
+<span class="k">const</span> <span class="k">int</span> mod = <span class="n">1</span><span class="s">&#x27;000&#x27;</span><span class="n">000</span><span class="s">&#x27;007;
+int add(int a, int b) { return (a += b) &lt; mod ? a : a - mod; }
+int subt(int a, int b) { return (a -= b) &lt; 0 ? a + mod : a; }
+int mult(int a, int b) { return 1ll * a * b % mod; }
+
+// exponent is ll: in form A the exponent is n-1 with n up to 1e9, and callers
+// pass raw divisors -- do not narrow this to int without checking the caller.
+int fp(int b, ll e) {
+    int r = 1;
+    for (; e; b = mult(b, b), e &gt;&gt;= 1)
+        if (e &amp; 1) r = mult(r, b);
+    return r;
+}
+int divi(int a, int b) { return mult(a, fp(b, mod - 2)); }
+
+// ============================================================================
+// SNIPPET 1 -- FORM A, single n, recursive inclusion-exclusion
+// ----------------------------------------------------------------------------
+// Identity:  F(n) = sum_{d | n} f(d)
+// Isolate:   f(n) = F(n) - sum_{d | n, d &lt; n} f(d)
+//
+// Invariant: divisors sorted ascending =&gt; every proper divisor of dv[j] sits at
+// some index k &lt; j, so f is already correct there when j is processed.
+//
+// Complexity: O(sqrt n) to enumerate + O(D^2) to combine + O(D log n) powers.
+//             D = d(n) &lt;= 1344 for n &lt;= 1e9  =&gt;  D^2 ~ 1.8M, fine.
+// Space: O(D).
+//
+// TO ADAPT: replace F(). Nothing else changes.
+//   F(m) = &quot;unconstrained count at the shrunk instance of size m&quot;
+//   i.e. count of objects at scale m with no gcd/period restriction at all.
+// ============================================================================
+
+// problem-specific. Below: # compositions of m into positive parts = 2^(m-1).
+int F(ll m) { return fp(2, m - 1); }
+
+// returns (divisors ascending, f at each). f.back() == f(n).
+pair&lt;vector&lt;ll&gt;, vector&lt;int&gt;&gt; invert_divisors(ll n) {
+    vector&lt;ll&gt; dv;
+    for (ll i = 1; i * i &lt;= n; i++)
+        if (n % i == 0) {
+            dv.push_back(i);
+            // the partner n/i is distinct from i iff i*i != n. FULL STOP.
+            // an extra guard like (n/i) % i silently drops valid divisors.
+            if (i * i != n) dv.push_back(n / i);
+        }
+    sort(dv.begin(), dv.end());
+
+    int D = dv.size();
+    vector&lt;int&gt; f(D);
+    for (int j = 0; j &lt; D; j++) {
+        f[j] = F(dv[j]);
+        for (int k = 0; k &lt; j; k++)
+            if (dv[j] % dv[k] == 0) f[j] = subt(f[j], f[k]);
+    }
+    return {dv, f};
+}
+
+// n == 1: dv = {1}, f[0] = F(1) = 2^0 = 1. Correct, no special case needed --
+// but this is exactly the kind of boundary worth asserting in a sweep.
+
+// ============================================================================
+// SNIPPET 2 -- FORM A via Mobius closed form (same answer, faster)
+// ----------------------------------------------------------------------------
+// Unrolling snippet 1 collapses the coefficient of F(n/d) to mu(d):
+//     f(n) = sum_{d | n} mu(d) * F(n/d)
+//     mu(1)=1;  mu(d)=0 if a squared prime divides d;  mu(d)=(-1)^k otherwise.
+// Only SQUAREFREE divisors survive -&gt; 2^omega(n) terms, omega &lt;= 9 for n &lt;= 1e9
+// =&gt; at most 512 terms vs ~1.8M above.
+//
+// Use snippet 1 when you need f at EVERY divisor; snippet 2 when only f(n).
+// ============================================================================
+
+int invert_mobius(ll n) {
+    vector&lt;ll&gt; p;
+    ll m = n;                      // m is destroyed by factorization
+    for (ll i = 2; i * i &lt;= m; i++)
+        if (m % i == 0) {
+            p.push_back(i);
+            while (m % i == 0) m /= i;
+        }
+    if (m &gt; 1) p.push_back(m);     // leftover prime &gt; sqrt(n)
+
+    int k = p.size(), res = 0;
+    for (int mask = 0; mask &lt; (1 &lt;&lt; k); mask++) {
+        ll d = 1;
+        for (int b = 0; b &lt; k; b++)
+            if (mask &gt;&gt; b &amp; 1) d *= p[b];
+        int t = F(n / d);          // n, NOT m -- do not collapse these two vars
+        res = (__builtin_popcount(mask) &amp; 1) ? subt(res, t) : add(res, t);
+    }
+    return res;
+}
+
+// ============================================================================
+// SNIPPET 3 -- FORM B, range inversion. The contest workhorse.
+// ----------------------------------------------------------------------------
+// in : g[d] = # objects whose invariant is a MULTIPLE of d,  1 &lt;= d &lt;= N
+// out: g[d] = # objects whose invariant is EXACTLY d          (in place)
+//
+// DESCENDING is what makes it correct: on reaching d, every g[m] with d | m,
+// m &gt; d has already been converted to exact, so subtracting them is legal.
+//
+// Complexity: O(N log N)  (harmonic sum).
+// ============================================================================
+
+void invert_multiples(vector&lt;int&gt;&amp; g, int N) {
+    for (int d = N; d &gt;= 1; d--)
+        for (int m = 2 * d; m &lt;= N; m += d)
+            g[d] = subt(g[d], g[m]);
+}
+
+// Companion you almost always need first: cnt[d] = # of a_i divisible by d.
+// Same harmonic loop, ASCENDING order is irrelevant here (pure accumulation).
+// NOTE: plain int addition, no mod -- these are counts, not residues.
+vector&lt;int&gt; divisor_counts(const vector&lt;int&gt;&amp; a, int N) {
+    vector&lt;int&gt; cnt(N + 1, 0);
+    for (int v : a) cnt[v]++;
+    for (int d = 1; d &lt;= N; d++)
+        for (int m = 2 * d; m &lt;= N; m += d)
+            cnt[d] += cnt[m];
+    return cnt;
+}
+
+// ============================================================================
+// SNIPPET 4 -- mu over a range (linear sieve)
+// ----------------------------------------------------------------------------
+// ONLY needed when a problem wants mu explicitly, e.g. sum_d mu(d)*h(d).
+// Plain inversion (snippets 1/3) never needs this.
+// Complexity: O(N).
+// ============================================================================
+
+vector&lt;int&gt; mu_sieve(int N) {
+    vector&lt;int&gt; mu(N + 1, 1), pr;
+    vector&lt;char&gt; comp(N + 1, 0);
+    for (int i = 2; i &lt;= N; i++) {
+        if (!comp[i]) { pr.push_back(i); mu[i] = -1; }
+        for (int p : pr) {
+            if (1LL * i * p &gt; N) break;   // cast: i*p overflows int near 2e9
+            comp[i * p] = 1;
+            if (i % p == 0) { mu[i * p] = 0; break; }   // squared factor
+            mu[i * p] = -mu[i];
+        }
+    }
+    return mu;
+}
+
+// ============================================================================
+// WORKED CHECK -- n = 6 (smallest n with two distinct primes; the smallest
+// case where a WRONG inclusion-exclusion actually differs from a right one)
+// ----------------------------------------------------------------------------
+// G(d) = # compositions of 6 with all parts divisible by d = 2^(6/d - 1)
+//   G(1)=32   G(2)=4: (6),(4,2),(2,4),(2,2,2)
+//   G(3)=2 : (6),(3,3)                      G(6)=1: (6)
+//
+// NAIVE TRAP: 32 - 4 - 2 = 26.  WRONG -- (6) sits in both G(2) and G(3) and was
+// removed twice. Add it back: 32 - 4 - 2 + 1 = 27. That sign pattern IS mu.
+//
+// Snippet 1: f(1)=1, f(2)=2^1-f(1)=1, f(3)=2^2-f(1)=3, f(6)=32-1-1-3=27.
+// Snippet 2: 2^5 - 2^2 - 2^1 + 2^0 = 27.  Agree.
+//
+// Spot-check the small ones by hand:
+//   f(2)=1 -&gt; (1,1)                  [ (2) has gcd 2, excluded ]
+//   f(3)=3 -&gt; (1,1,1),(2,1),(1,2)
+// ============================================================================
+
+// ============================================================================
+// DRIVER -- CF 900D Unusual Sequences   https://codeforces.com/problemset/problem/900/D
+// ----------------------------------------------------------------------------
+// gcd(a_i) = x and sum = y. Divide through by x: compositions of n = y/x with
+// gcd exactly 1. y % x != 0 -&gt; answer 0.
+// ============================================================================
+
+int main() {
+    fio
+    ll x, y;
+    cin &gt;&gt; x &gt;&gt; y;
+    if (y % x) { cout &lt;&lt; 0 &lt;&lt; &quot;\n&quot;; return 0; }
+    cout &lt;&lt; invert_divisors(y / x).second.back() &lt;&lt; &quot;\n&quot;;
+    // equivalently: cout &lt;&lt; invert_mobius(y / x) &lt;&lt; &quot;\n&quot;;
+    return 0;
+}
+
+// ============================================================================
+// ADAPTATION CHECKLIST -- run this before writing code on a new problem
+// ----------------------------------------------------------------------------
+//   1. Name the invariant. Confirm it divides n (form A) or ranges 1..N (B).
+//   2. Write G(d) = &quot;count with invariant a multiple of d&quot; in CLOSED FORM.
+//      Can&#x27;</span>t? The technique does <span class="k">not</span> apply yet -- go back to modelling.
+<span class="c">//   3. Pick form A or B from the table at the top of this file.</span>
+<span class="c">//   4. Swap F() (form A) or build g[] (form B). Nothing else changes.</span>
+<span class="c">//   5. Hand-trace n = 6 against brute force before submitting.</span>
+<span class="c">//</span>
+<span class="c">// THIRD SHAPE REMINDER: if you need f at ALL values 1..N, do NOT build a</span>
+<span class="c">// divisor list per value. Use snippet 3. O(N log N) beats O(N * sqrt N).</span>
+<span class="c">//</span>
+<span class="c">// SIBLINGS (ratings from memory, NOT verified in search -- treat as approximate)</span>
+<span class="c">//   CF 803F   Coprime Subsequences        ~1900  form B, sieve shape</span>
+<span class="c">//             https://codeforces.com/problemset/problem/803/F</span>
+<span class="c">//   ABC 162 E Sum of gcd of Tuples (Hard)        same inversion, weight each</span>
+<span class="c">//             https://atcoder.jp/contests/abc162/tasks/abc162_e</span>
+<span class="c">//                                                exact-class by d</span>
+<span class="c">//   CF 900D   Unusual Sequences           ~1800  form A (this file)</span>
+<span class="c">//             https://codeforces.com/problemset/problem/900/D</span>
+<span class="c">//</span>
+<span class="c">// TRANSFERABLE HEURISTIC: when an &quot;exact&quot; count resists you, define the</span>
+<span class="c">// &quot;at least / multiple of&quot; version first. It is almost always a one-liner and</span>
+<span class="c">// inversion is mechanical from there. The hard step is never the inversion --</span>
+<span class="c">// it is spotting the invariant that is forced to divide n.</span>
+<span class="c">// ============================================================================</span></code></pre>
+</div>
+<div class="file" id="sos">
+<h2>3.3 &nbsp;sos</h2>
+<p class="path">DP/sos.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// SOS DP (sum over subsets / zeta transform) -- O(2^N * N)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   F[mask] = sum of A[sub] over every sub that is a SUBMASK of mask</span>
+<span class="c">//</span>
+<span class="c">// The naive version is O(3^N) by enumerating submasks. This is O(2^N * N):</span>
+<span class="c">// fix one bit at a time and merge the two halves. Think of it as an</span>
+<span class="c">// N-DIMENSIONAL PREFIX SUM over a 2x2x...x2 grid -- each bit is one axis, and</span>
+<span class="c">// the outer loop is &quot;prefix-sum along axis i&quot;. That framing is the whole idea,</span>
+<span class="c">// and it is why the loop order below is bit-outer, mask-inner.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THE BIT LOOP MUST BE OUTSIDE</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #      for i in bits:  for mask:  if (mask&gt;&gt;i&amp;1) F[mask] += F[mask^(1&lt;&lt;i)];</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Swapping the loops gives a partial, order-dependent answer that looks</span>
+<span class="cbox">// #  plausible on small N. Same rule as a multidimensional prefix sum: finish</span>
+<span class="cbox">// #  one axis before starting the next.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  ZETA vs MOBIUS -- the transform and its INVERSE</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #    forward (subset sums):   F[mask] += F[mask ^ (1&lt;&lt;i)]</span>
+<span class="cbox">// #    inverse (recover A):     F[mask] -= F[mask ^ (1&lt;&lt;i)]</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Identical loops, one sign. The inverse is what turns &quot;at least&quot; counts</span>
+<span class="cbox">// #  into &quot;exactly&quot; counts -- the subset analogue of DP/incexc.cpp.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// SUPERSET version (sum over all masks CONTAINING mask): flip the test to</span>
+<span class="c">//   if (!(mask&gt;&gt;i&amp;1)) F[mask] += F[mask | (1&lt;&lt;i)];</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   N is the number of BITS, not the number of masks. Arrays are size 1&lt;&lt;N.</span>
+<span class="c">//   Overflow: 2^N terms are summed into one cell -- use ll or a modulus.</span>
+<span class="c">//   The first block below keeps a per-bit layer (dp[mask][i]) for clarity;</span>
+<span class="c">//     the second is the same thing with the layer dropped. Use the second.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   for each mask, aggregate over its SUBMASKS       this</span>
+<span class="c">//   for each mask, aggregate over its SUPERMASKS     the flipped version above</span>
+<span class="c">//   count pairs (i,j) with a[i] &amp; a[j] == 0          SOS over complements:</span>
+<span class="c">//                                                    for each x, how many y</span>
+<span class="c">//                                                    are submasks of ~x</span>
+<span class="c">//   count pairs with a[i] | a[j] == full             same, complemented</span>
+<span class="c">//   count pairs with a[i] &amp; a[j] == k                SOS then Mobius on k</span>
+<span class="c">//   number of subsets whose OR is exactly S          zeta, then inverse</span>
+<span class="c">//   max/min over submasks instead of sum             replace += with max/min;</span>
+<span class="c">//                                                    idempotent, so no inverse</span>
+<span class="c">//   &quot;for each mask, the best two submask values&quot;     carry a pair, merge both</span>
+<span class="c">//   subset-sum convolution                           SOS with a popcount layer</span>
+<span class="c">//                                                    (ranked zeta transform)</span>
+<span class="c">//   xor / and / or CONVOLUTION                       different tool -- FWHT,</span>
+<span class="c">//                                                    math/fwht.cpp</span>
+<span class="c">//   multidimensional prefix sums over a real grid    same loop shape, more</span>
+<span class="c">//                                                    values per axis --</span>
+<span class="c">//                                                    DS/prefix_sum_2d.cpp</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS: aggregating over submasks of ONE mask is just the submask loop,</span>
+<span class="c">//   O(2^popcount). SOS pays off when you need the answer for EVERY mask.</span>
+<span class="c">// ============================================================================</span>
+<span class="c">//iterative version</span>
+<span class="k">for</span>(<span class="k">int</span> mask = <span class="n">0</span>; mask &lt; (<span class="n">1</span>&lt;&lt;N); ++mask){
+	dp[mask][-<span class="n">1</span>] = A[mask];	<span class="c">//handle base case separately (leaf states)</span>
+	<span class="k">for</span>(<span class="k">int</span> i = <span class="n">0</span>;i &lt; N; ++i){
+		<span class="k">if</span>(mask &amp; (<span class="n">1</span>&lt;&lt;i))
+			dp[mask][i] = dp[mask][i-<span class="n">1</span>] + dp[mask^(<span class="n">1</span>&lt;&lt;i)][i-<span class="n">1</span>];
+		<span class="k">else</span>
+			dp[mask][i] = dp[mask][i-<span class="n">1</span>];
+	}
+	F[mask] = dp[mask][N-<span class="n">1</span>];
+}
+<span class="c">//memory optimized, super easy to code.</span>
+<span class="k">for</span>(<span class="k">int</span> i = <span class="n">0</span>; i&lt;(<span class="n">1</span>&lt;&lt;N); ++i)
+	F[i] = A[i];
+<span class="k">for</span>(<span class="k">int</span> i = <span class="n">0</span>;i &lt; N; ++i) <span class="k">for</span>(<span class="k">int</span> mask = <span class="n">0</span>; mask &lt; (<span class="n">1</span>&lt;&lt;N); ++mask){
+	<span class="k">if</span>(mask &amp; (<span class="n">1</span>&lt;&lt;i))
+		F[mask] += F[mask^(<span class="n">1</span>&lt;&lt;i)];
+}</code></pre>
+</div>
+<div class="file" id="subset_sum_bitset">
+<h2>3.4 &nbsp;subset_sum_bitset</h2>
+<p class="path">DP/subset_sum_bitset.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// SUBSET SUM BY BITSET -- feasibility in O(n * S / 64)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//     dp[0] = 1;   for each weight w:   dp |= dp &lt;&lt; w;</span>
+<span class="c">// After the loop dp[s] is &quot;some subset sums to exactly s&quot;. Two lines, and it</span>
+<span class="c">// turns an O(n*S) DP into O(n*S/64) -- n = 100, S = 1e5 becomes ~1.5e5 word</span>
+<span class="c">// operations.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  FEASIBILITY ONLY. NOT COUNTING, NOT MAXIMISING.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  A bit is one bit: reachable or not. The moment the problem asks HOW MANY</span>
+<span class="cbox">// #  subsets, or the BEST value at that weight, you need a real DP array and</span>
+<span class="cbox">// #  the /64 is gone.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #    &quot;can we make exactly S&quot;          -&gt; this</span>
+<span class="cbox">// #    &quot;how many ways to make S&quot;        -&gt; dp[] of counts, O(n*S)</span>
+<span class="cbox">// #    &quot;max value with weight &lt;= S&quot;     -&gt; 0/1 knapsack, O(n*S)</span>
+<span class="cbox">// #    &quot;fewest items summing to S&quot;      -&gt; BFS over reachable sums, or DP</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  BOUNDED COUNTS: BINARY-SPLIT FIRST</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  k copies of weight w is NOT `dp |= dp &lt;&lt; w` repeated k times when k is</span>
+<span class="cbox">// #  large. Split k into 1, 2, 4, ..., remainder and push each as one item:</span>
+<span class="cbox">// #      for (b = 1; k; b &lt;&lt;= 1) { t = min(b, k); push(t*w); k -= t; }</span>
+<span class="cbox">// #  That is O(log k) shifts instead of k, and it represents every count in</span>
+<span class="cbox">// #  [0, k] exactly once.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  UNBOUNDED (any number of copies) is a different loop entirely -- a plain</span>
+<span class="cbox">// #  forward DP `for s: if (dp[s-w]) dp[s]=1`, which the bitset cannot express</span>
+<span class="cbox">// #  because each shift would only add one copy.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   MAXB is a compile-time constant and must exceed the largest sum you care</span>
+<span class="c">//     about. Bits above it are lost silently by the shift.</span>
+<span class="c">//   Negative weights: shift the whole domain by an OFFSET, work in</span>
+<span class="c">//     [0, 2*maxsum], and read answers back at offset + target.</span>
+<span class="c">//   Total sum can exceed the bitset even when the TARGET does not -- size by</span>
+<span class="c">//     the target, and skip items heavier than it.</span>
+<span class="c">//   Reconstruction needs the per-item snapshots (see below), which costs</span>
+<span class="c">//     O(n * S / 8) bytes. If n*S is large, recompute instead of storing.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   is sum S reachable                      reach()</span>
+<span class="c">//   which items give S                      recover() -- keeps snapshots</span>
+<span class="c">//   partition into two equal halves         total even, and reach(total/2)</span>
+<span class="c">//   minimise |A| - |B| over a partition     best reachable s near total/2</span>
+<span class="c">//   can each of q targets be made           one dp, then q lookups</span>
+<span class="c">//   k copies of each item                   binary splitting, see the box</span>
+<span class="c">//   unbounded copies                        plain forward DP, not this</span>
+<span class="c">//   all reachable sums                      iterate _Find_next over dp</span>
+<span class="c">//   count of DISTINCT reachable sums        dp.count()</span>
+<span class="c">//   coins: fewest to make S                 BFS/DP, not this</span>
+<span class="c">//   &quot;can we split into k equal groups&quot;      bitmask DP over items, n &lt;= 20 --</span>
+<span class="c">//                                           DP/bitmask_tsp.cpp [1]</span>
+<span class="c">//   subset with a given XOR                 xor basis, not subset sum --</span>
+<span class="c">//                                           DP/sub-problems xorbasis.cpp</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="k">int</span> MAXB = <span class="n">100005</span>;
+
+<span class="c">// dp[s] == 1  &lt;=&gt;  some subset of w sums to exactly s</span>
+<span class="t">bitset</span>&lt;MAXB&gt; reach(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;w) {
+    <span class="t">bitset</span>&lt;MAXB&gt; dp;
+    dp[<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> x : w) dp |= dp &lt;&lt; x;
+    <span class="k">return</span> dp;
+}
+<span class="c">// k copies of value v, expressed as O(log k) independent items</span>
+<span class="k">void</span> push_bounded(<span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;items, <span class="k">int</span> v, <span class="k">int</span> k) {
+    <span class="k">for</span> (<span class="k">int</span> b = <span class="n">1</span>; k &gt; <span class="n">0</span>; b &lt;&lt;= <span class="n">1</span>) {
+        <span class="k">int</span> t = min(b, k);
+        items.push_back(t * v);
+        k -= t;
+    }
+}
+<span class="c">// which items make S. Returns their indices, or empty if unreachable.</span>
+<span class="c">// Keeps one snapshot per item: O(n * MAXB / 8) bytes -- see the pitfalls.</span>
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; recover(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;w, <span class="k">int</span> S) {
+    <span class="k">int</span> n = w.size();
+    <span class="t">vector</span>&lt;<span class="t">bitset</span>&lt;MAXB&gt;&gt; snap(n + <span class="n">1</span>);
+    snap[<span class="n">0</span>][<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) snap[i + <span class="n">1</span>] = snap[i] | (snap[i] &lt;&lt; w[i]);
+    <span class="k">if</span> (!snap[n][S]) <span class="k">return</span> {};
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; take;
+    <span class="k">int</span> cur = S;
+    <span class="k">for</span> (<span class="k">int</span> i = n - <span class="n">1</span>; i &gt;= <span class="n">0</span>; i--) {
+        <span class="k">if</span> (snap[i][cur]) <span class="k">continue</span>;              <span class="c">// item i was not needed</span>
+        take.push_back(i), cur -= w[i];          <span class="c">// it was: undo it</span>
+    }
+    reverse(take.begin(), take.end());
+    <span class="k">return</span> take;
+}</code></pre>
+</div>
+<div class="file" id="submask_partition">
+<h2>3.5 &nbsp;submask_partition</h2>
+<p class="path">DP/submask_partition.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// SUBMASK PARTITION DP -- O(3^n), the &quot;split a set into groups&quot; workhorse</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// The shape: dp[mask] is built from dp[mask ^ sub] for every submask sub.</span>
+<span class="c">//</span>
+<span class="c">//     for (int mask = 1; mask &lt; (1&lt;&lt;n); mask++)</span>
+<span class="c">//         for (int sub = mask; sub; sub = (sub-1) &amp; mask)</span>
+<span class="c">//             dp[mask] = best(dp[mask], dp[mask ^ sub] + cost[sub]);</span>
+<span class="c">//</span>
+<span class="c">// Total work is sum over masks of 2^popcount(mask) = 3^n, because every bit is</span>
+<span class="c">// independently in `sub`, in `mask^sub`, or outside `mask`. n = 18 is 387M and</span>
+<span class="c">// too slow; n &lt;= 16 (43M) is comfortable, n = 17 (129M) is borderline.</span>
+<span class="c">//</span>
+<span class="c">// This is NOT SOS DP. SOS answers &quot;aggregate over submasks&quot; for every mask in</span>
+<span class="c">// O(2^n * n) -- but only for an aggregate that a per-bit prefix sum can build</span>
+<span class="c">// (sum, max, count). A PARTITION needs `cost[sub]` combined with `dp[mask^sub]`,</span>
+<span class="c">// which is a convolution over the subset lattice, and no per-bit trick gives it.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  FIX THE LOWEST SET BIT TO KILL THE FACTOR OF 2</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Every partition of `mask` into two parts is generated TWICE, once as</span>
+<span class="cbox">// #  (sub, mask^sub) and once as (mask^sub, sub). For MIN / MAX that is</span>
+<span class="cbox">// #  harmless -- just wasted time. For COUNTING it doubles the answer.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Force the lowest set bit of `mask` to live in `sub`:</span>
+<span class="cbox">// #      int low = mask &amp; -mask;</span>
+<span class="cbox">// #      for (int sub = mask; sub; sub = (sub-1) &amp; mask)</span>
+<span class="cbox">// #          if (sub &amp; low) ...</span>
+<span class="cbox">// #  Halves the work and makes counting correct. See count_partitions().</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  `sub = 0` IS NEVER EMITTED</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  `for (sub = mask; sub; sub = (sub-1) &amp; mask)` stops before 0. That is</span>
+<span class="cbox">// #  what you want here -- an empty group is not a group -- but if you need</span>
+<span class="cbox">// #  the empty submask, use the do/while form in math/bitwise.cpp, or the</span>
+<span class="cbox">// #  transition silently never considers &quot;take nothing&quot;.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   cost[] must be precomputed for all 2^n masks BEFORE the DP. Computing it</span>
+<span class="c">//     inside the loop turns 3^n into 3^n * (whatever cost costs).</span>
+<span class="c">//   `mask ^ sub` and `mask - sub` are the same only because sub is a submask.</span>
+<span class="c">//   dp[0] is the identity: 0 for min-cost/count-of-groups, 1 for counting</span>
+<span class="c">//     partitions, and dp[0] = 0 with everything else INF for min.</span>
+<span class="c">//   INF must survive the addition: use LLONG_MAX/4 or 1e18/4, never LLONG_MAX.</span>
+<span class="c">//   n up to 20 means 1&lt;&lt;20 arrays -- 8 MB per ll array. Two of them is fine,</span>
+<span class="c">//     five is not.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS -- everything below is this one loop with a different cost[]</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   partition n items into groups, minimise total cost   min_partition()</span>
+<span class="c">//   ... into EXACTLY k groups                            add a k dimension,</span>
+<span class="c">//                                                        O(3^n * k)</span>
+<span class="c">//   ... minimise the number of groups                    cost[sub] = 1 if sub</span>
+<span class="c">//                                                        is a legal group</span>
+<span class="c">//   minimum set cover (parts may OVERLAP)                min_cover() -- the</span>
+<span class="c">//                                                        subtly different loop</span>
+<span class="c">//   count the ways to partition into labelled groups     count_partitions()</span>
+<span class="c">//   graph colouring / chromatic number                   cost[sub] = 1 iff sub</span>
+<span class="c">//                                                        is independent --</span>
+<span class="c">//                                                        graph/graph_coloring.cpp</span>
+<span class="c">//   bin packing, n &lt;= 16 items                           cost[sub] = 1 iff sub</span>
+<span class="c">//                                                        fits in one bin</span>
+<span class="c">//   split people into teams, team score given            cost[sub] = score[sub]</span>
+<span class="c">//   minimum number of rounds / days / trips              same as &quot;minimise the</span>
+<span class="c">//                                                        number of groups&quot;</span>
+<span class="c">//   &quot;assign every task, each worker takes a SET&quot;         one layer per worker,</span>
+<span class="c">//                                                        dp[i][mask]</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   &quot;assign task i to worker i&quot;, one item each  -&gt; dp[mask] with popcount as</span>
+<span class="c">//     the row index, O(2^n * n). No submask loop. Cheaper by a huge factor.</span>
+<span class="c">//   &quot;for each mask, sum over its submasks&quot;      -&gt; SOS DP, DP/sos.cpp.</span>
+<span class="c">//   &quot;which sums are reachable&quot;                  -&gt; bitset, DS/bitset.cpp.</span>
+<span class="c">//   n &gt; 20                                      -&gt; not a bitmask problem.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="t">ll</span> INF = <span class="n">1e18</span> / <span class="n">4</span>;
+
+<span class="k">int</span> n;                       <span class="c">// number of items, n &lt;= ~16</span>
+<span class="t">ll</span>  cost[<span class="n">1</span> &lt;&lt; <span class="n">20</span>];           <span class="c">// cost[sub] = cost of making `sub` ONE group,</span>
+                             <span class="c">// INF if `sub` is not a legal group</span>
+<span class="t">ll</span>  dp[<span class="n">1</span> &lt;&lt; <span class="n">20</span>];
+
+<span class="c">// ---- minimum total cost to partition the full set into legal groups --------</span>
+<span class="c">// Groups are DISJOINT and cover everything. Returns INF if impossible.</span>
+<span class="t">ll</span> min_partition() {
+    <span class="k">int</span> full = (<span class="n">1</span> &lt;&lt; n) - <span class="n">1</span>;
+    dp[<span class="n">0</span>] = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> mask = <span class="n">1</span>; mask &lt;= full; mask++) {
+        dp[mask] = INF;
+        <span class="k">int</span> low = mask &amp; -mask;                  <span class="c">// pin the lowest bit into sub</span>
+        <span class="k">for</span> (<span class="k">int</span> sub = mask; sub; sub = (sub - <span class="n">1</span>) &amp; mask) {
+            <span class="k">if</span> (!(sub &amp; low)) <span class="k">continue</span>;          <span class="c">// each split seen once</span>
+            <span class="k">if</span> (cost[sub] &gt;= INF || dp[mask ^ sub] &gt;= INF) <span class="k">continue</span>;
+            dp[mask] = min(dp[mask], dp[mask ^ sub] + cost[sub]);
+        }
+    }
+    <span class="k">return</span> dp[full];
+}
+
+<span class="c">// ---- number of ways to partition into UNLABELLED groups --------------------</span>
+<span class="c">// Pinning the low bit is what makes this a partition count and not a</span>
+<span class="c">// composition count -- without it every partition is counted k! times.</span>
+<span class="t">ll</span> count_partitions() {
+    <span class="k">int</span> full = (<span class="n">1</span> &lt;&lt; n) - <span class="n">1</span>;
+    dp[<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> mask = <span class="n">1</span>; mask &lt;= full; mask++) {
+        dp[mask] = <span class="n">0</span>;
+        <span class="k">int</span> low = mask &amp; -mask;
+        <span class="k">for</span> (<span class="k">int</span> sub = mask; sub; sub = (sub - <span class="n">1</span>) &amp; mask) {
+            <span class="k">if</span> (!(sub &amp; low)) <span class="k">continue</span>;
+            <span class="k">if</span> (cost[sub] &gt;= INF) <span class="k">continue</span>;      <span class="c">// reuse cost[] as legality</span>
+            dp[mask] += dp[mask ^ sub];
+        }
+    }
+    <span class="k">return</span> dp[full];
+}
+
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">// MINIMUM SET COVER -- parts may OVERLAP, so the transition is different.</span>
+<span class="c">// Do NOT pin the low bit here: `sub` is what the chosen set adds, and the</span>
+<span class="c">// same cover can legitimately be reached by different orders.</span>
+<span class="c">//</span>
+<span class="c">// `reach[s]` = the set of items some available group can cover, restricted</span>
+<span class="c">// to s. Classic form: pick the lowest UNCOVERED item and try every group</span>
+<span class="c">// containing it -- that keeps it O(2^n * #groups) instead of O(3^n).</span>
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; groups;          <span class="c">// available groups, as masks</span>
+
+<span class="t">ll</span> min_cover() {
+    <span class="k">int</span> full = (<span class="n">1</span> &lt;&lt; n) - <span class="n">1</span>;
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; d(full + <span class="n">1</span>, INF);
+    d[<span class="n">0</span>] = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> mask = <span class="n">0</span>; mask &lt; full; mask++) {
+        <span class="k">if</span> (d[mask] &gt;= INF) <span class="k">continue</span>;
+        <span class="k">int</span> low = __builtin_ctz(~mask);          <span class="c">// lowest UNCOVERED item</span>
+        <span class="k">for</span> (<span class="k">int</span> g : groups) {
+            <span class="k">if</span> (!(g &gt;&gt; low &amp; <span class="n">1</span>)) <span class="k">continue</span>;       <span class="c">// must cover it, or we loop</span>
+            <span class="k">int</span> nxt = mask | g;
+            d[nxt] = min(d[nxt], d[mask] + <span class="n">1</span>);
+        }
+    }
+    <span class="k">return</span> d[full];
+}</code></pre>
+</div>
+<div class="file" id="subset_sum_convolution">
+<h2>3.6 &nbsp;subset_sum_convolution</h2>
+<p class="path">DP/subset_sum_convolution.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// SUBSET-SUM CONVOLUTION -- sum over DISJOINT pairs, O(2^n * n^2)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//     h[S] = sum over A + B = S with A and B DISJOINT of f[A] * g[B]</span>
+<span class="c">//</span>
+<span class="c">// The plain OR-convolution (zeta, multiply, Mobius) computes</span>
+<span class="c">//     sum over A | B = S of f[A]*g[B]</span>
+<span class="c">// which OVER-COUNTS: it accepts pairs that overlap. The fix is a rank</span>
+<span class="c">// dimension.</span>
+<span class="c">//</span>
+<span class="c">//     fhat[k][S] = f[S] if popcount(S) == k else 0,   zeta-transformed</span>
+<span class="c">//</span>
+<span class="c">// Then convolve the ranks like polynomials: hhat[k] = sum_{i+j=k} fhat[i] *</span>
+<span class="c">// ghat[j] pointwise. Finally Mobius each rank back and read</span>
+<span class="c">//     h[S] = hhat[popcount(S)][S]</span>
+<span class="c">//</span>
+<span class="c">// Why it works: |A| + |B| == |A | B| holds exactly when A and B are disjoint.</span>
+<span class="c">// The rank index enforces disjointness arithmetically, and everything else is</span>
+<span class="c">// the OR-convolution you already have.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  READ hhat AT rank == popcount(S), NOT AT THE TOP RANK</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  hhat[k][S] for k &gt; popcount(S) contains the overlapping garbage that the</span>
+<span class="cbox">// #  rank trick is there to discard. Reading the last row, or summing over</span>
+<span class="cbox">// #  all k, reproduces exactly the over-counted OR-convolution you were</span>
+<span class="cbox">// #  trying to avoid.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  ZETA AND MOBIUS ARE PER RANK, NOT ACROSS RANKS</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  There are n+1 independent transforms, one per rank layer. Applying zeta</span>
+<span class="cbox">// #  to the whole (n+1) x 2^n array as if it were flat mixes ranks and the</span>
+<span class="cbox">// #  result is meaningless. The pointwise multiply is the ONLY step that</span>
+<span class="cbox">// #  couples ranks, and it couples them as a polynomial product in k.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Memory is (n+1) * 2^n values. n = 20 means 21 * 1e6 * 8 bytes = 176 MB --</span>
+<span class="c">//     that, not time, is what stops you. n &lt;= 18 is the practical ceiling.</span>
+<span class="c">//   Time is 2^n * n^2. n = 20 is 4e8; n = 18 is 8.5e7 and comfortable.</span>
+<span class="c">//   Under a modulus, reduce after the inner accumulation, not every term.</span>
+<span class="c">//   Without a modulus, the values are sums of 2^n products -- overflow is real.</span>
+<span class="c">//   f[0] and g[0] participate: the empty set is a legal operand.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   h[S] = sum over disjoint A+B=S of f[A]g[B]      subset_sum_convolution()</span>
+<span class="c">//   partition a set into groups with arbitrary       repeated convolution, or</span>
+<span class="c">//     per-group cost, n up to ~20                    exp of a set power series;</span>
+<span class="c">//                                                    beats 3^n around n = 20 --</span>
+<span class="c">//                                                    below n = 18 prefer</span>
+<span class="c">//                                                    DP/submask_partition.cpp</span>
+<span class="c">//   &quot;cover S exactly once by k pieces&quot;               convolve f with itself k</span>
+<span class="c">//                                                    times</span>
+<span class="c">//   count ways to tile / cover with disjoint parts   this</span>
+<span class="c">//   OR-convolution (overlaps allowed)                zeta, multiply, Mobius --</span>
+<span class="c">//                                                    no rank dimension needed</span>
+<span class="c">//   AND-convolution                                  superset zeta, same shape</span>
+<span class="c">//   XOR-convolution                                  FWHT -- math/fwht.cpp</span>
+<span class="c">//   &quot;for each mask, aggregate over submasks&quot;         plain SOS -- DP/sos.cpp</span>
+<span class="c">//   chromatic polynomial / graph colouring           inclusion-exclusion over</span>
+<span class="c">//                                                    independent sets --</span>
+<span class="c">//                                                    graph/graph_coloring.cpp</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   overlapping pairs are fine       -&gt; OR-convolution, drop the rank, O(2^n n).</span>
+<span class="c">//   n &lt;= 18 and you only need ONE partition DP -&gt; the 3^n submask loop is</span>
+<span class="c">//     simpler and often faster in practice. DP/submask_partition.cpp.</span>
+<span class="c">//   the index is a SUM of integers, not a set union -&gt; FFT, math/fft_ntt.cpp.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="t">ll</span> MOD = <span class="n">1000000007</span>;
+
+<span class="c">// zeta over subsets, in place, one layer</span>
+<span class="k">void</span> zeta(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a, <span class="k">int</span> n) {
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)
+        <span class="k">for</span> (<span class="k">int</span> m = <span class="n">0</span>; m &lt; (<span class="n">1</span> &lt;&lt; n); m++)
+            <span class="k">if</span> (m &gt;&gt; i &amp; <span class="n">1</span>) a[m] = (a[m] + a[m ^ (<span class="n">1</span> &lt;&lt; i)]) % MOD;
+}
+<span class="c">// Mobius = the same loop with a minus</span>
+<span class="k">void</span> mobius(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a, <span class="k">int</span> n) {
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)
+        <span class="k">for</span> (<span class="k">int</span> m = <span class="n">0</span>; m &lt; (<span class="n">1</span> &lt;&lt; n); m++)
+            <span class="k">if</span> (m &gt;&gt; i &amp; <span class="n">1</span>) a[m] = (a[m] - a[m ^ (<span class="n">1</span> &lt;&lt; i)] + MOD) % MOD;
+}
+
+<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; subset_sum_convolution(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;f, <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;g, <span class="k">int</span> n) {
+    <span class="k">int</span> N = <span class="n">1</span> &lt;&lt; n;
+    <span class="c">// split by popcount, then zeta each layer independently</span>
+    <span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; F(n + <span class="n">1</span>, <span class="t">vector</span>&lt;<span class="t">ll</span>&gt;(N, <span class="n">0</span>)), G(n + <span class="n">1</span>, <span class="t">vector</span>&lt;<span class="t">ll</span>&gt;(N, <span class="n">0</span>));
+    <span class="k">for</span> (<span class="k">int</span> m = <span class="n">0</span>; m &lt; N; m++) {
+        F[__builtin_popcount(m)][m] = f[m] % MOD;
+        G[__builtin_popcount(m)][m] = g[m] % MOD;
+    }
+    <span class="k">for</span> (<span class="k">int</span> k = <span class="n">0</span>; k &lt;= n; k++) zeta(F[k], n), zeta(G[k], n);
+
+    <span class="c">// polynomial multiply in the rank index, pointwise in the mask index</span>
+    <span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; H(n + <span class="n">1</span>, <span class="t">vector</span>&lt;<span class="t">ll</span>&gt;(N, <span class="n">0</span>));
+    <span class="k">for</span> (<span class="k">int</span> k = <span class="n">0</span>; k &lt;= n; k++)
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt;= k; i++)
+            <span class="k">for</span> (<span class="k">int</span> m = <span class="n">0</span>; m &lt; N; m++)
+                H[k][m] = (H[k][m] + F[i][m] * G[k - i][m]) % MOD;
+
+    <span class="k">for</span> (<span class="k">int</span> k = <span class="n">0</span>; k &lt;= n; k++) mobius(H[k], n);
+
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; h(N);
+    <span class="k">for</span> (<span class="k">int</span> m = <span class="n">0</span>; m &lt; N; m++)
+        h[m] = H[__builtin_popcount(m)][m];        <span class="c">// the rank that matters</span>
+    <span class="k">return</span> h;
+}</code></pre>
+</div>
+<div class="file" id="bitmask_tsp">
+<h2>3.7 &nbsp;bitmask_tsp</h2>
+<p class="path">DP/bitmask_tsp.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// HELD-KARP -- TSP and general &quot;visit every element once&quot; DP, O(2^n * n^2)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// dp[mask][last] = cheapest way to have visited exactly `mask`, standing at</span>
+<span class="c">// `last`. The state is (what is done, where I am) -- and almost every bitmask</span>
+<span class="c">// DP is that same pair.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  n IS ABOUT 20, AND THE MEMORY IS WHAT STOPS YOU</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #      2^n * n ints:  n=20 -&gt; 84 MB      n=18 -&gt; 19 MB      n=22 -&gt; 369 MB</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Time 2^n*n^2 at n=20 is 4.2e8 -- tight but passable. Memory is the wall.</span>
+<span class="cbox">// #  If n is 22-24 and the SECOND dimension is not needed (order-independent</span>
+<span class="cbox">// #  cost), drop `last` and it becomes 2^n, which is a different, much cheaper</span>
+<span class="cbox">// #  DP -- see [1] below.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  PATH vs CYCLE -- decide before writing the answer line</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #    CYCLE (return to start):  answer = min over last of dp[full][last] + c[last][0]</span>
+<span class="cbox">// #    PATH  (end anywhere):     answer = min over last of dp[full][last]</span>
+<span class="cbox">// #    PATH with fixed ends:     start the DP at s, take dp[full][t]</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Fixing vertex 0 as the start is free for a CYCLE (every cycle passes</span>
+<span class="cbox">// #  through it) and WRONG for a path, which must try every start -- or add a</span>
+<span class="cbox">// #  dummy node at distance 0 to everything.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   The transition must check `mask &gt;&gt; v &amp; 1` is 0 before moving to v; adding</span>
+<span class="c">//     an already-visited vertex silently produces a shorter, invalid tour.</span>
+<span class="c">//   Unreachable states must stay INF and be skipped, or INF + cost overflows.</span>
+<span class="c">//   Iterating masks in increasing order is required -- a mask only ever</span>
+<span class="c">//     transitions to a strictly larger mask, so plain ascending order works.</span>
+<span class="c">//   For reconstruction store the parent, or re-walk the DP backwards.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS -- the shapes that are this DP in disguise</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// [1] ORDER DOES NOT MATTER -&gt; drop `last`, dp[mask] only, O(2^n * n).</span>
+<span class="c">//     &quot;assign n tasks to n workers&quot;, &quot;partition into groups&quot;, &quot;cover all with</span>
+<span class="c">//     minimum cost&quot;. Iterate submasks for partitioning: O(3^n).</span>
+<span class="c">//</span>
+<span class="c">// [2] ASSIGNMENT dp[mask] where popcount(mask) IS the row index -- you never</span>
+<span class="c">//     need a second dimension because the row is implied. Classic for</span>
+<span class="c">//     &quot;n people, n jobs, cost matrix&quot;, though Hungarian is O(n^3) and better</span>
+<span class="c">//     past n = 20: graph/matching/hungarian.cpp.</span>
+<span class="c">//</span>
+<span class="c">// [3] COUNTING Hamiltonian paths / cycles: same DP with += instead of min.</span>
+<span class="c">//</span>
+<span class="c">// [4] SHORTEST SUPERSTRING: overlap[i][j] = how much j saves after i, then</span>
+<span class="c">//     TSP on the overlap matrix. Same for &quot;merge all strings&quot;.</span>
+<span class="c">//</span>
+<span class="c">// [5] TSP WITH REPEATS ALLOWED: run Floyd-Warshall first so c[][] becomes</span>
+<span class="c">//     shortest paths, then this. Otherwise the &quot;visit once&quot; constraint is</span>
+<span class="c">//     wrong for the real graph.</span>
+<span class="c">//</span>
+<span class="c">// [6] n UP TO 40: meet in the middle. Split, enumerate 2^(n/2) each side.</span>
+<span class="c">//     Held-Karp does not stretch that far.</span>
+<span class="c">//</span>
+<span class="c">// [7] BITMASK OVER SOMETHING ELSE than vertices -- primes used, colours seen,</span>
+<span class="c">//     broken profile of a grid row (DP/broken_profile_dp.cpp). Same machinery.</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS: n &gt; 24 -&gt; no exact bitmask solution; look for structure (a tree, a</span>
+<span class="c">//   DAG, a metric with special properties) or an approximation.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="k">int</span> TN = <span class="n">20</span>;
+<span class="t">ll</span> dp[<span class="n">1</span> &lt;&lt; TN][TN], c[TN][TN];
+<span class="k">const</span> <span class="t">ll</span> TINF = (<span class="t">ll</span>)<span class="n">4e18</span> / <span class="n">4</span>;
+
+<span class="c">// cheapest Hamiltonian CYCLE through all n vertices, starting and ending at 0</span>
+<span class="t">ll</span> tsp_cycle(<span class="k">int</span> n) {
+    <span class="k">int</span> full = <span class="n">1</span> &lt;&lt; n;
+    <span class="k">for</span> (<span class="k">int</span> m = <span class="n">0</span>; m &lt; full; m++)
+        <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++) dp[m][v] = TINF;
+    dp[<span class="n">1</span>][<span class="n">0</span>] = <span class="n">0</span>;                                  <span class="c">// start at 0, only 0 visited</span>
+    <span class="k">for</span> (<span class="k">int</span> m = <span class="n">1</span>; m &lt; full; m++)
+        <span class="k">for</span> (<span class="k">int</span> u = <span class="n">0</span>; u &lt; n; u++) {
+            <span class="k">if</span> (dp[m][u] &gt;= TINF || !(m &gt;&gt; u &amp; <span class="n">1</span>)) <span class="k">continue</span>;
+            <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++) {
+                <span class="k">if</span> (m &gt;&gt; v &amp; <span class="n">1</span>) <span class="k">continue</span>;          <span class="c">// already visited</span>
+                <span class="t">ll</span> nd = dp[m][u] + c[u][v];
+                <span class="k">if</span> (nd &lt; dp[m | <span class="n">1</span> &lt;&lt; v][v]) dp[m | <span class="n">1</span> &lt;&lt; v][v] = nd;
+            }
+        }
+    <span class="t">ll</span> best = TINF;
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++)
+        <span class="k">if</span> (dp[full - <span class="n">1</span>][v] &lt; TINF) best = min(best, dp[full - <span class="n">1</span>][v] + c[v][<span class="n">0</span>]);
+    <span class="k">return</span> best;
+}
+<span class="c">// cheapest Hamiltonian PATH, any start, any end</span>
+<span class="t">ll</span> tsp_path(<span class="k">int</span> n) {
+    <span class="k">int</span> full = <span class="n">1</span> &lt;&lt; n;
+    <span class="k">for</span> (<span class="k">int</span> m = <span class="n">0</span>; m &lt; full; m++)
+        <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++) dp[m][v] = TINF;
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++) dp[<span class="n">1</span> &lt;&lt; v][v] = <span class="n">0</span>;  <span class="c">// every start, see the box</span>
+    <span class="k">for</span> (<span class="k">int</span> m = <span class="n">1</span>; m &lt; full; m++)
+        <span class="k">for</span> (<span class="k">int</span> u = <span class="n">0</span>; u &lt; n; u++) {
+            <span class="k">if</span> (dp[m][u] &gt;= TINF || !(m &gt;&gt; u &amp; <span class="n">1</span>)) <span class="k">continue</span>;
+            <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++) {
+                <span class="k">if</span> (m &gt;&gt; v &amp; <span class="n">1</span>) <span class="k">continue</span>;
+                <span class="t">ll</span> nd = dp[m][u] + c[u][v];
+                <span class="k">if</span> (nd &lt; dp[m | <span class="n">1</span> &lt;&lt; v][v]) dp[m | <span class="n">1</span> &lt;&lt; v][v] = nd;
+            }
+        }
+    <span class="t">ll</span> best = TINF;
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++) best = min(best, dp[full - <span class="n">1</span>][v]);
+    <span class="k">return</span> best;
+}
+<span class="c">// the tour itself, for the cycle version. Call after tsp_cycle.</span>
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; tsp_order(<span class="k">int</span> n) {
+    <span class="k">int</span> full = (<span class="n">1</span> &lt;&lt; n) - <span class="n">1</span>, m = full, cur = -<span class="n">1</span>;
+    <span class="t">ll</span> best = TINF;
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++)
+        <span class="k">if</span> (dp[full][v] &lt; TINF &amp;&amp; dp[full][v] + c[v][<span class="n">0</span>] &lt; best)
+            best = dp[full][v] + c[v][<span class="n">0</span>], cur = v;
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; path;
+    <span class="k">while</span> (cur != -<span class="n">1</span>) {
+        path.push_back(cur);
+        <span class="k">int</span> pm = m ^ (<span class="n">1</span> &lt;&lt; cur), prev = -<span class="n">1</span>;
+        <span class="k">if</span> (pm)
+            <span class="k">for</span> (<span class="k">int</span> u = <span class="n">0</span>; u &lt; n; u++)
+                <span class="k">if</span> ((pm &gt;&gt; u &amp; <span class="n">1</span>) &amp;&amp; dp[pm][u] &lt; TINF &amp;&amp; dp[pm][u] + c[u][cur] == dp[m][cur]) {
+                    prev = u;
+                    <span class="k">break</span>;
+                }
+        m = pm, cur = prev;
+    }
+    reverse(path.begin(), path.end());
+    <span class="k">return</span> path;
+}</code></pre>
+</div>
+<div class="file" id="broken_profile_dp">
+<h2>3.8 &nbsp;broken_profile_dp</h2>
+<p class="path">DP/broken_profile_dp.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// BROKEN PROFILE DP -- grid DP cell by cell, O(n * m * 2^m)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// A row-by-row grid DP needs the whole previous row as state: 2^m per row, and</span>
+<span class="c">// the transition between two full rows is another 2^m -- O(n * 4^m). Broken</span>
+<span class="c">// profile moves ONE CELL at a time instead, so the state is a single mask that</span>
+<span class="c">// straddles the boundary between the finished part and the rest, and the</span>
+<span class="c">// transition is O(1). O(n * m * 2^m) total.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  WHAT THE MASK MEANS -- get this wrong and nothing else matters</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Bit 0 is the CURRENT cell. Bit k is the cell k steps later in row-major</span>
+<span class="cbox">// #  order. A set bit means &quot;already covered by a piece placed earlier&quot;.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Moving to the next cell SHIFTS the mask right by one. A vertical piece</span>
+<span class="cbox">// #  reaches m cells ahead, so it sets bit m-1 AFTER the shift. A horizontal</span>
+<span class="cbox">// #  piece reaches one cell ahead, so it sets bit 0 after the shift.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  That is the whole algorithm. Everything else is bounds checks.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  MAKE m THE SMALLER DIMENSION</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Cost is 2^m, so a 2 x 20 grid must be processed as 20 x 2, not 2 x 20.</span>
+<span class="cbox">// #  swap(n, m) first -- the answer is identical and the runtime is not.</span>
+<span class="cbox">// #  m &lt;= 20 is the practical ceiling; m &lt;= 12 is comfortable.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   A vertical piece needs i + 1 &lt; n; a horizontal needs j + 1 &lt; m AND the</span>
+<span class="c">//     next cell free (bit 1 of the pre-shift mask clear).</span>
+<span class="c">//   The final answer is dp[0]: every cell covered, nothing dangling.</span>
+<span class="c">//   Blocked cells are not an exception -- treat a blocked cell as &quot;already</span>
+<span class="c">//     covered&quot; and just shift.</span>
+<span class="c">//   Counts explode; take a modulus unless n*m is tiny.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   tile a grid with 1x2 dominoes           count_tilings()</span>
+<span class="c">//   ... with some cells blocked             blocked[i][j] -&gt; treat as covered</span>
+<span class="c">//   ... count tilings mod p                 same, add the mod</span>
+<span class="c">//   maximum independent set on a grid       mask = &quot;did I take the cell m</span>
+<span class="c">//     (no two adjacent chosen)              back&quot;, value DP instead of count</span>
+<span class="c">//   place k non-attacking pieces            add the count to the state:</span>
+<span class="c">//                                           dp[cell][mask][k]</span>
+<span class="c">//   colour a grid, adjacent differ          mask holds the colours of the last</span>
+<span class="c">//                                           m cells (base-c, not binary)</span>
+<span class="c">//   count Hamiltonian circuits on a grid    PLUG DP -- the mask holds bracket</span>
+<span class="c">//     / connected shapes                    plugs, not booleans, and needs a</span>
+<span class="c">//                                           canonical form per state. Much</span>
+<span class="c">//                                           heavier; this file is the boolean</span>
+<span class="c">//                                           special case</span>
+<span class="c">//   longest path in a grid                  plug DP again, not this</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS: if the grid is huge in BOTH dimensions, there is no profile DP --</span>
+<span class="c">//   look for a formula (domino tilings have one), a matching formulation</span>
+<span class="c">//   (grid tiling = perfect matching on a bipartite graph, graph/matching/),</span>
+<span class="c">//   or a transfer matrix raised to a power.</span>
+<span class="c">// ============================================================================</span>
+
+<span class="c">// number of ways to tile an n x m grid with 1x2 dominoes</span>
+<span class="t">ll</span> count_tilings(<span class="k">int</span> n, <span class="k">int</span> m) {
+    <span class="k">if</span> (m &gt; n) swap(n, m);                       <span class="c">// 2^m cost -- see the box</span>
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; dp(<span class="n">1</span> &lt;&lt; m, <span class="n">0</span>), nd;
+    dp[<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++) {
+            nd.assign(<span class="n">1</span> &lt;&lt; m, <span class="n">0</span>);
+            <span class="k">for</span> (<span class="k">int</span> mask = <span class="n">0</span>; mask &lt; (<span class="n">1</span> &lt;&lt; m); mask++) {
+                <span class="k">if</span> (!dp[mask]) <span class="k">continue</span>;
+                <span class="k">if</span> (mask &amp; <span class="n">1</span>) {                  <span class="c">// already covered: just advance</span>
+                    nd[mask &gt;&gt; <span class="n">1</span>] += dp[mask];
+                } <span class="k">else</span> {
+                    <span class="k">if</span> (i + <span class="n">1</span> &lt; n)               <span class="c">// vertical: reaches m ahead</span>
+                        nd[(mask &gt;&gt; <span class="n">1</span>) | (<span class="n">1</span> &lt;&lt; (m - <span class="n">1</span>))] += dp[mask];
+                    <span class="k">if</span> (j + <span class="n">1</span> &lt; m &amp;&amp; !(mask &amp; <span class="n">2</span>))<span class="c">// horizontal: reaches 1 ahead</span>
+                        nd[(mask &gt;&gt; <span class="n">1</span>) | <span class="n">1</span>] += dp[mask];
+                }
+            }
+            dp.swap(nd);
+        }
+    <span class="k">return</span> dp[<span class="n">0</span>];                                <span class="c">// nothing left dangling</span>
+}
+<span class="c">// same, with blocked cells. blocked[i][j] = 1 means the cell cannot be used.</span>
+<span class="t">ll</span> count_tilings_blocked(<span class="k">int</span> n, <span class="k">int</span> m, <span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="k">int</span>&gt;&gt; &amp;blocked) {
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; dp(<span class="n">1</span> &lt;&lt; m, <span class="n">0</span>), nd;
+    dp[<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++) {
+            nd.assign(<span class="n">1</span> &lt;&lt; m, <span class="n">0</span>);
+            <span class="k">for</span> (<span class="k">int</span> mask = <span class="n">0</span>; mask &lt; (<span class="n">1</span> &lt;&lt; m); mask++) {
+                <span class="k">if</span> (!dp[mask]) <span class="k">continue</span>;
+                <span class="k">if</span> (blocked[i][j]) {             <span class="c">// treat as already covered</span>
+                    <span class="k">if</span> (!(mask &amp; <span class="n">1</span>)) nd[mask &gt;&gt; <span class="n">1</span>] += dp[mask];
+                    <span class="k">continue</span>;                    <span class="c">// a piece must not overlap it</span>
+                }
+                <span class="k">if</span> (mask &amp; <span class="n">1</span>) {
+                    nd[mask &gt;&gt; <span class="n">1</span>] += dp[mask];
+                } <span class="k">else</span> {
+                    <span class="k">if</span> (i + <span class="n">1</span> &lt; n &amp;&amp; !blocked[i + <span class="n">1</span>][j])
+                        nd[(mask &gt;&gt; <span class="n">1</span>) | (<span class="n">1</span> &lt;&lt; (m - <span class="n">1</span>))] += dp[mask];
+                    <span class="k">if</span> (j + <span class="n">1</span> &lt; m &amp;&amp; !(mask &amp; <span class="n">2</span>) &amp;&amp; !blocked[i][j + <span class="n">1</span>])
+                        nd[(mask &gt;&gt; <span class="n">1</span>) | <span class="n">1</span>] += dp[mask];
+                }
+            }
+            dp.swap(nd);
+        }
+    <span class="k">return</span> dp[<span class="n">0</span>];
+}</code></pre>
+</div>
+<div class="file" id="digit-dp">
+<h2>3.9 &nbsp;digit dp</h2>
+<p class="path">DP/digit dp.cpp</p>
+<pre><code><span class="pp">#include &lt;bits/stdc++.h&gt;</span>
+<span class="cbox">// #include &lt;ext/pb_ds/tree_policy.hpp&gt;</span>
+<span class="cbox">// #include &lt;ext/pb_ds/assoc_container.hpp&gt;</span>
+<span class="cbox">// #define el &#x27;\n&#x27;</span>
+<span class="cbox">// #define ll long long</span>
+<span class="pp">#define fio                       \</span>
+    ios_base::sync_with_stdio(<span class="n">0</span>); \
+    cin.tie(<span class="n">0</span>);                   \
+    cout.tie(<span class="n">0</span>);
+<span class="k">using</span> <span class="k">namespace</span> std;
+<span class="k">const</span> <span class="k">char</span> D = <span class="n">52</span>;
+<span class="k">const</span> <span class="k">int</span> MOD = <span class="n">1e9</span> + <span class="n">7</span>;
+<span class="k">int</span> dp[D][<span class="n">2</span>][<span class="n">2</span>][<span class="n">36</span>][<span class="n">36</span>][<span class="n">2</span>];
+<span class="k">char</span> vis[D][<span class="n">2</span>][<span class="n">2</span>][<span class="n">35</span>][<span class="n">35</span>][<span class="n">2</span>];
+<span class="k">char</span> tc = <span class="n">0</span>;
+<span class="t">string</span> a, b;
+<span class="t">string</span> normlen(<span class="t">string</span> &amp;s, <span class="k">char</span> sz) { <span class="k">return</span> s = (<span class="t">string</span>(sz - (<span class="k">char</span>)s.size(), <span class="s">&#x27;0&#x27;</span>) + s); }
+<span class="k">int</span> add(<span class="k">int</span> a, <span class="k">int</span> b){
+    a += b;
+    <span class="k">return</span> (a &gt;= MOD ? a - MOD : a);
+}
+<span class="k">int</span> rec(<span class="k">char</span> i, <span class="k">bool</span> upl, <span class="k">bool</span> downh, <span class="k">char</span> trs, <span class="k">char</span> ns, <span class="k">bool</span> vld){
+    <span class="k">auto</span> &amp;ret = dp[i][upl][downh][trs][ns][vld];
+    <span class="k">if</span> (i == (<span class="k">int</span>)b.size())
+        <span class="k">return</span> ((trs == <span class="n">17</span>) &amp;&amp; (ns == <span class="n">17</span>) &amp;&amp; vld);
+    <span class="k">auto</span> &amp;vz = vis[i][upl][downh][trs][ns][vld];
+    <span class="k">if</span> (vz == tc)
+        <span class="k">return</span> ret;
+    vz = tc, ret = <span class="n">0</span>;
+    <span class="k">char</span> low = (upl ? <span class="n">0</span> : a[i]);
+    <span class="k">char</span> high = (downh ? <span class="n">9</span> : b[i]);
+    <span class="k">for</span> (<span class="k">char</span> curv, curt, curs, curn, j = low; j &lt;= high; j++)
+    {
+        curt = (j == <span class="n">3</span>);
+        curs = (j == <span class="n">6</span>);
+        curn = (j == <span class="n">9</span>);
+        <span class="k">if</span> ((curs &amp;&amp; (ns == <span class="n">0</span> || trs == <span class="n">0</span>)) || curt &amp;&amp; trs &gt; <span class="n">34</span> || curn &amp;&amp; ns &gt; <span class="n">34</span>)
+            <span class="k">continue</span>;
+        ret = add(ret, rec(i + <span class="n">1</span>, (upl || j &gt; low), (downh || j &lt; high), trs + curt - curs, ns + curn - curs, vld || (max({curt, curs, curn}))));
+    }
+    <span class="k">return</span> ret;
+}
+<span class="k">void</span> solve(){
+    cin &gt;&gt; a &gt;&gt; b;
+    normlen(a, b.size());
+    <span class="k">for</span> (<span class="k">auto</span> &amp;nm : a)
+        nm -= <span class="s">&#x27;0&#x27;</span>;
+    <span class="k">for</span> (<span class="k">auto</span> &amp;nm : b)
+        nm -= <span class="s">&#x27;0&#x27;</span>;
+    cout &lt;&lt; rec(<span class="n">0</span>, <span class="n">0</span>, <span class="n">0</span>, <span class="n">17</span>, <span class="n">17</span>, <span class="n">0</span>) &lt;&lt; <span class="s">&#x27;\n&#x27;</span>;
+}
+<span class="k">signed</span> main(){
+    fio <span class="k">int</span> t;
+    cin &gt;&gt; t;
+    <span class="k">for</span> (tc = <span class="n">1</span>; tc &lt;= t; tc++)
+        solve();
+    <span class="k">return</span> <span class="n">0</span>;
+}</code></pre>
+</div>
+<div class="file" id="digit_dp_automaton">
+<h2>3.10 &nbsp;digit_dp_automaton</h2>
+<p class="path">DP/digit_dp_automaton.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// DIGIT DP + AUTOMATON -- count numbers in [L, R] satisfying a rule</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Same frame as DP/digit dp.cpp, but the state carries an AUTOMATON STATE that</span>
+<span class="c">// the transition advances. That single extra dimension covers divisibility,</span>
+<span class="c">// forbidden substrings, digit-sum conditions and KMP/Aho matching -- rules</span>
+<span class="c">// that cannot be expressed by &quot;tight&quot; and a counter alone.</span>
+<span class="c">//</span>
+<span class="c">//   dp[pos][tight][started][autstate]</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THE FOUR FLAGS, AND WHICH ONES YOU ACTUALLY NEED</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #   pos      which digit, left to right.                      always</span>
+<span class="cbox">// #   tight    still equal to the bound&#x27;s prefix? If yes the     always</span>
+<span class="cbox">// #            next digit is capped at bound[pos].</span>
+<span class="cbox">// #   started  have we placed a nonzero digit yet? Needed        only if</span>
+<span class="cbox">// #            whenever LEADING ZEROS must not count as real     leading</span>
+<span class="cbox">// #            digits -- &quot;digit 0 appears k times&quot;, &quot;the number  zeros</span>
+<span class="cbox">// #            has d digits&quot;. NOT needed for pure divisibility.  matter</span>
+<span class="cbox">// #   aut      the automaton state.                              this file</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Forgetting `started` is the classic wrong answer: 007 is counted as</span>
+<span class="cbox">// #  containing two zeros. Adding it when it is not needed doubles the state</span>
+<span class="cbox">// #  space for nothing.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  COUNT [L, R] AS f(R) - f(L-1), NOT AS ONE DP</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Two bounds in one DP needs a second tight flag and four times the states.</span>
+<span class="cbox">// #  f(X) = &quot;how many in [0, X]&quot; is the same function twice.</span>
+<span class="cbox">// #  L = 0 needs care: f(-1) = 0. For big-number L given as a string, subtract</span>
+<span class="cbox">// #  one as a string, or handle L itself separately.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Memo only the states where tight == false. Tight states are visited once</span>
+<span class="c">//     each, and caching them across different bounds is the classic</span>
+<span class="c">//     cross-contamination bug. (The version below memoises on !tight only.)</span>
+<span class="c">//   Reset the memo per bound, or stamp it with a test-case id -- DP/digit</span>
+<span class="c">//     dp.cpp uses the stamp trick.</span>
+<span class="c">//   The automaton must be TOTAL: every (state, digit) pair needs a target.</span>
+<span class="c">//     A missing edge is a dead state, not a crash.</span>
+<span class="c">//   Size the memo by the real bounds. `DP/digit dp.cpp` has a mismatch between</span>
+<span class="c">//     its dp and vis dimensions -- re-derive them per problem.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS -- what the automaton is, per problem type</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   divisible by m                     state = value mod m; step:</span>
+<span class="c">//                                      (s*10 + d) % m</span>
+<span class="c">//   digit sum equals / divisible by k  state = running sum (or sum mod k)</span>
+<span class="c">//   does NOT contain &quot;13&quot; / &quot;666&quot;      state = KMP prefix-function position in</span>
+<span class="c">//                                      the forbidden pattern; reject on a full</span>
+<span class="c">//                                      match -- strings/Z kmp.cpp</span>
+<span class="c">//   avoids ANY of a set of patterns    state = Aho-Corasick node; reject when</span>
+<span class="c">//                                      outlink marks a terminal --</span>
+<span class="c">//                                      strings/aho_corasick.cpp</span>
+<span class="c">//   no two adjacent equal digits       state = previous digit</span>
+<span class="c">//   digits non-decreasing              state = previous digit, cap the range</span>
+<span class="c">//   contains digit d at least k times  state = min(count, k)</span>
+<span class="c">//   alternating parity                 state = parity of the last digit</span>
+<span class="c">//   the number itself is a palindrome  NOT an automaton -- fix the length and</span>
+<span class="c">//                                      build the halves directly</span>
+<span class="c">//   sum of the numbers, not the count  carry (count, sum) as a pair and</span>
+<span class="c">//                                      combine: sum = sum_child + d*10^pos*cnt</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS: if the property depends on the number as a whole in a non-local</span>
+<span class="c">//   way (primality, &quot;is a perfect square&quot;), digit DP does not apply.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="k">int</span> DPOS = <span class="n">20</span>;          <span class="c">// max digits</span>
+<span class="k">const</span> <span class="k">int</span> DAUT = <span class="n">105</span>;         <span class="c">// max automaton states -- size per problem</span>
+
+<span class="k">int</span> MOD_M;                    <span class="c">// example rule: divisible by MOD_M</span>
+<span class="t">ll</span> memo[DPOS][<span class="n">2</span>][DAUT];
+<span class="k">bool</span> seen[DPOS][<span class="n">2</span>][DAUT];
+<span class="t">string</span> bound_;
+
+<span class="c">// EXAMPLE automaton: state = value mod MOD_M. Replace this and DAUT only.</span>
+<span class="k">inline</span> <span class="k">int</span> step(<span class="k">int</span> s, <span class="k">int</span> d) { <span class="k">return</span> (s * <span class="n">10</span> + d) % MOD_M; }
+<span class="k">inline</span> <span class="k">bool</span> accept(<span class="k">int</span> s, <span class="k">bool</span> started) { <span class="k">return</span> started &amp;&amp; s == <span class="n">0</span>; }
+
+<span class="t">ll</span> go(<span class="k">int</span> pos, <span class="k">bool</span> tight, <span class="k">bool</span> started, <span class="k">int</span> aut) {
+    <span class="k">if</span> (pos == (<span class="k">int</span>)bound_.size()) <span class="k">return</span> accept(aut, started);
+    <span class="k">if</span> (!tight &amp;&amp; seen[pos][started][aut]) <span class="k">return</span> memo[pos][started][aut];
+    <span class="k">int</span> hi = tight ? bound_[pos] - <span class="s">&#x27;0&#x27;</span> : <span class="n">9</span>;
+    <span class="t">ll</span> res = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> d = <span class="n">0</span>; d &lt;= hi; d++) {
+        <span class="k">bool</span> nstarted = started || d &gt; <span class="n">0</span>;
+        <span class="k">int</span> naut = nstarted ? step(aut, d) : aut;     <span class="c">// leading zeros do not advance</span>
+        res += go(pos + <span class="n">1</span>, tight &amp;&amp; d == hi, nstarted, naut);
+    }
+    <span class="k">if</span> (!tight) seen[pos][started][aut] = <span class="k">true</span>, memo[pos][started][aut] = res;
+    <span class="k">return</span> res;
+}
+<span class="c">// how many x in [0, X] satisfy the rule</span>
+<span class="t">ll</span> count_upto(<span class="k">const</span> <span class="t">string</span> &amp;X) {
+    bound_ = X;
+    memset(seen, <span class="n">0</span>, <span class="k">sizeof</span> seen);
+    <span class="k">return</span> go(<span class="n">0</span>, <span class="k">true</span>, <span class="k">false</span>, <span class="n">0</span>);
+}
+<span class="c">// [L, R] as f(R) - f(L-1); pass L already decremented -- see the box</span>
+<span class="t">ll</span> count_range(<span class="k">const</span> <span class="t">string</span> &amp;Lminus1, <span class="k">const</span> <span class="t">string</span> &amp;R) {
+    <span class="k">return</span> count_upto(R) - count_upto(Lminus1);
+}</code></pre>
+</div>
+<div class="file" id="rerooting">
+<h2>3.11 &nbsp;rerooting</h2>
+<p class="path">DP/rerooting.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// REROOTING -- the answer for EVERY root, in O(n) total</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// TWO THINGS ARE CALLED &quot;REROOTING&quot;. Do not mix them up:</span>
+<span class="c">//   (a) REROOTING DP -- this file. You can compute f(root) with one DFS; the</span>
+<span class="c">//       problem wants f(v) for all v. Naive is O(n^2), this is O(n).</span>
+<span class="c">//   (b) REROOTING AN LCA QUERY -- the tree is fixed, one query names a</span>
+<span class="c">//       different root. No DP, no rebuild, see [T4] in DS/LCA/binary lifting.cpp:</span>
+<span class="c">//       lca_rooted_at_r(u,v) = deepest of lca(u,v), lca(u,r), lca(v,r).</span>
+<span class="c">//</span>
+<span class="c">// THE TELL for (a): &quot;for each vertex, output ...&quot; on a tree. If the statement</span>
+<span class="c">//   asks per-vertex and a single-root version is easy, it is this.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// THE FRAMEWORK</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   down[u] = answer over u&#x27;s SUBTREE      (tree rooted at 1)</span>
+<span class="c">//   up[u]   = answer over EVERYTHING ELSE, entering u through its parent</span>
+<span class="c">//   ans[u]  = combine(down[u], up[u])</span>
+<span class="c">//</span>
+<span class="c">//   Pass 1 (post-order):  down[u] from down[children]</span>
+<span class="c">//   Pass 2 (pre-order):   up[child] from up[u] and u&#x27;s OTHER children</span>
+<span class="c">//</span>
+<span class="c">// PASS 2 IS THE ONLY HARD PART -- &quot;u&#x27;s other children&quot; is the whole game:</span>
+<span class="c">//</span>
+<span class="c">//   INVERTIBLE merge (+, xor, count, product with no zeros):</span>
+<span class="c">//       take u&#x27;s total and SUBTRACT the child&#x27;s contribution. One line.</span>
+<span class="c">//</span>
+<span class="c">//   NON-INVERTIBLE merge (max, min, gcd, &quot;best two&quot;):</span>
+<span class="c">//       you cannot subtract. Two options --</span>
+<span class="c">//         prefix/suffix arrays over the child list: pre[i] = merge of children</span>
+<span class="c">//           0..i-1, suf[i] = merge of i+1..end, then exclude child i in O(1).</span>
+<span class="c">//           This is the GENERAL answer and always works.</span>
+<span class="c">//         or, for max/min specifically, keep the BEST TWO. If the best comes</span>
+<span class="c">//           through the child you are excluding, use the second best.</span>
+<span class="c">//           Shorter to type; see example B.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THE PITFALL THAT COSTS THE MOST TIME</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  up[root] must be the IDENTITY OF YOUR MERGE. Not 0 by reflex.</span>
+<span class="cbox">// #      sum 0      count 0      xor 0      gcd 0</span>
+<span class="cbox">// #      max -INF   min +INF     product 1  best-two (0,0) or (-INF,-INF)</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  SYMPTOM: ans[root] comes out RIGHT and every other vertex is wrong. The</span>
+<span class="cbox">// #  instinct is to go hunting in pass 2&#x27;s exclusion logic, which is the</span>
+<span class="cbox">// #  expensive place to look. Check this line first -- it is one character.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// OTHER PITFALLS:</span>
+<span class="c">//   Recursion: two DFS passes over n = 2e5. Same stack caveat as the rest of</span>
+<span class="c">//     the tree code here.</span>
+<span class="c">//   ll for anything summing distances: n * n = 4e10 at n = 2e5.</span>
+<span class="c">//   Multi-test: clear g[], down[], up[] for 1..n, not for 1..N.</span>
+<span class="c">//   The child loop in pass 2 must use up[u] as it was BEFORE you descend --</span>
+<span class="c">//     write up[v] first, then recurse. Do not recurse inside the accumulation.</span>
+<span class="c">//</span>
+<span class="c">// ============================================================================</span>
+<span class="c">// EXAMPLE A -- sum of distances from every node   (CSES Tree Distances II)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Merge is +, so it is invertible and pass 2 collapses to a single shift.</span>
+<span class="c">// Move the root from u to a child v: every one of the sz[v] nodes inside v&#x27;s</span>
+<span class="c">// subtree gets 1 CLOSER, every one of the other n - sz[v] gets 1 further.</span>
+<span class="c">//     ans[v] = ans[u] - sz[v] + (n - sz[v]) = ans[u] + n - 2*sz[v]</span>
+<span class="c">// That subtraction is only legal because + has an inverse. Keep the general</span>
+<span class="c">// framework in mind for when it does not -- see example B.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="k">int</span> N = <span class="n">200</span><span class="s">&#x27;123;
+vector&lt;int&gt; g[N];
+int n, sz[N];
+ll down[N], ans[N];
+
+void dfs1(int u, int p) {
+    sz[u] = 1, down[u] = 0;
+    for (int v : g[u])
+        if (v != p) {
+            dfs1(v, u);
+            sz[u] += sz[v];
+            down[u] += down[v] + sz[v];   // every node in v&#x27;</span>s subtree is <span class="n">1</span> further
+        }
+}
+<span class="k">void</span> dfs2(<span class="k">int</span> u, <span class="k">int</span> p) {
+    <span class="k">for</span> (<span class="k">int</span> v : g[u])
+        <span class="k">if</span> (v != p) {
+            ans[v] = ans[u] + n - <span class="n">2</span> * sz[v];
+            dfs2(v, u);
+        }
+}
+<span class="c">// run: dfs1(1, 0); ans[1] = down[1]; dfs2(1, 0);</span>
+<span class="c">//      ^ merge is +, so the root seed is down[1] itself (up[root] = 0 = identity)</span>
+
+<span class="c">// ============================================================================</span>
+<span class="c">// EXAMPLE B -- eccentricity: farthest node from each vertex</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Merge is max -- NOT invertible. Best-two form: d1 = deepest downward, d2 =</span>
+<span class="c">// second deepest through a DIFFERENT child. When excluding child v, if the best</span>
+<span class="c">// came through v then the best without v is d2.</span>
+<span class="c">//   ecc[u] = max(d1[u], updep[u])</span>
+<span class="c">// Sanity check: max over all u of ecc[u] is the diameter.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">int</span> d1[N], d2[N], updep[N];
+
+<span class="k">void</span> dfs1b(<span class="k">int</span> u, <span class="k">int</span> p) {
+    d1[u] = d2[u] = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> v : g[u])
+        <span class="k">if</span> (v != p) {
+            dfs1b(v, u);
+            <span class="k">int</span> c = d1[v] + <span class="n">1</span>;
+            <span class="k">if</span> (c &gt; d1[u]) d2[u] = d1[u], d1[u] = c;
+            <span class="k">else</span> <span class="k">if</span> (c &gt; d2[u]) d2[u] = c;
+        }
+}
+<span class="k">void</span> dfs2b(<span class="k">int</span> u, <span class="k">int</span> p) {
+    <span class="k">for</span> (<span class="k">int</span> v : g[u])
+        <span class="k">if</span> (v != p) {
+            <span class="k">int</span> best = (d1[v] + <span class="n">1</span> == d1[u] ? d2[u] : d1[u]);  <span class="c">// u&#x27;s best WITHOUT v</span>
+            updep[v] = max(updep[u], best) + <span class="n">1</span>;
+            dfs2b(v, u);
+        }
+}
+<span class="c">// run: dfs1b(1, 0); updep[1] = 0; dfs2b(1, 0);</span>
+<span class="c">//      ^ identity for &quot;deepest upward&quot; is 0 here because depths are &gt;= 0. If</span>
+<span class="c">//        your values can go negative this must be -INF, not 0.</span>
+
+<span class="c">// ============================================================================</span>
+<span class="c">// THE GENERAL PASS 2, when neither subtraction nor best-two fits</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   vector&lt;int&gt; ch;                       // children of u, in order</span>
+<span class="c">//   vector&lt;T&gt; pre(k+1, ID), suf(k+1, ID); // ID = identity of merge</span>
+<span class="c">//   for (int i = 0; i &lt; k; i++)     pre[i+1] = merge(pre[i], f(ch[i]));</span>
+<span class="c">//   for (int i = k-1; i &gt;= 0; i--)  suf[i]   = merge(suf[i+1], f(ch[i]));</span>
+<span class="c">//   for (int i = 0; i &lt; k; i++)</span>
+<span class="c">//       up[ch[i]] = lift(merge(up[u], merge(pre[i], suf[i+1])));</span>
+<span class="c">// where f(v) is v&#x27;s downward contribution and lift() is the one-edge step.</span>
+<span class="c">// O(deg u) per node, O(n) overall. Use this whenever you are unsure -- it is</span>
+<span class="c">// never wrong, and the invertible case is just an optimisation of it.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// WHAT ELSE IS THIS SHAPE</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   sum / max distance from every node          examples A and B</span>
+<span class="cbox">//   # of paths through each vertex              sz[v] * (n - sz[v]) per edge</span>
+<span class="c">//   count subtrees / colourings containing v    merge = product, invertible</span>
+<span class="c">//   best answer if the tree is hung at v        any &quot;for each root&quot; statement</span>
+<span class="c">//   tree diameter                               max ecc, or two BFS (shorter)</span>
+<span class="c">//   sum over all (u,v) pairs of some path stat  often rerooting + contribution</span>
+<span class="c">//</span>
+<span class="c">// NOT REROOTING: a single fixed root with path queries -&gt; HLD. Queries about</span>
+<span class="c">//   ancestors -&gt; DS/LCA/binary lifting.cpp. Small-to-large / DSU on tree is a</span>
+<span class="c">//   different technique for &quot;answer per subtree&quot; WITHOUT the second pass.</span>
+<span class="c">// ============================================================================</span></code></pre>
+</div>
+<div class="file" id="tree_knapsack">
+<h2>3.12 &nbsp;tree_knapsack</h2>
+<p class="path">DP/tree_knapsack.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// TREE KNAPSACK -- &quot;choose exactly k nodes in the tree&quot;, O(n*k) not O(n*k^2)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// dp[v][j] = best value using exactly j chosen nodes inside v&#x27;s subtree.</span>
+<span class="c">// Merge children one at a time, like a knapsack where each child is an item</span>
+<span class="c">// whose &quot;weights&quot; are 0..size(child).</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THE TWO LOOP CAPS ARE THE WHOLE ALGORITHM</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #      for (int a = min(done, k); a &gt;= 0; a--)          // NOT a = k</span>
+<span class="cbox">// #          for (int b = min(sz[c], k - a); b &gt;= 0; b--) // NOT b = k</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  `done` is the number of nodes merged into v SO FAR; sz[c] is the child&#x27;s</span>
+<span class="cbox">// #  subtree size. With both caps the total work is O(n*k) (O(n^2) when</span>
+<span class="cbox">// #  k = n). Looping to k unconditionally is O(n*k^2) and produces the</span>
+<span class="cbox">// #  IDENTICAL answer -- it just TLEs. This is the single most common way to</span>
+<span class="cbox">// #  write a correct tree knapsack that does not pass.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Why O(n^2): the pair (a,b) is charged to one pair of NODES, one from the</span>
+<span class="cbox">// #  already-merged part and one from the child. Every pair of nodes is</span>
+<span class="cbox">// #  charged exactly once -- at their LCA. n^2/2 pairs, done.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  MERGE INTO A TEMPORARY, NEVER IN PLACE</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  dp[v] is being read (index a) and written (index a+b) in the same pass.</span>
+<span class="cbox">// #  b = 0 writes onto the cell you are about to read. Build `ndp` fresh,</span>
+<span class="cbox">// #  then swap. Descending loops are NOT enough to save you here, because</span>
+<span class="cbox">// #  the child contributes at every b, not just b = 1.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Identity: for MAX use -INF everywhere and dp[v][0 or 1] = base, so that</span>
+<span class="c">//     unreachable counts can never be selected. Initialising to 0 silently</span>
+<span class="c">//     legalises &quot;j nodes chosen&quot; when it is impossible.</span>
+<span class="c">//   ndp must be sized min(done + sz[c], k) + 1 and filled with -INF each time.</span>
+<span class="c">//   Recursion depth: a path graph with n = 2e5 overflows the stack. Iterative</span>
+<span class="c">//     DFS, or raise the stack.</span>
+<span class="c">//   sz[v] must be accumulated as you merge, not read from a separate pass, or</span>
+<span class="c">//     the cap is wrong for the first children.</span>
+<span class="c">//   &quot;exactly k&quot; vs &quot;at most k&quot;: for at-most, answer = max over j &lt;= k, or add</span>
+<span class="c">//     a free 0-value transition.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   choose exactly k nodes, maximise value            solve() below</span>
+<span class="c">//   choose exactly k EDGES                            index by edges; a subtree</span>
+<span class="c">//                                                     with j nodes has j-1</span>
+<span class="c">//                                                     internal edges</span>
+<span class="c">//   pick k nodes, they must be CONNECTED              force v chosen, and only</span>
+<span class="c">//                                                     merge children that are</span>
+<span class="c">//                                                     themselves connected to v</span>
+<span class="c">//   cut the tree into exactly k components            dp[v][j][0/1] = is the</span>
+<span class="c">//                                                     edge to the parent cut</span>
+<span class="c">//   minimum cost to keep exactly k leaves             same shape, cost on edges</span>
+<span class="c">//   count subtrees of size exactly k                  same loop, += instead of</span>
+<span class="c">//                                                     max</span>
+<span class="c">//   maximum weight independent set of size k          add a 0/1 &quot;is v taken&quot;</span>
+<span class="c">//                                                     dimension</span>
+<span class="c">//   knapsack with a numeric CAPACITY, not a count     the Euler-tour form</span>
+<span class="c">//                                                     below -- O(n*W)</span>
+<span class="c">//   &quot;each node needs its parent taken first&quot;          that is exactly the</span>
+<span class="c">//                                                     Euler-tour form</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   no count/capacity dimension at all -&gt; plain tree DP, one value per node.</span>
+<span class="c">//   the capacity is huge AND the count matters -&gt; the product is the cost;</span>
+<span class="c">//     neither form saves you.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="t">ll</span> NEG = -<span class="n">1e18</span> / <span class="n">4</span>;
+
+<span class="k">int</span> n, K;
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; g[<span class="n">200005</span>];
+<span class="t">ll</span>  val[<span class="n">200005</span>];             <span class="c">// value of taking node v</span>
+<span class="k">int</span> sz[<span class="n">200005</span>];
+<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; dp[<span class="n">200005</span>];       <span class="c">// dp[v][j], j = 0..min(sz[v], K)</span>
+
+<span class="k">void</span> dfs(<span class="k">int</span> v, <span class="k">int</span> p) {
+    sz[v] = <span class="n">1</span>;
+    dp[v].assign(min(<span class="n">1</span>, K) + <span class="n">1</span>, NEG);
+    dp[v][<span class="n">0</span>] = <span class="n">0</span>;                                  <span class="c">// take nothing from v</span>
+    <span class="k">if</span> (K &gt;= <span class="n">1</span>) dp[v][<span class="n">1</span>] = val[v];                 <span class="c">// take v itself</span>
+    <span class="k">int</span> done = <span class="n">1</span>;                                  <span class="c">// nodes merged so far</span>
+    <span class="k">for</span> (<span class="k">int</span> c : g[v]) {
+        <span class="k">if</span> (c == p) <span class="k">continue</span>;
+        dfs(c, v);
+        <span class="k">int</span> lim = min(done + sz[c], K);
+        <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; ndp(lim + <span class="n">1</span>, NEG);
+        <span class="k">for</span> (<span class="k">int</span> a = min(done, K); a &gt;= <span class="n">0</span>; a--) {
+            <span class="k">if</span> (dp[v][a] == NEG) <span class="k">continue</span>;
+            <span class="k">int</span> bmax = min(sz[c], K - a);
+            <span class="k">for</span> (<span class="k">int</span> b = bmax; b &gt;= <span class="n">0</span>; b--) {
+                <span class="k">if</span> (dp[c][b] == NEG) <span class="k">continue</span>;
+                ndp[a + b] = max(ndp[a + b], dp[v][a] + dp[c][b]);
+            }
+        }
+        dp[v].swap(ndp);
+        done += sz[c];
+        sz[v] += sz[c];
+    }
+}
+
+<span class="t">ll</span> solve(<span class="k">int</span> root) {                               <span class="c">// exactly K nodes</span>
+    dfs(root, <span class="n">0</span>);
+    <span class="k">return</span> dp[root].size() &gt; (<span class="t">size_t</span>)K ? dp[root][K] : NEG;
+}
+
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">// EULER-TOUR FORM -- capacity W instead of a node count, O(n*W)</span>
+<span class="c">//</span>
+<span class="c">// Use when each node has a WEIGHT and the budget is a number, not a count, and</span>
+<span class="c">// a node may be taken only if its parent is. Flatten to DFS order; at position</span>
+<span class="c">// i you either TAKE node ord[i] and move to i+1, or SKIP ITS WHOLE SUBTREE and</span>
+<span class="c">// jump to tout[ord[i]]. No child merging at all -- it is a 1D knapsack with</span>
+<span class="c">// jumps, and it is far shorter than the version above.</span>
+<span class="c">//</span>
+<span class="c">// f[i][w] = best value from positions i.. with budget w.</span>
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="k">int</span> ord[<span class="n">200005</span>], pos_[<span class="n">200005</span>], tout_[<span class="n">200005</span>], timer_;
+<span class="k">int</span> wt[<span class="n">200005</span>];
+
+<span class="k">void</span> flatten(<span class="k">int</span> v, <span class="k">int</span> p) {
+    pos_[v] = timer_;
+    ord[timer_++] = v;
+    <span class="k">for</span> (<span class="k">int</span> c : g[v]) <span class="k">if</span> (c != p) flatten(c, v);
+    tout_[v] = timer_;                             <span class="c">// one past the subtree</span>
+}
+
+<span class="t">ll</span> knap_tour(<span class="k">int</span> root, <span class="k">int</span> W) {
+    timer_ = <span class="n">0</span>;
+    flatten(root, <span class="n">0</span>);
+    <span class="c">// f[i][w]; i from n down to 0</span>
+    <span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; f(n + <span class="n">1</span>, <span class="t">vector</span>&lt;<span class="t">ll</span>&gt;(W + <span class="n">1</span>, <span class="n">0</span>));
+    <span class="k">for</span> (<span class="k">int</span> i = n - <span class="n">1</span>; i &gt;= <span class="n">0</span>; i--) {
+        <span class="k">int</span> v = ord[i];
+        <span class="k">for</span> (<span class="k">int</span> w = <span class="n">0</span>; w &lt;= W; w++) {
+            <span class="t">ll</span> best = f[tout_[v]][w];              <span class="c">// skip v and all below it</span>
+            <span class="k">if</span> (wt[v] &lt;= w) best = max(best, val[v] + f[i + <span class="n">1</span>][w - wt[v]]);
+            f[i][w] = best;
+        }
+    }
+    <span class="k">return</span> f[<span class="n">0</span>][W];
+}</code></pre>
+</div>
+<div class="file" id="sub-problems-xorbasis">
+<h2>3.13 &nbsp;sub-problems xorbasis</h2>
+<p class="path">DP/sub-problems xorbasis.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">//  XOR BASIS (linear basis over GF(2)) — reference template</span>
+<span class="c">//  Self-test:  g++ -std=c++17 -O2 -DXB_TEST xor_basis.cpp -o xb &amp;&amp; ./xb</span>
+<span class="c">// ============================================================================</span>
+<span class="c">//</span>
+<span class="c">//  SUBPROBLEM INDEX  (all O(B) unless noted)</span>
+<span class="c">//   [1]  is x independent / insert                      insert(x)</span>
+<span class="c">//   [2]  can x be written as XOR of a subset?           contains(x)</span>
+<span class="c">//   [3]  canonical rep of coset x+span / MIN of x^S     reduce(x) == minXor(x)</span>
+<span class="c">//   [4]  MAX of x ^ (subset xor)                        maxXor(x)   (x=0 -&gt; max subset xor)</span>
+<span class="c">//   [5]  min NONZERO subset xor                         minNonzero()      [needs rref()]</span>
+<span class="c">//   [6]  k-th smallest DISTINCT xor value (0-indexed)   kth(k)            [needs rref()]</span>
+<span class="c">//   [7]  how many distinct xor values are &lt; x           countLess(x) O(B^2)[needs rref()]</span>
+<span class="c">//   [8]  #distinct achievable values                    2^rk  = distinctCnt()</span>
+<span class="c">//   [9]  #subsets whose xor == x                        subsetCnt(x, mod)</span>
+<span class="c">//   [10] sum of all distinct achievable values          sumDistinct(mod)</span>
+<span class="c">//   [11] does a nonempty subset xor to 0?               rk &lt; cnt</span>
+<span class="c">//   [12] merge two independent sets                     merge(other)</span>
+<span class="c">//   [13] span(A) INTERSECT span(B)                      intersect(A,B)      (rare)</span>
+<span class="c">//   [14] max-WEIGHT independent subset                  maxWeightIndep()    (matroid greedy)</span>
+<span class="c">//   [15] max xor of a subset of a[l..r]                 PrefixBasis</span>
+<span class="c">//   [16] min/max xor PATH u-&gt;v in a graph               cycleBasis recipe (bottom)</span>
+<span class="c">//   [17] subset with square product / parity vectors    modeling recipe (bottom)</span>
+<span class="c">//</span>
+<span class="c">//  --------------------------- PICK B FIRST ----------------------------------</span>
+<span class="c">//  B = bit count. Every value must be in [0, 2^B).  Too small B = silent WA.</span>
+<span class="c">//     a[i] &lt;= 1e9  -&gt; B=30      a[i] &lt; 2^20 -&gt; B=20 (tight B matters for [15])</span>
+<span class="c">//     a[i] &lt;= 1e18 -&gt; B=60      a[i] &lt; 2^63 -&gt; B=63 and swap ll -&gt; unsigned long long</span>
+<span class="c">//  Compiles fine under `#define int long long` (placed after the includes).</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="pp">#include &lt;bits/stdc++.h&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> std;
+<span class="k">using</span> <span class="t">ll</span> = <span class="k">long</span> <span class="k">long</span>;
+
+<span class="k">template</span>&lt;<span class="k">int</span> B = <span class="n">60</span>&gt;
+<span class="k">struct</span> XorBasis {
+    <span class="t">array</span>&lt;<span class="t">ll</span>, B&gt; b{};   <span class="c">// b[i] != 0  =&gt;  highest set bit of b[i] is exactly i (&quot;pivot i&quot;)</span>
+    <span class="k">int</span> rk = <span class="n">0</span>;         <span class="c">// rank: #independent vectors. #distinct xors == 2^rk</span>
+    <span class="k">int</span> cnt = <span class="n">0</span>;        <span class="cbox">// #values ever fed to insert() — only needed for [9]</span>
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; vec;     <span class="c">// RREF vectors, ascending pivot; VALID ONLY AFTER rref()</span>
+
+    <span class="k">void</span> clear() { b.fill(<span class="n">0</span>); rk = cnt = <span class="n">0</span>; vec.clear(); }
+
+    <span class="c">// [1] true  = x independent, basis grew.</span>
+    <span class="c">//     false = x already lies in the span (x collapsed to 0).</span>
+    <span class="k">bool</span> insert(<span class="t">ll</span> x) {
+        ++cnt;
+        <span class="k">for</span> (<span class="k">int</span> i = B - <span class="n">1</span>; i &gt;= <span class="n">0</span>; --i) {
+            <span class="k">if</span> (!(x &gt;&gt; i &amp; <span class="n">1</span>)) <span class="k">continue</span>;
+            <span class="k">if</span> (!b[i]) { b[i] = x; ++rk; <span class="k">return</span> <span class="k">true</span>; }
+            x ^= b[i];
+        }
+        <span class="k">return</span> <span class="k">false</span>;
+    }
+
+    <span class="c">// [3] Kill every pivot bit of x. Result is the UNIQUE minimum of {x ^ s : s in span}:</span>
+    <span class="c">//     any other coset member differs from it first at some pivot bit, where it has 1.</span>
+    <span class="t">ll</span> reduce(<span class="t">ll</span> x) <span class="k">const</span> {
+        <span class="k">for</span> (<span class="k">int</span> i = B - <span class="n">1</span>; i &gt;= <span class="n">0</span>; --i)
+            <span class="k">if</span> ((x &gt;&gt; i &amp; <span class="n">1</span>) &amp;&amp; b[i]) x ^= b[i];
+        <span class="k">return</span> x;
+    }
+    <span class="t">ll</span> minXor(<span class="t">ll</span> x = <span class="n">0</span>) <span class="k">const</span> { <span class="k">return</span> reduce(x); }   <span class="c">// min of x ^ subset</span>
+    <span class="c">// [2]</span>
+    <span class="k">bool</span> contains(<span class="t">ll</span> x) <span class="k">const</span> { <span class="k">return</span> reduce(x) == <span class="n">0</span>; }
+
+    <span class="c">// [4] Greedy from the top: b[i] touches no bit above i, so taking it whenever it</span>
+    <span class="c">//     turns bit i on is never regrettable.</span>
+    <span class="t">ll</span> maxXor(<span class="t">ll</span> x = <span class="n">0</span>) <span class="k">const</span> {
+        <span class="k">for</span> (<span class="k">int</span> i = B - <span class="n">1</span>; i &gt;= <span class="n">0</span>; --i)
+            <span class="k">if</span> (b[i] &amp;&amp; !(x &gt;&gt; i &amp; <span class="n">1</span>)) x ^= b[i];
+        <span class="k">return</span> x;
+    }
+
+    <span class="c">// Reduced row echelon form: pivot i appears in b[i] and nowhere else.</span>
+    <span class="c">// Needed by [5][6][7]. Cheap: O(B^2) bit ops. Safe to insert() afterwards,</span>
+    <span class="c">// but vec/rref-ness goes stale — call rref() again.</span>
+    <span class="k">void</span> rref() {
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; B; ++i) {
+            <span class="k">if</span> (!b[i]) <span class="k">continue</span>;                       <span class="c">// b[i] already free of lower pivots</span>
+            <span class="k">for</span> (<span class="k">int</span> j = i + <span class="n">1</span>; j &lt; B; ++j)
+                <span class="k">if</span> (b[j] &gt;&gt; i &amp; <span class="n">1</span>) b[j] ^= b[i];
+        }
+        vec.clear();
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; B; ++i) <span class="k">if</span> (b[i]) vec.push_back(b[i]);
+        <span class="c">// vec is strictly increasing (pivot order == value order in RREF)</span>
+    }
+
+    <span class="c">// [5] smallest nonzero value in the span. -1 if span == {0}.</span>
+    <span class="c">//     NOTE: if rk &lt; cnt, some NONEMPTY subset xors to 0, so the answer to</span>
+    <span class="c">//     &quot;min xor over nonempty subsets&quot; is 0, not this.</span>
+    <span class="t">ll</span> minNonzero() <span class="k">const</span> { <span class="k">return</span> vec.empty() ? -<span class="n">1</span> : vec[<span class="n">0</span>]; }
+
+    <span class="c">// [6] k-th smallest distinct value, 0-indexed; kth(0) == 0. Needs 0 &lt;= k &lt; 2^rk.</span>
+    <span class="c">//     In RREF the pivot bits of the result ARE the coefficients, so k -&gt; value</span>
+    <span class="c">//     is order-preserving: bit i of k &lt;-&gt; vec[i].</span>
+    <span class="t">ll</span> kth(<span class="t">ll</span> k) <span class="k">const</span> {
+        <span class="t">ll</span> r = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; (<span class="k">int</span>)vec.size(); ++i) <span class="k">if</span> (k &gt;&gt; i &amp; <span class="n">1</span>) r ^= vec[i];
+        <span class="k">return</span> r;
+    }
+
+    <span class="c">// [7] #distinct achievable values strictly less than x.</span>
+    <span class="c">//     kth() is monotone, so the valid k form a prefix [0..K]; build K bit by bit.</span>
+    <span class="c">//     O(B^2). If this is inside a 1e5+ query loop and TLEs, replace with a single</span>
+    <span class="c">//     descending-pivot walk over x (O(B)).</span>
+    <span class="t">ll</span> countLess(<span class="t">ll</span> x) <span class="k">const</span> {
+        <span class="k">if</span> (x &lt;= <span class="n">0</span>) <span class="k">return</span> <span class="n">0</span>;                 <span class="c">// kth(0) == 0</span>
+        <span class="t">ll</span> k = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="k">int</span> i = (<span class="k">int</span>)vec.size() - <span class="n">1</span>; i &gt;= <span class="n">0</span>; --i) {
+            <span class="t">ll</span> t = k | (<span class="n">1LL</span> &lt;&lt; i);
+            <span class="k">if</span> (kth(t) &lt; x) k = t;
+        }
+        <span class="k">return</span> k + <span class="n">1</span>;
+    }
+
+    <span class="c">// [8] returns -1 if 2^rk overflows; use a mod in that case.</span>
+    <span class="t">ll</span> distinctCnt() <span class="k">const</span> { <span class="k">return</span> rk &lt; <span class="n">63</span> ? (<span class="n">1LL</span> &lt;&lt; rk) : -<span class="n">1</span>; }
+
+    <span class="c">// [9] #subsets of the inserted multiset with xor == x  ==  2^(cnt-rk) if</span>
+    <span class="c">//     representable, else 0. (Fix any representation; the 2^(cnt-rk) elements of</span>
+    <span class="c">//     the dependency space toggle freely.) cnt-rk is huge -&gt; always mod.</span>
+    <span class="t">ll</span> subsetCnt(<span class="t">ll</span> x, <span class="t">ll</span> mod) <span class="k">const</span> {
+        <span class="k">if</span> (!contains(x)) <span class="k">return</span> <span class="n">0</span>;
+        <span class="t">ll</span> r = <span class="n">1</span> % mod, e = cnt - rk, base = <span class="n">2</span> % mod;
+        <span class="k">while</span> (e) { <span class="k">if</span> (e &amp; <span class="n">1</span>) r = r * base % mod; base = base * base % mod; e &gt;&gt;= <span class="n">1</span>; }
+        <span class="k">return</span> r;
+    }
+
+    <span class="c">// [10] Bit p is set in exactly half of the 2^rk distinct values iff some basis</span>
+    <span class="c">//      vector has bit p (else in none). So sum = (OR of basis) * 2^(rk-1).</span>
+    <span class="t">ll</span> sumDistinct(<span class="t">ll</span> mod) <span class="k">const</span> {
+        <span class="k">if</span> (!rk) <span class="k">return</span> <span class="n">0</span>;
+        <span class="t">ll</span> o = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; B; ++i) o |= b[i];
+        <span class="t">ll</span> r = o % mod, e = rk - <span class="n">1</span>, base = <span class="n">2</span> % mod;
+        <span class="k">while</span> (e) { <span class="k">if</span> (e &amp; <span class="n">1</span>) r = r * base % mod; base = base * base % mod; e &gt;&gt;= <span class="n">1</span>; }
+        <span class="k">return</span> r % mod;
+    }
+
+    <span class="c">// [12] cnt adds up, so [9] stays correct for the union multiset.</span>
+    <span class="k">void</span> merge(<span class="k">const</span> XorBasis&amp; o) {
+        <span class="k">int</span> keep = cnt;
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; B; ++i) <span class="k">if</span> (o.b[i]) insert(o.b[i]);
+        cnt = keep + o.cnt;
+        vec.clear();
+    }
+
+    <span class="c">// [13] span(X) INTERSECT span(Y)  — Zassenhaus. Row-reduce the block matrix</span>
+    <span class="c">//      [[X, X], [Y, 0]] on the first block only; a row whose first block dies</span>
+    <span class="c">//      encodes  sum(a_i x_i) == sum(b_j y_j), and its second block IS that common</span>
+    <span class="c">//      vector. Collected witnesses span the intersection.</span>
+    <span class="k">friend</span> XorBasis intersect(<span class="k">const</span> XorBasis&amp; X, <span class="k">const</span> XorBasis&amp; Y) {
+        <span class="t">array</span>&lt;<span class="t">ll</span>, B&gt; u{}, w{};
+        XorBasis res;
+        <span class="k">auto</span> add = [&amp;](<span class="t">ll</span> val, <span class="t">ll</span> wit) {
+            <span class="k">for</span> (<span class="k">int</span> i = B - <span class="n">1</span>; i &gt;= <span class="n">0</span>; --i) {
+                <span class="k">if</span> (!(val &gt;&gt; i &amp; <span class="n">1</span>)) <span class="k">continue</span>;
+                <span class="k">if</span> (!u[i]) { u[i] = val; w[i] = wit; <span class="k">return</span>; }
+                val ^= u[i]; wit ^= w[i];
+            }
+            <span class="k">if</span> (wit) res.insert(wit);
+        };
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; B; ++i) <span class="k">if</span> (X.b[i]) add(X.b[i], X.b[i]);
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; B; ++i) <span class="k">if</span> (Y.b[i]) add(Y.b[i], <span class="n">0</span>);
+        <span class="k">return</span> res;
+    }
+};
+
+<span class="c">// [14] Max-weight subset that is XOR-independent (linear matroid =&gt; plain greedy).</span>
+<span class="c">//      Also the shape of &quot;keep k items, maximize sum, all xors distinct&quot; problems.</span>
+<span class="c">//      Returns total weight; `take` flags the chosen indices.</span>
+<span class="k">template</span>&lt;<span class="k">int</span> B = <span class="n">60</span>&gt;
+<span class="t">ll</span> maxWeightIndep(<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="t">ll</span>, <span class="t">ll</span>&gt;&gt; vw <span class="c">/*{value,weight}*/</span>, <span class="t">vector</span>&lt;<span class="k">char</span>&gt;* take = <span class="k">nullptr</span>) {
+    <span class="k">int</span> n = vw.size();
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; id(n); iota(id.begin(), id.end(), <span class="n">0</span>);
+    sort(id.begin(), id.end(), [&amp;](<span class="k">int</span> a, <span class="k">int</span> b) { <span class="k">return</span> vw[a].second &gt; vw[b].second; });
+    XorBasis&lt;B&gt; xb; <span class="t">ll</span> tot = <span class="n">0</span>;
+    <span class="k">if</span> (take) take-&gt;assign(n, <span class="n">0</span>);
+    <span class="k">for</span> (<span class="k">int</span> i : id) <span class="k">if</span> (xb.insert(vw[i].first)) { tot += vw[i].second; <span class="k">if</span> (take) (*take)[i] = <span class="n">1</span>; }
+    <span class="k">return</span> tot;
+}
+
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// [15] PREFIX BASIS — max xor of a subset of a[l..r], O(B) per query, no updates.</span>
+<span class="c">//      Trick: for prefix r keep, at each pivot, the vector with the LARGEST index.</span>
+<span class="c">//      Then a query [l,r] just ignores pivots whose stored index &lt; l — and that</span>
+<span class="c">//      restricted set is still a basis of a[l..r], because the greedy always kept</span>
+<span class="c">//      the freshest representative.</span>
+<span class="c">//      MEMORY = n * B * sizeof(T+int). n=5e5, B=20, T=unsigned -&gt; ~80MB. Keep B tight</span>
+<span class="c">//      and T 32-bit, or roll the array offline (sort queries by r).</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="k">template</span>&lt;<span class="k">int</span> B = <span class="n">20</span>, <span class="k">class</span> T = <span class="k">unsigned</span>&gt;
+<span class="k">struct</span> PrefixBasis {
+    <span class="t">vector</span>&lt;<span class="t">array</span>&lt;T, B&gt;&gt; val;
+    <span class="t">vector</span>&lt;<span class="t">array</span>&lt;<span class="k">int</span>, B&gt;&gt; pos;
+    <span class="k">void</span> build(<span class="k">const</span> <span class="t">vector</span>&lt;T&gt;&amp; a) {
+        <span class="k">int</span> n = a.size();
+        val.assign(n + <span class="n">1</span>, {}); pos.assign(n + <span class="n">1</span>, {});
+        pos[<span class="n">0</span>].fill(-<span class="n">1</span>);
+        <span class="k">for</span> (<span class="k">int</span> t = <span class="n">0</span>; t &lt; n; ++t) {
+            val[t + <span class="n">1</span>] = val[t]; pos[t + <span class="n">1</span>] = pos[t];
+            T x = a[t]; <span class="k">int</span> p = t;
+            <span class="k">for</span> (<span class="k">int</span> i = B - <span class="n">1</span>; i &gt;= <span class="n">0</span> &amp;&amp; x; --i) {
+                <span class="k">if</span> (!(x &gt;&gt; i &amp; <span class="n">1</span>)) <span class="k">continue</span>;
+                <span class="k">if</span> (pos[t + <span class="n">1</span>][i] &lt; <span class="n">0</span>) { val[t + <span class="n">1</span>][i] = x; pos[t + <span class="n">1</span>][i] = p; x = <span class="n">0</span>; <span class="k">break</span>; }
+                <span class="k">if</span> (pos[t + <span class="n">1</span>][i] &lt; p) { swap(x, val[t + <span class="n">1</span>][i]); swap(p, pos[t + <span class="n">1</span>][i]); }
+                x ^= val[t + <span class="n">1</span>][i];
+            }
+        }
+    }
+    T maxXor(<span class="k">int</span> l, <span class="k">int</span> r) <span class="k">const</span> {          <span class="c">// 0-indexed, inclusive</span>
+        T res = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="k">int</span> i = B - <span class="n">1</span>; i &gt;= <span class="n">0</span>; --i)
+            <span class="k">if</span> (pos[r + <span class="n">1</span>][i] &gt;= l &amp;&amp; !(res &gt;&gt; i &amp; <span class="n">1</span>)) res ^= val[r + <span class="n">1</span>][i];
+        <span class="k">return</span> res;
+    }
+    <span class="t">array</span>&lt;T, B&gt; getBasis(<span class="k">int</span> l, <span class="k">int</span> r) <span class="k">const</span> {   <span class="c">// slot i nonzero &lt;=&gt; present, leading bit == i</span>
+        <span class="t">array</span>&lt;T, B&gt; b{};
+        <span class="k">for</span> (<span class="k">int</span> i = B - <span class="n">1</span>; i &gt;= <span class="n">0</span>; --i)
+            <span class="k">if</span> (pos[r + <span class="n">1</span>][i] &gt;= l) b[i] = val[r + <span class="n">1</span>][i];
+        <span class="k">return</span> b;
+    }
+};
+
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">//  RECIPES (no code needed, just the reduction)</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// [16] MIN/MAX XOR PATH u-&gt;v, undirected, xor-weighted, walks allowed:</span>
+<span class="c">//        DFS per component, d[v] = xor(root..v).</span>
+<span class="c">//        For every NON-TREE edge (u,v,w): xb.insert(d[u]^d[v]^w)   // a cycle</span>
+<span class="c">//        query(u,v) = xb.maxXor(d[u]^d[v])  /  xb.minXor(d[u]^d[v])</span>
+<span class="c">//      Why: any u-&gt;v walk = base path ^ some combination of cycles, and every</span>
+<span class="c">//      combination is realizable (re-walk the cycle). Tree path xor is d[u]^d[v].</span>
+<span class="c">//</span>
+<span class="c">// [17] PARITY-VECTOR MODELING — &quot;subset whose product is a perfect square&quot;:</span>
+<span class="c">//        each a[i] -&gt; bitmask of primes with ODD exponent; square &lt;=&gt; xor of masks 0.</span>
+<span class="cbox">//        #nonempty valid subsets = 2^(n-rk) - 1.   Same shape: any &quot;every X appears an</span>
+<span class="c">//        even number of times&quot; constraint becomes a GF(2) vector.</span>
+<span class="c">//</span>
+<span class="c">// [18] NOT SUPPORTED: deletion. Workarounds: PrefixBasis [15] for suffix/range,</span>
+<span class="c">//      offline divide-and-conquer on time, segment tree of bases (merge is O(B^2)),</span>
+<span class="c">//      or the &quot;keep newest index&quot; trick generalized to a sliding window.</span>
+<span class="c">//</span>
+<span class="c">// [19] B &gt; 64: swap ll for bitset&lt;B&gt; / array&lt;uint64_t,K&gt;. Same algorithm; insert</span>
+<span class="c">//      becomes O(B * B/64). Gaussian elimination on a matrix is the same object.</span>
+<span class="c">//</span>
+<span class="c">//  TRIGGER RULES</span>
+<span class="c">//   * &quot;xor of a subset&quot; / &quot;choose any subset, xor them&quot; -&gt; basis. Always.</span>
+<span class="c">//   * &quot;xor compared with a sum&quot; -&gt; NOT basis; rewrite as carry/disjointness first.</span>
+<span class="c">//   * &quot;max xor of a subarray&quot; -&gt; NOT basis; that&#x27;s prefix-xor + trie.</span>
+<span class="c">//   * &quot;xor of a path&quot; -&gt; d[u]^d[v]; if walks/cycles allowed, cycle basis [16].</span>
+<span class="c">//   * &quot;count subsets with property P over xor&quot; -&gt; 2^(n-rk) per achievable value [9].</span>
+<span class="c">//   * &quot;even count of every prime/letter/type&quot; -&gt; parity vectors [17].</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+
+<span class="pp">#ifdef XB_TEST</span>
+<span class="c">// Brute-force cross-check of every claim above on small random inputs.</span>
+<span class="k">int</span> main() {
+    <span class="t">mt19937</span> rng(<span class="n">20260730</span>);
+    <span class="k">const</span> <span class="k">int</span> Bt = <span class="n">5</span>, MOD = <span class="n">1000000007</span>;
+    <span class="k">for</span> (<span class="k">int</span> it = <span class="n">0</span>; it &lt; <span class="n">3000</span>; ++it) {
+        <span class="k">int</span> n = rng() % <span class="n">7</span> + <span class="n">1</span>;
+        <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; a(n); <span class="k">for</span> (<span class="k">auto</span>&amp; x : a) x = rng() % <span class="n">32</span>;
+        XorBasis&lt;Bt&gt; xb; <span class="k">for</span> (<span class="t">ll</span> x : a) xb.insert(x);
+        <span class="t">map</span>&lt;<span class="t">ll</span>, <span class="t">ll</span>&gt; mult;
+        <span class="k">for</span> (<span class="k">int</span> m = <span class="n">0</span>; m &lt; (<span class="n">1</span> &lt;&lt; n); ++m) { <span class="t">ll</span> v = <span class="n">0</span>; <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; ++i) <span class="k">if</span> (m &gt;&gt; i &amp; <span class="n">1</span>) v ^= a[i]; mult[v]++; }
+        <span class="t">set</span>&lt;<span class="t">ll</span>&gt; S; <span class="k">for</span> (<span class="k">auto</span>&amp; kv : mult) S.insert(kv.first);
+        assert((<span class="t">ll</span>)S.size() == xb.distinctCnt());
+        assert((xb.rk &lt; xb.cnt) == ((<span class="k">int</span>)S.size() &lt; (<span class="n">1</span> &lt;&lt; n)));
+        xb.rref();
+        { <span class="k">int</span> i = <span class="n">0</span>; <span class="k">for</span> (<span class="t">ll</span> v : S) assert(xb.kth(i++) == v); }
+        <span class="t">ll</span> mn = -<span class="n">1</span>; <span class="k">for</span> (<span class="t">ll</span> v : S) <span class="k">if</span> (v) { mn = v; <span class="k">break</span>; }
+        assert(xb.minNonzero() == mn);
+        <span class="k">for</span> (<span class="t">ll</span> x = <span class="n">0</span>; x &lt; <span class="n">40</span>; ++x) {
+            assert(xb.contains(x) == (<span class="k">bool</span>)S.count(x));
+            <span class="t">ll</span> mx = -<span class="n">1</span>, mi = LLONG_MAX, lt = <span class="n">0</span>;
+            <span class="k">for</span> (<span class="t">ll</span> v : S) { mx = max(mx, x ^ v); mi = min(mi, x ^ v); lt += (v &lt; x); }
+            assert(xb.maxXor(x) == mx);
+            assert(xb.minXor(x) == mi);
+            assert(xb.countLess(x) == lt);
+            assert(xb.subsetCnt(x, MOD) == (mult.count(x) ? mult[x] % MOD : <span class="n">0</span>));
+        }
+        <span class="t">ll</span> s = <span class="n">0</span>; <span class="k">for</span> (<span class="t">ll</span> v : S) s += v;
+        assert(xb.sumDistinct(MOD) == s % MOD);
+
+        <span class="c">// [13] intersection</span>
+        <span class="k">int</span> m1 = rng() % <span class="n">4</span> + <span class="n">1</span>, m2 = rng() % <span class="n">4</span> + <span class="n">1</span>;
+        XorBasis&lt;Bt&gt; P, Q; <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; pa(m1), qa(m2);
+        <span class="k">for</span> (<span class="k">auto</span>&amp; x : pa) { x = rng() % <span class="n">32</span>; P.insert(x); }
+        <span class="k">for</span> (<span class="k">auto</span>&amp; x : qa) { x = rng() % <span class="n">32</span>; Q.insert(x); }
+        <span class="k">auto</span> span = [](<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&amp; v) { <span class="t">set</span>&lt;<span class="t">ll</span>&gt; r; <span class="k">for</span> (<span class="k">int</span> m = <span class="n">0</span>; m &lt; (<span class="n">1</span> &lt;&lt; v.size()); ++m) { <span class="t">ll</span> t = <span class="n">0</span>; <span class="k">for</span> (<span class="t">size_t</span> i = <span class="n">0</span>; i &lt; v.size(); ++i) <span class="k">if</span> (m &gt;&gt; i &amp; <span class="n">1</span>) t ^= v[i]; r.insert(t); } <span class="k">return</span> r; };
+        <span class="t">set</span>&lt;<span class="t">ll</span>&gt; sp = span(pa), sq = span(qa), si;
+        <span class="k">for</span> (<span class="t">ll</span> v : sp) <span class="k">if</span> (sq.count(v)) si.insert(v);
+        XorBasis&lt;Bt&gt; R = intersect(P, Q);
+        assert(R.distinctCnt() == (<span class="t">ll</span>)si.size());
+        <span class="k">for</span> (<span class="t">ll</span> v : si) assert(R.contains(v));
+
+        <span class="c">// [15] prefix basis</span>
+        <span class="t">vector</span>&lt;<span class="k">unsigned</span>&gt; ua(n); <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; ++i) ua[i] = (<span class="k">unsigned</span>)a[i];
+        PrefixBasis&lt;Bt, <span class="k">unsigned</span>&gt; pb; pb.build(ua);
+        <span class="k">for</span> (<span class="k">int</span> l = <span class="n">0</span>; l &lt; n; ++l) <span class="k">for</span> (<span class="k">int</span> r = l; r &lt; n; ++r) {
+            <span class="k">unsigned</span> best = <span class="n">0</span>;
+            <span class="k">for</span> (<span class="k">int</span> m = <span class="n">0</span>; m &lt; (<span class="n">1</span> &lt;&lt; (r - l + <span class="n">1</span>)); ++m) { <span class="k">unsigned</span> t = <span class="n">0</span>; <span class="k">for</span> (<span class="k">int</span> i = l; i &lt;= r; ++i) <span class="k">if</span> (m &gt;&gt; (i - l) &amp; <span class="n">1</span>) t ^= ua[i]; best = max(best, t); }
+            assert(pb.maxXor(l, r) == best);
+        }
+
+        <span class="c">// [14] max-weight independent subset</span>
+        <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="t">ll</span>, <span class="t">ll</span>&gt;&gt; vw(n); <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; ++i) vw[i] = { a[i], (<span class="t">ll</span>)(rng() % <span class="n">100</span>) };
+        <span class="t">ll</span> got = maxWeightIndep&lt;Bt&gt;(vw), want = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="k">int</span> m = <span class="n">0</span>; m &lt; (<span class="n">1</span> &lt;&lt; n); ++m) {
+            XorBasis&lt;Bt&gt; t; <span class="k">bool</span> ok = <span class="k">true</span>; <span class="t">ll</span> w = <span class="n">0</span>;
+            <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n &amp;&amp; ok; ++i) <span class="k">if</span> (m &gt;&gt; i &amp; <span class="n">1</span>) { ok = t.insert(vw[i].first); w += vw[i].second; }
+            <span class="k">if</span> (ok) want = max(want, w);
+        }
+        assert(got == want);
+    }
+    puts(<span class="s">&quot;all subproblems verified against brute force&quot;</span>);
+}
+<span class="pp">#endif</span></code></pre>
+</div>
+<div class="file" id="cht">
+<h2>3.14 &nbsp;CHT</h2>
+<p class="path">DP/optimization/CHT.cpp</p>
+<pre><code><span class="pp">#include &lt;bits/stdc++.h&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> std;
+<span class="k">typedef</span> <span class="k">long</span> <span class="k">long</span> <span class="t">ll</span>;
+<span class="pp">#define el &#x27;\n&#x27;</span>
+<span class="pp">#define fio ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);</span>
+<span class="cbox">//#pragma once</span>
+<span class="c">// to find the minimum</span>
+<span class="c">// add(-k, -m)</span>
+<span class="c">// query(x) * -1</span>
+<span class="c">// max(mx+b), query(x), intercept is what&#x27;s added</span>
+<span class="c">// add(slope, intercept) (slope*xi) which is queried</span>
+<span class="k">struct</span> Line {
+    <span class="t">ll</span> k, m;
+    <span class="k">mutable</span> <span class="t">ll</span> p;
+    <span class="k">bool</span> <span class="k">operator</span>&lt;(<span class="k">const</span> Line&amp; o) <span class="k">const</span> { <span class="k">return</span> k &lt; o.k;}
+    <span class="k">bool</span> <span class="k">operator</span>&lt;(<span class="k">const</span> <span class="t">ll</span>&amp;x) <span class="k">const</span> { <span class="k">return</span> p &lt; x;}
+};
+
+<span class="k">struct</span> LineContainer : <span class="t">multiset</span>&lt;Line, <span class="t">less</span>&lt;&gt;&gt; {
+    <span class="k">const</span> <span class="t">ll</span> inf = numeric_limits&lt;<span class="t">ll</span>&gt;::max();
+    <span class="t">ll</span> div(<span class="t">ll</span> a, <span class="t">ll</span> b) { <span class="c">// floored division</span>
+        <span class="k">return</span> a / b - ((a ^ b) &lt; <span class="n">0</span> &amp;&amp; a % b);
+    }
+    <span class="k">bool</span> isect(iterator x, iterator y) {
+        <span class="k">if</span> (y == end()) { x-&gt;p = inf; <span class="k">return</span> <span class="k">false</span>; }
+        <span class="k">if</span> (x-&gt;k == y-&gt;k) x-&gt;p = x-&gt;m &gt; y-&gt;m ? inf : -inf;
+        <span class="k">else</span> x-&gt;p = div(y-&gt;m - x-&gt;m, x-&gt;k - y-&gt;k);
+        <span class="k">return</span> x-&gt;p &gt;= y-&gt;p;
+    }
+    <span class="k">void</span> add(<span class="t">ll</span> k, <span class="t">ll</span> m) {
+        <span class="k">auto</span> z = insert({k, m, <span class="n">0</span>}), y = z++, x = y;
+        <span class="k">while</span> (isect(y, z)) z = erase(z);
+        <span class="k">if</span> (x != begin() &amp;&amp; isect(--x, y)) isect(x, y = erase(y));
+        <span class="k">while</span> ((y = x) != begin() &amp;&amp; (--x)-&gt;p &gt;= y-&gt;p)
+            isect(x, erase(y));
+    }
+    <span class="t">ll</span> query(<span class="t">ll</span> x) {
+        assert(!empty());
+        <span class="k">auto</span> l = *lower_bound(x);
+        <span class="k">return</span> l.k * x + l.m;
+    }
+};
+
+<span class="k">void</span> solve() {
+    LineContainer cht;
+    <span class="t">ll</span> n, c, lst{};
+    cin &gt;&gt; n &gt;&gt; c;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        <span class="t">ll</span> h;
+        cin &gt;&gt; h;
+        <span class="k">if</span> (i)
+            lst = cht.query(h)-h*h-c, lst*=-<span class="n">1</span>;
+        cht.add(<span class="n">2</span>*h,-lst-h*h);
+    }
+    cout &lt;&lt; lst &lt;&lt; el;
+}
+
+<span class="k">signed</span> main() { fio <span class="k">int</span> t = <span class="n">1</span>; <span class="c">/*cin &gt;&gt; t;*/</span> <span class="k">while</span> (t--) solve(); <span class="k">return</span> <span class="n">0</span>; }</code></pre>
+</div>
+<div class="file" id="li_chao">
+<h2>3.15 &nbsp;li_chao</h2>
+<p class="path">DP/optimization/li_chao.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// LI CHAO TREE -- min over a set of lines at a query point, O(log C) per op</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Each node owns ONE line: the one that wins at that node&#x27;s midpoint. Insert</span>
+<span class="c">// walks down deciding, at every node, which of the two lines to keep and which</span>
+<span class="c">// to push into the half where it might still win. Two lines cross at most once,</span>
+<span class="c">// so exactly one half can still change hands -- that is why insert is a single</span>
+<span class="c">// root-to-leaf walk and not a rebuild.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  WHEN TO USE THIS INSTEAD OF CHT (DP/optimization/CHT.cpp)</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  CHT / LineContainer wins normally: O(1) memory per line, no coordinate</span>
+<span class="cbox">// #  domain, smaller constant. Reach for LI CHAO only when one of these is</span>
+<span class="cbox">// #  true --</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #    1. A LINE IS ONLY VALID ON A RANGE of x. insert_seg() below. CHT cannot</span>
+<span class="cbox">// #       express this at all. This is the main reason the file exists.</span>
+<span class="cbox">// #    2. You need it PERSISTENT or MERGEABLE (small-to-large over subtrees).</span>
+<span class="cbox">// #       One line per node makes both easy; a hull does not.</span>
+<span class="cbox">// #    3. The slope/query order is adversarial AND you do not trust the hull&#x27;s</span>
+<span class="cbox">// #       floor-division edge cases.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Cost of choosing it: you must bound the x domain up front, by compressing</span>
+<span class="cbox">// #  the query points or fixing [LO, HI].</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THIS FILE IS THE MINIMUM. FOR MAXIMUM, NEGATE.</span>
+<span class="cbox">// #      insert({-m, -c});     answer = -query(x);</span>
+<span class="cbox">// #  Flipping the comparisons instead works but you must also flip the</span>
+<span class="cbox">// #  sentinel, and half-flipping it is the standard way to get a silent wrong</span>
+<span class="cbox">// #  answer here.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   m * x overflows before the comparison does. |m| * |x| must fit in ll --</span>
+<span class="c">//     with m and x both up to 1e9 that is 1e18, which fits, but 1e18 + c does</span>
+<span class="c">//     not always. Keep the sentinel well below LLONG_MAX (INF/4 below).</span>
+<span class="c">//   The domain [LO, HI] is INCLUSIVE and fixed at build time. Query outside it</span>
+<span class="c">//     reads a leaf that was never meant for you -- clamp or compress first.</span>
+<span class="c">//   Node count is 4 * (HI - LO + 1) for the array version. At 1e6 that is</span>
+<span class="c">//     4e6 Lines = 64 MB. Compress the x values if you can; the tree only ever</span>
+<span class="c">//     needs the points you will actually query.</span>
+<span class="c">//   Lines may be inserted in ANY order and queries interleaved freely. That is</span>
+<span class="c">//     the whole point -- no monotonicity requirement anywhere.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   dp[i] = min_j (m_j * x_i + c_j)        the CHT family; either tool works</span>
+<span class="c">//   ... with arbitrary slope order          this, or LineContainer</span>
+<span class="c">//   ... where line j only applies for       ONLY this -- insert_seg()</span>
+<span class="c">//       x in [l_j, r_j]</span>
+<span class="c">//   min cost with k segments               pair with D&amp;C opt or aliens trick</span>
+<span class="c">//   convex hull trick on a TREE            Li Chao merged small-to-large, or</span>
+<span class="c">//                                          insert on entry / rollback on exit</span>
+<span class="c">//   &quot;buy machine j, then produce x units&quot;  classic: m = rate, c = fixed cost</span>
+<span class="c">//   min over parabolas / non-lines         Li Chao works for ANY family where</span>
+<span class="c">//                                          two members cross at most once in</span>
+<span class="c">//                                          the domain -- state that property</span>
+<span class="c">//                                          before assuming it</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS: slopes AND queries both monotone -&gt; a plain deque hull is O(1)</span>
+<span class="c">//   amortised and ten lines. Only reach here when that fails.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="t">ll</span> LINF = (<span class="t">ll</span>)<span class="n">4e18</span> / <span class="n">4</span>;
+
+<span class="k">struct</span> Line {
+    <span class="t">ll</span> m, c;
+    <span class="t">ll</span> <span class="k">operator</span>()(<span class="t">ll</span> x) <span class="k">const</span> { <span class="k">return</span> m * x + c; }
+};
+<span class="k">const</span> Line NOLINE = {<span class="n">0</span>, LINF};        <span class="c">// evaluates to +inf everywhere</span>
+
+<span class="k">const</span> <span class="k">int</span> LO = <span class="n">0</span>, HI = <span class="n">1</span> &lt;&lt; <span class="n">20</span>;       <span class="c">// inclusive x domain</span>
+Line tr[<span class="n">4</span> * (<span class="n">1</span> &lt;&lt; <span class="n">20</span>)];
+
+<span class="k">void</span> lc_init(<span class="k">int</span> u, <span class="k">int</span> l, <span class="k">int</span> r) {
+    tr[u] = NOLINE;
+    <span class="k">if</span> (l == r) <span class="k">return</span>;
+    <span class="k">int</span> mid = (l + r) &gt;&gt; <span class="n">1</span>;
+    lc_init(u &lt;&lt; <span class="n">1</span>, l, mid), lc_init(u &lt;&lt; <span class="n">1</span> | <span class="n">1</span>, mid + <span class="n">1</span>, r);
+}
+<span class="c">// f applies to the WHOLE domain</span>
+<span class="k">void</span> insert(<span class="k">int</span> u, <span class="k">int</span> l, <span class="k">int</span> r, Line f) {
+    <span class="k">while</span> (<span class="k">true</span>) {
+        <span class="k">int</span> mid = (l + r) &gt;&gt; <span class="n">1</span>;
+        <span class="k">bool</span> lef = f(l) &lt; tr[u](l);
+        <span class="k">bool</span> md = f(mid) &lt; tr[u](mid);
+        <span class="k">if</span> (md) swap(tr[u], f);       <span class="c">// f wins the midpoint: keep it here</span>
+        <span class="k">if</span> (l == r) <span class="k">return</span>;
+        <span class="k">if</span> (lef != md) u = u &lt;&lt; <span class="n">1</span>, r = mid;          <span class="c">// they cross on the left</span>
+        <span class="k">else</span> u = u &lt;&lt; <span class="n">1</span> | <span class="n">1</span>, l = mid + <span class="n">1</span>;            <span class="c">// ... or on the right</span>
+    }
+}
+<span class="c">// f applies ONLY on [ql, qr]. This is what CHT cannot do.</span>
+<span class="k">void</span> insert_seg(<span class="k">int</span> u, <span class="k">int</span> l, <span class="k">int</span> r, <span class="k">int</span> ql, <span class="k">int</span> qr, Line f) {
+    <span class="k">if</span> (qr &lt; l || r &lt; ql) <span class="k">return</span>;
+    <span class="k">if</span> (ql &lt;= l &amp;&amp; r &lt;= qr) <span class="k">return</span> insert(u, l, r, f);
+    <span class="k">int</span> mid = (l + r) &gt;&gt; <span class="n">1</span>;
+    insert_seg(u &lt;&lt; <span class="n">1</span>, l, mid, ql, qr, f);
+    insert_seg(u &lt;&lt; <span class="n">1</span> | <span class="n">1</span>, mid + <span class="n">1</span>, r, ql, qr, f);
+}
+<span class="c">// minimum over every line covering x</span>
+<span class="t">ll</span> query(<span class="k">int</span> u, <span class="k">int</span> l, <span class="k">int</span> r, <span class="k">int</span> x) {
+    <span class="t">ll</span> res = tr[u](x);
+    <span class="k">while</span> (l != r) {
+        <span class="k">int</span> mid = (l + r) &gt;&gt; <span class="n">1</span>;
+        <span class="k">if</span> (x &lt;= mid) u = u &lt;&lt; <span class="n">1</span>, r = mid;
+        <span class="k">else</span> u = u &lt;&lt; <span class="n">1</span> | <span class="n">1</span>, l = mid + <span class="n">1</span>;
+        res = min(res, tr[u](x));
+    }
+    <span class="k">return</span> res;
+}</code></pre>
+</div>
+<div class="file" id="dc">
+<h2>3.16 &nbsp;D&amp;C</h2>
+<p class="path">DP/optimization/D&amp;C.cpp</p>
+<pre><code><span class="pp">#include &lt;bits/stdc++.h&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> std;
+<span class="k">typedef</span> <span class="k">long</span> <span class="k">long</span> <span class="t">ll</span>;
+<span class="c">// inf, op&lt;=, best &gt;</span>
+<span class="pp">#define RECONSTRUCT 1          // 0 = value only (O(n) memory), 1 = also recover splits (O(L*n))</span>
+
+<span class="k">const</span> <span class="t">ll</span> INF = LLONG_MAX / <span class="n">4</span>;
+
+<span class="k">int</span> n, L;
+<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; a, pre;             <span class="c">// 1-indexed input + prefix sums</span>
+<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; prv, cur;
+<span class="pp">#if RECONSTRUCT</span>
+<span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="k">int</span>&gt;&gt; opt;       <span class="c">// opt[layer][j] = best split k for dp[layer][j]</span>
+<span class="pp">#endif</span>
+
+<span class="c">// cost of segment a[k+1..j]; must be O(1)</span>
+<span class="k">inline</span> <span class="t">ll</span> C(<span class="k">int</span> k, <span class="k">int</span> j) {
+    <span class="t">ll</span> s = pre[j] - pre[k];
+    <span class="k">return</span> s * s;              <span class="c">// &lt;-- problem-specific</span>
+}
+
+<span class="c">// fill cur[lo..hi]; optimal split for each lies in [optl, optr]</span>
+<span class="k">void</span> solve(<span class="k">int</span> lo, <span class="k">int</span> hi, <span class="k">int</span> optl, <span class="k">int</span> optr, <span class="k">int</span> layer) {
+    <span class="k">if</span> (lo &gt; hi) <span class="k">return</span>;
+    <span class="k">int</span> mid = (lo + hi) &gt;&gt; <span class="n">1</span>;
+    <span class="t">ll</span> best = INF;
+    <span class="k">int</span> o = optl;
+    <span class="k">for</span> (<span class="k">int</span> k = optl, kend = min(mid - <span class="n">1</span>, optr); k &lt;= kend; k++) {
+        <span class="k">if</span> (prv[k] &gt;= INF) <span class="k">continue</span>;
+        <span class="t">ll</span> v = prv[k] + C(k, mid);
+        <span class="k">if</span> (v &lt; best) { best = v; o = k; }
+    }
+    cur[mid] = best;
+<span class="pp">#if RECONSTRUCT</span>
+    opt[layer][mid] = o;
+<span class="pp">#endif</span>
+    solve(lo, mid - <span class="n">1</span>, optl, o, layer);
+    solve(mid + <span class="n">1</span>, hi, o, optr, layer);
+}
+
+<span class="k">int</span> main() {
+    ios::sync_with_stdio(<span class="k">false</span>); cin.tie(<span class="k">nullptr</span>);
+    cin &gt;&gt; n &gt;&gt; L;
+    a.assign(n + <span class="n">1</span>, <span class="n">0</span>);
+    pre.assign(n + <span class="n">1</span>, <span class="n">0</span>);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>; i &lt;= n; i++) { cin &gt;&gt; a[i]; pre[i] = pre[i - <span class="n">1</span>] + a[i]; }
+
+    prv.assign(n + <span class="n">1</span>, INF);
+    cur.assign(n + <span class="n">1</span>, INF);
+    prv[<span class="n">0</span>] = <span class="n">0</span>;
+<span class="pp">#if RECONSTRUCT</span>
+    opt.assign(L + <span class="n">1</span>, <span class="t">vector</span>&lt;<span class="k">int</span>&gt;(n + <span class="n">1</span>, <span class="n">0</span>));
+<span class="pp">#endif</span>
+
+    <span class="k">for</span> (<span class="k">int</span> layer = <span class="n">1</span>; layer &lt;= L; layer++) {
+        fill(cur.begin(), cur.end(), INF);
+        solve(<span class="n">1</span>, n, <span class="n">0</span>, n - <span class="n">1</span>, layer);
+        prv.swap(cur);
+    }
+
+    <span class="k">if</span> (prv[n] &gt;= INF) { cout &lt;&lt; <span class="s">&quot;-1\n&quot;</span>; <span class="k">return</span> <span class="n">0</span>; }   <span class="c">// infeasible: L groups can&#x27;t cover n</span>
+    cout &lt;&lt; prv[n] &lt;&lt; <span class="s">&quot;\n&quot;</span>;
+
+<span class="pp">#if RECONSTRUCT</span>
+    <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>,<span class="k">int</span>&gt;&gt; groups;
+    <span class="k">int</span> j = n;
+    <span class="k">for</span> (<span class="k">int</span> layer = L; layer &gt;= <span class="n">1</span>; layer--) {
+        <span class="k">int</span> k = opt[layer][j];
+        groups.push_back({k + <span class="n">1</span>, j});
+        j = k;
+    }
+    reverse(groups.begin(), groups.end());
+    <span class="k">for</span> (<span class="k">auto</span> &amp;[l, r] : groups) cout &lt;&lt; l &lt;&lt; <span class="s">&quot; &quot;</span> &lt;&lt; r &lt;&lt; <span class="s">&quot;\n&quot;</span>;
+<span class="pp">#endif</span>
+}
+
+<span class="c">/*</span>
+<span class="c">int L = 1, R = 0; long long cur = 0;</span>
+<span class="c">int cnt[N];</span>
+
+<span class="c">void addR(int i){ cur += cnt[a[i]]++; }</span>
+<span class="c">void delR(int i){ cur -= --cnt[a[i]]; }</span>
+<span class="c">void addL(int i){ cur += cnt[a[i]]++; }</span>
+<span class="c">void delL(int i){ cur -= --cnt[a[i]]; }</span>
+
+<span class="c">long long C(int l, int r){</span>
+<span class="c">    while (R &lt; r) addR(++R);</span>
+<span class="c">    while (L &gt; l) addL(--L);</span>
+<span class="c">    while (R &gt; r) delR(R--);</span>
+<span class="c">    while (L &lt; l) delL(L++);</span>
+<span class="c">    return cur;</span>
+<span class="c">}</span>
+<span class="c">*/</span></code></pre>
+</div>
+<div class="file" id="knuth">
+<h2>3.17 &nbsp;knuth</h2>
+<p class="path">DP/optimization/knuth.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// KNUTH (Knuth-Yao) OPTIMIZATION -- interval DP, O(n^3) -&gt; O(n^2)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SHAPE IT SOLVES -- must match exactly:</span>
+<span class="c">//     dp[i][j] = min over k in [i, j-1] of ( dp[i][k] + dp[k+1][j] ) + C(i, j)</span>
+<span class="c">//   Split into two ADJACENT intervals, plus a cost depending on (i, j) ONLY.</span>
+<span class="c">//   Cost depends on k? Wrong shape -- see NOT THIS.</span>
+<span class="c">//</span>
+<span class="c">// WHEN IT IS LEGAL -- C must satisfy BOTH, for all a &lt;= b &lt;= c &lt;= d:</span>
+<span class="c">//   1. quadrangle inequality   C(a,c) + C(b,d) &lt;= C(a,d) + C(b,c)</span>
+<span class="c">//   2. monotone on intervals   C(b,c) &lt;= C(a,d)            (inner &lt;= outer)</span>
+<span class="c">//   These give  opt[i][j-1] &lt;= opt[i][j] &lt;= opt[i+1][j],  and THAT is what</span>
+<span class="c">//   collapses the inner loop -- to O(n^2) total, amortised, not per state.</span>
+<span class="c">//</span>
+<span class="c">// THE ONLY CHECK YOU NEED UNDER TIME PRESSURE:</span>
+<span class="c">//   Is C(i,j) the sum of a[i..j] with every a[i] &gt;= 0?  -&gt; yes, both hold.</span>
+<span class="c">//   Covers the whole &quot;merge two adjacent piles, cost = size of the merged pile&quot;</span>
+<span class="c">//   family, and optimal BST (Knuth&#x27;s original problem). Anything else: brute</span>
+<span class="c">//   force the quadrangle inequality on random n &lt;= 6 arrays before trusting it.</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS -- the three it gets confused with:</span>
+<span class="c">//   dp[layer][j] = min_k dp[layer-1][k] + C(k,j)  -&gt; divide &amp; conquer opt,</span>
+<span class="c">//                                                    D&amp;C.cpp in this folder</span>
+<span class="c">//   cost depends on the split point k itself      -&gt; not Knuth (matrix chain</span>
+<span class="c">//                                                    multiplication is this)</span>
+<span class="c">//   dp[i] = min_k dp[k] + m[k]*x[i] + c[k]        -&gt; CHT / Li Chao</span>
+<span class="c">//</span>
+<span class="c">// DON&#x27;T BOTHER WHEN n &lt;= ~500: plain O(n^3) is ~1.2e8 and passes, and you skip</span>
+<span class="c">//   the risk of a quadrangle inequality you never actually verified.</span>
+<span class="c">//</span>
+<span class="c">// HOW TO USE:</span>
+<span class="c">//   1. fill pre[]  -- prefix sums, pre[i+1] = pre[i] + a[i]</span>
+<span class="c">//   2. rewrite C() for the problem</span>
+<span class="c">//   3. knuth(n);   answer = dp[0][n-1]</span>
+<span class="c">//   Length-increasing order is mandatory: opt[i][j-1] and opt[i+1][j] must</span>
+<span class="c">//   already be final when dp[i][j] is computed.</span>
+<span class="c">//</span>
+<span class="c">// SYMPTOM THAT C IS WRONG: some dp[i][j] stays LLONG_MAX. That means lo &gt; hi,</span>
+<span class="c">//   i.e. opt[i][j-1] &gt; opt[i+1][j], i.e. the quadrangle inequality fails.</span>
+<span class="c">//</span>
+<span class="c">// MEMORY: dp + opt at N = 2005 is 46 MB. Shrink N if anything else is big.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="k">int</span> N = <span class="n">2005</span>;
+<span class="k">long</span> <span class="k">long</span> dp[N][N], pre[N];
+<span class="k">int</span> opt[N][N];
+
+<span class="c">// cost of segment [i, j]; must be O(1) -- problem-specific</span>
+<span class="k">inline</span> <span class="k">long</span> <span class="k">long</span> C(<span class="k">int</span> i, <span class="k">int</span> j) { <span class="k">return</span> pre[j + <span class="n">1</span>] - pre[i]; }
+
+<span class="k">void</span> knuth(<span class="k">int</span> n) {
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) { dp[i][i] = <span class="n">0</span>; opt[i][i] = i; }
+    <span class="k">for</span> (<span class="k">int</span> len = <span class="n">2</span>; len &lt;= n; len++)
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>, j = len - <span class="n">1</span>; j &lt; n; i++, j++) {
+            dp[i][j] = LLONG_MAX;
+            <span class="k">int</span> lo = max(opt[i][j - <span class="n">1</span>], i);
+            <span class="k">int</span> hi = min(opt[i + <span class="n">1</span>][j], j - <span class="n">1</span>);
+            <span class="k">for</span> (<span class="k">int</span> k = lo; k &lt;= hi; k++) {
+                <span class="k">long</span> <span class="k">long</span> cur = dp[i][k] + dp[k + <span class="n">1</span>][j] + C(i, j);
+                <span class="k">if</span> (cur &lt; dp[i][j]) { dp[i][j] = cur; opt[i][j] = k; }
+            }
+        }
+}</code></pre>
+</div>
+<div class="file" id="slope_trick">
+<h2>3.18 &nbsp;slope_trick</h2>
+<p class="path">DP/slope_trick.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// SLOPE TRICK -- maintain a convex piecewise-linear f(x) with two heaps</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// The DP value is a FUNCTION of one parameter, and that function is convex,</span>
+<span class="c">// piecewise linear, continuous. Rather than an array over x, store:</span>
+<span class="c">//</span>
+<span class="c">//     minf          the minimum value of f</span>
+<span class="c">//     L (max-heap)  the slope-change points to the LEFT of the flat bottom</span>
+<span class="c">//     R (min-heap)  the slope-change points to the RIGHT</span>
+<span class="c">//</span>
+<span class="c">// Every breakpoint stored once per unit of slope change. The flat bottom is</span>
+<span class="c">// [L.top(), R.top()]. That is the entire representation -- f is recovered by</span>
+<span class="c">// walking outward, but you almost never need to.</span>
+<span class="c">//</span>
+<span class="c">// The operations, each O(log n):</span>
+<span class="c">//     f(x) += (x - a)+        &quot;cost if you end above a&quot;    -&gt; add to R</span>
+<span class="c">//     f(x) += (a - x)+        &quot;cost if you end below a&quot;    -&gt; add to L</span>
+<span class="c">//     f(x) += |x - a|         both of the above</span>
+<span class="c">//     f(x)  = min_{y&lt;=x} f(y) prefix min  -&gt; DROP R entirely (slope &gt;= 0 gone)</span>
+<span class="c">//     f(x)  = min_{y&gt;=x} f(y) suffix min  -&gt; DROP L entirely</span>
+<span class="c">//     f(x) -&gt; f(x - c)        shift right -&gt; lazy add c to both heaps</span>
+<span class="c">//     f(x) -&gt; min_{|y-x|&lt;=c}  &quot;slide&quot;     -&gt; shift L left by c, R right by c</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  ADDING |x - a| IS A THREE-STEP DANCE, NOT TWO PUSHES</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #      L.push(a); R.push(a);</span>
+<span class="cbox">// #      if (L.top() &gt; R.top()) { swap the two tops; }</span>
+<span class="cbox">// #      minf += max(0LL, &lt;the amount the bottom moved&gt;);</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Concretely: push a into L, then move L.top() into R; push a into R, then</span>
+<span class="cbox">// #  move R.top() into L. The minimum increases by |a - (old bottom)| only</span>
+<span class="cbox">// #  when a falls outside the flat region. Skipping the re-balance leaves the</span>
+<span class="cbox">// #  heaps interleaved and every later query is wrong, silently.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  BOTH HEAPS NEED LAZY SHIFT TAGS, AND APPLYING ONE ACROSS A SWAP IS THE BUG</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Shifting f left/right is O(1) via a tag per heap. But when an element</span>
+<span class="cbox">// #  MOVES from L to R during a rebalance, its value must be un-tagged from</span>
+<span class="cbox">// #  L&#x27;s frame and re-tagged into R&#x27;s. Forgetting that is THE slope-trick</span>
+<span class="cbox">// #  bug: it passes every test where the two shifts happen to be equal.</span>
+<span class="cbox">// #  Below, addL / addR are those tags and push/pop always convert.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   The function MUST be convex. Adding any concave piece (a -|x-a|, a</span>
+<span class="c">//     &quot;reward&quot;) destroys the invariant permanently. There is no check.</span>
+<span class="c">//   Only the MINIMUM is tracked exactly; f at a specific x needs a walk.</span>
+<span class="c">//   Prefix-min deletes the whole right heap. If you need it later, you cannot</span>
+<span class="c">//     -- that information is gone by design.</span>
+<span class="c">//   The classic &quot;make the array non-decreasing with min total |change|&quot; needs</span>
+<span class="c">//     only L and minf; R never grows. Use that as the sanity model.</span>
+<span class="c">//   Integer domain: all breakpoints are integers if the inputs are.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   min total |a_i - b_i| making b non-DECREASING     the canonical one --</span>
+<span class="c">//                                                     nondecreasing() below</span>
+<span class="c">//   ... non-increasing                                same, on the reversed</span>
+<span class="c">//                                                     array</span>
+<span class="c">//   ... strictly increasing                           subtract i from a_i</span>
+<span class="c">//                                                     first, then the above</span>
+<span class="c">//   &quot;each step may move by at most c&quot;                 the slide operation</span>
+<span class="c">//   &quot;you may also pay to skip&quot;                        add a constant-slope</span>
+<span class="c">//                                                     piece</span>
+<span class="c">//   min cost to equalise with a move budget            slide + |x-a|</span>
+<span class="c">//   convex cost merged UP A TREE                       slope trick + heap</span>
+<span class="c">//                                                      merging (small to</span>
+<span class="c">//                                                      large, or a leftist /</span>
+<span class="c">//                                                      pairing heap)</span>
+<span class="c">//   &quot;exactly k pieces, cost convex in k&quot;               aliens trick evaluates</span>
+<span class="c">//                                                      ONE tangent of this same</span>
+<span class="c">//                                                      function -- their PDF</span>
+<span class="c">//   min-cost flow on a line / regret greedy            the same convexity fact</span>
+<span class="c">//                                                      in a third vocabulary</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   the cost is not convex          -&gt; no slope trick. Full DP over x.</span>
+<span class="c">//   you need f at many x values     -&gt; keep the array; the heaps only give the</span>
+<span class="c">//                                      minimum cheaply.</span>
+<span class="c">//   the parameter is a COUNT you must report -&gt; aliens/Lagrangian, not this.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">struct</span> Slope {
+    <span class="t">priority_queue</span>&lt;<span class="t">ll</span>&gt; L;                                   <span class="c">// max-heap</span>
+    <span class="t">priority_queue</span>&lt;<span class="t">ll</span>, <span class="t">vector</span>&lt;<span class="t">ll</span>&gt;, <span class="t">greater</span>&lt;<span class="t">ll</span>&gt;&gt; R;          <span class="c">// min-heap</span>
+    <span class="t">ll</span> addL = <span class="n">0</span>, addR = <span class="n">0</span>;                                  <span class="c">// lazy shift tags</span>
+    <span class="t">ll</span> minf = <span class="n">0</span>;
+
+    <span class="k">void</span> pushL(<span class="t">ll</span> x) { L.push(x - addL); }
+    <span class="k">void</span> pushR(<span class="t">ll</span> x) { R.push(x - addR); }
+    <span class="t">ll</span>  topL() <span class="k">const</span> { <span class="k">return</span> L.top() + addL; }
+    <span class="t">ll</span>  topR() <span class="k">const</span> { <span class="k">return</span> R.top() + addR; }
+    <span class="k">void</span> popL() { L.pop(); }
+    <span class="k">void</span> popR() { R.pop(); }
+
+    <span class="c">// f(x) += (a - x)+     &quot;penalty for finishing BELOW a&quot;</span>
+    <span class="k">void</span> add_left(<span class="t">ll</span> a) {
+        pushL(a);
+        <span class="k">if</span> (!R.empty() &amp;&amp; topR() &lt; a) {                     <span class="c">// rebalance</span>
+            <span class="t">ll</span> t = topR(); popR();
+            minf += a - t;
+            pushR(a);                                       <span class="c">// re-tag into R</span>
+            popL(); pushL(t);                               <span class="c">// and t into L</span>
+        }
+    }
+    <span class="c">// f(x) += (x - a)+     &quot;penalty for finishing ABOVE a&quot;</span>
+    <span class="k">void</span> add_right(<span class="t">ll</span> a) {
+        pushR(a);
+        <span class="k">if</span> (!L.empty() &amp;&amp; topL() &gt; a) {
+            <span class="t">ll</span> t = topL(); popL();
+            minf += t - a;
+            pushL(a);
+            popR(); pushR(t);
+        }
+    }
+    <span class="c">// f(x) += |x - a|</span>
+    <span class="k">void</span> add_abs(<span class="t">ll</span> a) { add_left(a), add_right(a); }
+
+    <span class="c">// f(x) = min over y &lt;= x of f(y)   -- the right slopes vanish</span>
+    <span class="k">void</span> prefix_min() { <span class="k">while</span> (!R.empty()) R.pop(); addR = <span class="n">0</span>; }
+    <span class="c">// f(x) = min over y &gt;= x of f(y)   -- the left slopes vanish</span>
+    <span class="k">void</span> suffix_min() { <span class="k">while</span> (!L.empty()) L.pop(); addL = <span class="n">0</span>; }
+
+    <span class="c">// f(x) -&gt; f(x - c): move the whole function right by c</span>
+    <span class="k">void</span> shift(<span class="t">ll</span> c) { addL += c, addR += c; }
+    <span class="c">// f(x) -&gt; min over |y - x| &lt;= c of f(y): widen the flat bottom</span>
+    <span class="k">void</span> slide(<span class="t">ll</span> cl, <span class="t">ll</span> cr) { addL -= cl, addR += cr; }
+
+    <span class="t">ll</span> min_value() <span class="k">const</span> { <span class="k">return</span> minf; }
+};
+
+<span class="c">// ---- the canonical use: min sum |a_i - b_i| with b non-decreasing ---------</span>
+<span class="c">// Each step: allow b_i to be anything &gt;= the previous (prefix min), then pay</span>
+<span class="c">// |a_i - b_i|. Only the left heap ever matters, so this is also the smallest</span>
+<span class="c">// correct model to test the structure against.</span>
+<span class="t">ll</span> min_cost_nondecreasing(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a) {
+    Slope f;
+    <span class="k">for</span> (<span class="t">ll</span> x : a) {
+        f.prefix_min();       <span class="c">// b_i may be &gt;= any earlier value: drop R</span>
+        f.add_abs(x);
+    }
+    <span class="k">return</span> f.min_value();
+}
+
+<span class="c">// ---- non-decreasing, but each step may rise by at most `c` ---------------</span>
+<span class="t">ll</span> min_cost_bounded_step(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a, <span class="t">ll</span> c) {
+    Slope f;
+    <span class="k">for</span> (<span class="t">ll</span> x : a) {
+        f.slide(<span class="n">0</span>, c);        <span class="c">// b_i in [b_{i-1}, b_{i-1} + c]</span>
+        f.add_abs(x);
+    }
+    <span class="k">return</span> f.min_value();
+}</code></pre>
+</div>
+<div class="file" id="matrix-expo">
+<h2>3.19 &nbsp;matrix expo</h2>
+<p class="path">DP/matrix/matrix expo.cpp</p>
+<pre><code><span class="pp">#define mat vector&lt;vector&lt;ll&gt;&gt;</span>
+<span class="pp">#define zero(n,m) mat(n , vector&lt;ll&gt;(m,0))</span>
+<span class="k">const</span> <span class="k">int</span> mod = <span class="c">/*1e9+7*/</span> <span class="c">/*119&lt;&lt;23|1*/</span>;
+<span class="k">int</span> add(<span class="k">int</span> a, <span class="k">int</span> b){ <span class="k">return</span> (a+=b) &lt; mod? a : a - mod; }
+<span class="k">int</span> subt(<span class="k">int</span> a, <span class="k">int</span> b){ <span class="k">return</span> (a-=b) &lt; <span class="n">0</span>? a + mod : a; }
+<span class="k">int</span> mult(<span class="k">int</span> a, <span class="k">int</span> b){ <span class="k">return</span> <span class="n">1ll</span>*a*b%mod;}
+mat I(<span class="k">int</span> n){
+  mat r = zero(n, n);
+  <span class="k">for</span>(<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) r[i][i] = <span class="n">1</span>;
+  <span class="k">return</span> r;
+}
+mat mult(mat &amp;a , mat &amp;b){
+  <span class="k">int</span> n = a.size() , m = b[<span class="n">0</span>].size();
+  mat res = zero(n , m);
+  <span class="k">for</span>(<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) 
+  <span class="k">for</span>(<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++) 
+  <span class="k">for</span>(<span class="k">int</span> k = <span class="n">0</span>; k &lt; n; k++) 
+    res[i][j] = add(res[i][j], mult(a[i][k], b[k][j]));
+  <span class="k">return</span> res;
+}
+mat fp(mat &amp;b , <span class="t">ll</span> e){
+  mat r = I(b.size());
+  <span class="k">for</span>(; e; b = mult(b, b), e &gt;&gt;= <span class="n">1</span>)
+    <span class="k">if</span>(e &amp; <span class="n">1</span>) r = mult(r, b);
+  <span class="k">return</span> r;
+}
+<span class="k">void</span> init(mat &amp;T, mat &amp;F, <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;b, <span class="t">vector</span>&lt;<span class="k">int</span>&gt;&amp;c){
+  <span class="k">int</span> k = b.size();
+  <span class="k">for</span>(<span class="k">int</span> i = <span class="n">0</span>; i &lt; k; i++)
+    F[i][<span class="n">0</span>] = b[k-i-<span class="n">1</span>], T[<span class="n">0</span>][i] = c[i];
+  <span class="k">for</span>(<span class="k">int</span> i = <span class="n">1</span>; i &lt; k; i++)
+    T[i][i-<span class="n">1</span>] = <span class="n">1</span>;
+}
+<span class="k">void</span> solve() { 
+  <span class="k">int</span> k, n;
+  cin &gt;&gt; k;
+  <span class="t">vector</span>&lt;<span class="k">int</span>&gt; b(k), c(k);
+  <span class="k">for</span>(<span class="k">auto</span> &amp;i : b) cin &gt;&gt; i;
+  <span class="k">for</span>(<span class="k">auto</span> &amp;i : c) cin &gt;&gt; i;
+  cin &gt;&gt; n;
+  <span class="k">if</span>(n &lt;= k) <span class="k">return</span> <span class="k">void</span>(cout &lt;&lt; b[n-<span class="n">1</span>] &lt;&lt; el);
+  n -= k;
+  mat T = zero(k, k), F = zero(k, <span class="n">1</span>);
+  init(T, F, b, c);
+  T = fp(T, n);
+  F = mult(T, F);
+  cout &lt;&lt; F[<span class="n">0</span>][<span class="n">0</span>] &lt;&lt; el;
+}
+<span class="c">/////////////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////////////</span>
+<span class="pp">#define row vector&lt;long long&gt;</span>
+<span class="pp">#define matrix vector&lt;row&gt;</span>
+<span class="pp">#define zero(n,m) vector&lt;row&gt;(n, row(m))</span>
+matrix mult(matrix&amp; a, matrix&amp; b) <span class="c">// a is a square matrix</span>
+{
+  <span class="k">int</span> n = a.size(), m = b[<span class="n">0</span>].size();
+  matrix result = zero(n, m);
+  <span class="k">for</span>(<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; ++i)
+  {
+    <span class="k">for</span>(<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; ++j)
+    {
+      <span class="k">for</span>(<span class="k">int</span> k = <span class="n">0</span>; k &lt; n; ++k)
+      {
+        result[i][j] += a[i][k] * b[k][j];
+        result[i][j] %= mod;
+      }
+    }
+  }
+  <span class="k">return</span> result;
+}
+matrix fp(matrix a, <span class="k">long</span> <span class="k">long</span> p)
+{
+  <span class="k">int</span> n = a.size();
+  matrix result = matrix(n, row(n));
+  <span class="k">for</span>(<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; ++i) result[i][i] = <span class="n">1</span>;
+  <span class="k">while</span>(p &gt; <span class="n">0</span>)
+  {
+    <span class="k">if</span> (p &amp; <span class="n">1</span>) result = mult(result, a);
+    a = mult(a, a);
+    p /= <span class="n">2</span>;
+  }
+  <span class="k">return</span> result;
+}
+<span class="c">/*</span>
+<span class="c">F = mult(T, F)</span>
+<span class="c">*/</span></code></pre>
+</div>
+<div class="file" id="minlenk">
+<h2>3.20 &nbsp;minlenK</h2>
+<p class="path">DP/matrix/minlenK.cpp</p>
+<pre><code><span class="pp">#include &lt;bits/stdc++.h&gt;</span>
+<span class="k">typedef</span> <span class="k">long</span> <span class="k">long</span> <span class="t">ll</span>;
+<span class="k">typedef</span> <span class="k">long</span> <span class="k">double</span> ld;
+<span class="pp">#define el &#x27;\n&#x27;</span>
+<span class="pp">#define fio ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);</span>
+<span class="pp">#define mat vector&lt;vector&lt;ll&gt;&gt;</span>
+<span class="pp">#define zero(n,m) mat(n , vector&lt;ll&gt;(m,0))</span>
+<span class="k">const</span> <span class="k">int</span> mod = <span class="n">1e9</span>;
+<span class="k">using</span> <span class="k">namespace</span> std;
+mat mult(mat &amp;a , mat &amp;b){
+  <span class="k">int</span> n = a.size() , m = b[<span class="n">0</span>].size();
+  mat res = zero(n , m);
+  <span class="k">for</span>(<span class="k">auto</span> &amp;i : res)
+    <span class="k">for</span>(<span class="k">auto</span> &amp;j : i)
+      j = <span class="n">4e18</span>;
+  <span class="k">for</span>(<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) 
+  <span class="k">for</span>(<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++) 
+  <span class="k">for</span>(<span class="k">int</span> k = <span class="n">0</span>; k &lt; n; k++) 
+    res[i][j] = min(res[i][j], a[i][k] + b[k][j]);
+  <span class="k">return</span> res;
+}
+mat fp(mat &amp;b , <span class="t">ll</span> e){
+  mat r = zero(b.size(), b.size());
+  <span class="k">for</span>(; e; b = mult(b, b), e &gt;&gt;= <span class="n">1</span>)
+    <span class="k">if</span>(e &amp; <span class="n">1</span>) r = mult(r, b);
+  <span class="k">return</span> r;
+}
+<span class="k">const</span> <span class="k">int</span> N = <span class="n">112</span>;
+<span class="k">void</span> solve(){ 
+  <span class="k">int</span> n, m, k;
+  cin &gt;&gt; n &gt;&gt; m &gt;&gt; k;
+  mat g = zero(n+<span class="n">1</span>, n+<span class="n">1</span>);
+  <span class="k">for</span>(<span class="k">auto</span> &amp;i : g)
+    <span class="k">for</span>(<span class="k">auto</span> &amp;j : i) j = <span class="n">4e18</span>;
+  <span class="k">for</span>(<span class="k">int</span> u, v,c, i = <span class="n">0</span>; i &lt; m; i++){
+    cin &gt;&gt; u &gt;&gt; v &gt;&gt; c;
+    g[u][v] = c;
+  }
+  g = fp(g, k);
+  <span class="t">ll</span> out = <span class="n">4e18</span>;
+  <span class="k">for</span>(<span class="k">int</span> i = <span class="n">1</span>; i &lt;= n; i++){
+    <span class="k">for</span>(<span class="k">int</span> j = <span class="n">1</span>; j &lt;= n; j++){
+      out = min(out, g[i][j]);
+    }
+  }
+  <span class="k">if</span>(out &gt; <span class="n">1e18</span>) 
+    cout &lt;&lt; <span class="s">&quot;IMPOSSIBLE\n&quot;</span>;
+  <span class="k">else</span> 
+    cout &lt;&lt; out &lt;&lt; el;
+}
+<span class="k">int</span> main(){ fio <span class="k">int</span> t = <span class="n">1</span>; <span class="c">/*cin &gt;&gt; t;*/</span> <span class="k">while</span>(t--) solve(); <span class="k">return</span> <span class="n">0</span>; }</code></pre>
+</div>
+</div>

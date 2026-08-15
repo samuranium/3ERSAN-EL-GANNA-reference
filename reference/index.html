@@ -1,0 +1,153 @@
+<title>3ERSAN EL GANNA — Team Reference</title>
+<style>
+:root{
+  --paper:#ffffff; --ink:#16181c; --soft:#5a6470; --faint:#8b939d;
+  --rule:#d5dade; --rule2:#aeb6bd;
+  --accent:#0d5f6b;
+  --c:#4f7a5e;        /* comment            */
+  --cbox:#8a5a12;     /* #### box comment   */
+  --k:#1f4f9c;        /* keyword            */
+  --t:#0d6b6b;        /* type               */
+  --s:#8a4520;        /* string             */
+  --n:#8a3d6b;        /* number             */
+  --pp:#6a3d9c;       /* preprocessor       */
+  --codebg:#fafbfb;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+    --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+    --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+    --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+  --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+  --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+  --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:10.5pt; line-height:1.5;
+}
+.wrap{max-width:52rem;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+h1{font-size:1.9rem;line-height:1.15;margin:0 0 .35rem;letter-spacing:-.01em}
+.blurb{color:var(--soft);margin:0 0 .3rem;max-width:52ch}
+.meta{color:var(--faint);font-size:.85em;margin:0}
+hr{border:none;border-top:3px double var(--rule2);margin:1.6rem 0}
+
+h2{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:1.02rem;margin:0 0 .1rem;letter-spacing:-.01em;
+  color:var(--accent);
+  break-after:avoid; page-break-after:avoid;
+}
+.path{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.78em;color:var(--faint);margin:0 0 .45rem;
+  break-after:avoid; page-break-after:avoid;
+}
+.file{ margin:0 0 1.5rem; break-inside:auto; }
+
+/* ---- table of contents ---- */
+.toc{margin:0 0 1rem}
+.toc h2{color:var(--ink);font-size:1.05rem;margin-bottom:.5rem}
+.toc .grp{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--faint);margin:.75rem 0 .2rem;
+}
+.toc ol{list-style:none;margin:0;padding:0;
+  columns:2; column-gap:2rem;}
+.toc li{break-inside:avoid;margin:.08rem 0;font-size:.92em}
+.toc a{color:var(--ink);text-decoration:none;
+  display:flex;justify-content:space-between;gap:.5rem;align-items:baseline}
+.toc a:hover{color:var(--accent)}
+.toc .num{color:var(--faint);font-size:.85em;
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-variant-numeric:tabular-nums}
+
+/* ---- code ---- */
+pre{
+  margin:0; background:var(--codebg);
+  border:1px solid var(--rule); border-radius:3px;
+  padding:.6rem .75rem;
+  font-family:ui-monospace,"Cascadia Mono","DejaVu Sans Mono",Consolas,Menlo,monospace;
+  font-size:8.6pt; line-height:1.38;
+  white-space:pre-wrap;
+  overflow-wrap:break-word;
+  padding-left:2.2em; text-indent:-1.6em;   /* hanging indent on wrapped lines */
+  tab-size:4;
+}
+code{font-family:inherit}
+.c{color:var(--c)}
+.cbox{color:var(--cbox);font-weight:600}
+.k{color:var(--k);font-weight:600}
+.t{color:var(--t)}
+.s{color:var(--s)}
+.n{color:var(--n)}
+.pp{color:var(--pp)}
+
+/* ---- prose blocks (the already-markdown index files) ---- */
+.prose{font-size:.95em}
+.prose table{border-collapse:collapse;width:100%;margin:.5rem 0;font-size:.88em}
+.prose th,.prose td{border:1px solid var(--rule);padding:.28rem .5rem;
+  text-align:left;vertical-align:top}
+.prose th{background:var(--codebg);font-weight:650}
+.prose h3{font-size:1rem;margin:1rem 0 .3rem;color:var(--accent);
+  break-after:avoid;page-break-after:avoid}
+.prose h4{font-size:.92rem;margin:.8rem 0 .25rem;
+  break-after:avoid;page-break-after:avoid}
+.prose code{background:var(--codebg);padding:.05em .3em;border-radius:2px;
+  font-size:.9em;border:1px solid var(--rule)}
+.prose ul,.prose ol{padding-left:1.2rem;margin:.4rem 0}
+.prose li{margin:.15rem 0}
+.prose p{margin:.4rem 0}
+
+/* ---- print ---- */
+@page{ size:A4; margin:13mm 11mm; }
+@media print{
+  :root{
+    --paper:#fff; --ink:#000; --soft:#333; --faint:#555;
+    --rule:#bbb; --rule2:#888; --codebg:#fbfbfb; --accent:#0a4a55;
+  }
+  body{font-size:10pt}
+  .wrap{max-width:none;padding:0;margin:0}
+  .noprint{display:none !important}
+  pre{font-size:8.2pt;border-color:#ccc;break-inside:auto}
+  h2{break-after:avoid;page-break-after:avoid}
+  .path{break-after:avoid;page-break-after:avoid}
+  .file{break-inside:auto}
+  .toc{break-after:page;page-break-after:always}
+  a{color:inherit;text-decoration:none}
+  .prose tr{break-inside:avoid}
+}
+
+.hint{
+  background:var(--codebg);border:1px solid var(--rule);
+  border-left:4px double var(--rule2);
+  border-radius:3px;padding:.7rem .9rem;margin:0 0 1.4rem;
+  font-size:.9em;color:var(--soft)
+}
+.hint b{color:var(--ink)}
+</style>
+<div class="wrap">
+<h1>3ERSAN EL GANNA</h1>
+<p class="blurb">Competitive programming team reference. Nine documents; open one and print it.</p>
+<div class="hint"><b>To make a PDF:</b> open a document below, Ctrl+P, Destination <b>Save as PDF</b>. Turn ON <b>Background graphics</b> so the code colouring survives, and <b>Headers and footers</b> if you want page numbers.</div>
+<div class="toc"><ol>
+<li><a href="00-subproblems.html"><span>Subproblems Index</span><span class="num">10 files</span></a></li>
+<li><a href="01-graph.html"><span>Graph</span><span class="num">34 files</span></a></li>
+<li><a href="02-ds.html"><span>Data Structures</span><span class="num">45 files</span></a></li>
+<li><a href="03-dp.html"><span>Dynamic Programming</span><span class="num">20 files</span></a></li>
+<li><a href="04-strings.html"><span>Strings and Hashing</span><span class="num">19 files</span></a></li>
+<li><a href="05-math.html"><span>Math and Number Theory</span><span class="num">18 files</span></a></li>
+<li><a href="06-combinatorics.html"><span>Combinatorics</span><span class="num">6 files</span></a></li>
+<li><a href="07-game.html"><span>Game Theory</span><span class="num">2 files</span></a></li>
+<li><a href="08-misc.html"><span>Template, Snippets and Testing</span><span class="num">4 files</span></a></li>
+</ol></div><p class="meta">158 files total.</p></div>

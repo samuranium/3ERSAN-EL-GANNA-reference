@@ -1,0 +1,408 @@
+<title>Game Theory — 3ERSAN EL GANNA</title>
+<style>
+:root{
+  --paper:#ffffff; --ink:#16181c; --soft:#5a6470; --faint:#8b939d;
+  --rule:#d5dade; --rule2:#aeb6bd;
+  --accent:#0d5f6b;
+  --c:#4f7a5e;        /* comment            */
+  --cbox:#8a5a12;     /* #### box comment   */
+  --k:#1f4f9c;        /* keyword            */
+  --t:#0d6b6b;        /* type               */
+  --s:#8a4520;        /* string             */
+  --n:#8a3d6b;        /* number             */
+  --pp:#6a3d9c;       /* preprocessor       */
+  --codebg:#fafbfb;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+    --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+    --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+    --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+  --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+  --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+  --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:10.5pt; line-height:1.5;
+}
+.wrap{max-width:52rem;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+h1{font-size:1.9rem;line-height:1.15;margin:0 0 .35rem;letter-spacing:-.01em}
+.blurb{color:var(--soft);margin:0 0 .3rem;max-width:52ch}
+.meta{color:var(--faint);font-size:.85em;margin:0}
+hr{border:none;border-top:3px double var(--rule2);margin:1.6rem 0}
+
+h2{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:1.02rem;margin:0 0 .1rem;letter-spacing:-.01em;
+  color:var(--accent);
+  break-after:avoid; page-break-after:avoid;
+}
+.path{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.78em;color:var(--faint);margin:0 0 .45rem;
+  break-after:avoid; page-break-after:avoid;
+}
+.file{ margin:0 0 1.5rem; break-inside:auto; }
+
+/* ---- table of contents ---- */
+.toc{margin:0 0 1rem}
+.toc h2{color:var(--ink);font-size:1.05rem;margin-bottom:.5rem}
+.toc .grp{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--faint);margin:.75rem 0 .2rem;
+}
+.toc ol{list-style:none;margin:0;padding:0;
+  columns:2; column-gap:2rem;}
+.toc li{break-inside:avoid;margin:.08rem 0;font-size:.92em}
+.toc a{color:var(--ink);text-decoration:none;
+  display:flex;justify-content:space-between;gap:.5rem;align-items:baseline}
+.toc a:hover{color:var(--accent)}
+.toc .num{color:var(--faint);font-size:.85em;
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-variant-numeric:tabular-nums}
+
+/* ---- code ---- */
+pre{
+  margin:0; background:var(--codebg);
+  border:1px solid var(--rule); border-radius:3px;
+  padding:.6rem .75rem;
+  font-family:ui-monospace,"Cascadia Mono","DejaVu Sans Mono",Consolas,Menlo,monospace;
+  font-size:8.6pt; line-height:1.38;
+  white-space:pre-wrap;
+  overflow-wrap:break-word;
+  padding-left:2.2em; text-indent:-1.6em;   /* hanging indent on wrapped lines */
+  tab-size:4;
+}
+code{font-family:inherit}
+.c{color:var(--c)}
+.cbox{color:var(--cbox);font-weight:600}
+.k{color:var(--k);font-weight:600}
+.t{color:var(--t)}
+.s{color:var(--s)}
+.n{color:var(--n)}
+.pp{color:var(--pp)}
+
+/* ---- prose blocks (the already-markdown index files) ---- */
+.prose{font-size:.95em}
+.prose table{border-collapse:collapse;width:100%;margin:.5rem 0;font-size:.88em}
+.prose th,.prose td{border:1px solid var(--rule);padding:.28rem .5rem;
+  text-align:left;vertical-align:top}
+.prose th{background:var(--codebg);font-weight:650}
+.prose h3{font-size:1rem;margin:1rem 0 .3rem;color:var(--accent);
+  break-after:avoid;page-break-after:avoid}
+.prose h4{font-size:.92rem;margin:.8rem 0 .25rem;
+  break-after:avoid;page-break-after:avoid}
+.prose code{background:var(--codebg);padding:.05em .3em;border-radius:2px;
+  font-size:.9em;border:1px solid var(--rule)}
+.prose ul,.prose ol{padding-left:1.2rem;margin:.4rem 0}
+.prose li{margin:.15rem 0}
+.prose p{margin:.4rem 0}
+
+/* ---- print ---- */
+@page{ size:A4; margin:13mm 11mm; }
+@media print{
+  :root{
+    --paper:#fff; --ink:#000; --soft:#333; --faint:#555;
+    --rule:#bbb; --rule2:#888; --codebg:#fbfbfb; --accent:#0a4a55;
+  }
+  body{font-size:10pt}
+  .wrap{max-width:none;padding:0;margin:0}
+  .noprint{display:none !important}
+  pre{font-size:8.2pt;border-color:#ccc;break-inside:auto}
+  h2{break-after:avoid;page-break-after:avoid}
+  .path{break-after:avoid;page-break-after:avoid}
+  .file{break-inside:auto}
+  .toc{break-after:page;page-break-after:always}
+  a{color:inherit;text-decoration:none}
+  .prose tr{break-inside:avoid}
+}
+
+.hint{
+  background:var(--codebg);border:1px solid var(--rule);
+  border-left:4px double var(--rule2);
+  border-radius:3px;padding:.7rem .9rem;margin:0 0 1.4rem;
+  font-size:.9em;color:var(--soft)
+}
+.hint b{color:var(--ink)}
+</style>
+<div class="wrap">
+<h1>7. Game Theory</h1>
+<p class="blurb">Impartial games, Grundy values, games with cycles.</p>
+<p class="meta">2 files · 3ERSAN EL GANNA team reference</p>
+<div class="hint noprint"><b>To make the PDF:</b> Ctrl+P → Destination <b>Save as PDF</b> → turn ON <b>Background graphics</b> (for the coloured code) and <b>Headers and footers</b> (for page numbers) → Margins <b>Default</b>. This box does not print.</div>
+<div class="toc"><h2>Contents</h2>
+<ol>
+<li><a href="#grundy"><span>grundy</span><span class="num">7.1</span></a></li>
+<li><a href="#retrograde"><span>retrograde</span><span class="num">7.2</span></a></li>
+</ol>
+</div>
+<div class="file" id="grundy">
+<h2>7.1 &nbsp;grundy</h2>
+<p class="path">game/grundy.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// SPRAGUE-GRUNDY -- impartial games, normal play</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// CONDITIONS. All four must hold or none of this applies:</span>
+<span class="c">//   two players alternate, both play optimally</span>
+<span class="c">//   both have the SAME moves available (impartial -- not chess, not any game</span>
+<span class="c">//     where the players own different pieces)</span>
+<span class="c">//   finite, no draws, no repetition</span>
+<span class="c">//   NORMAL PLAY: the player unable to move LOSES. (Misere is different; see</span>
+<span class="c">//     the end.)</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THE WHOLE THEORY IN THREE LINES</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #    G(position) = mex{ G(p) : p reachable in one move }</span>
+<span class="cbox">// #    G == 0  &lt;=&gt;  the player TO MOVE loses</span>
+<span class="cbox">// #    G(A + B + ...) = G(A) xor G(B) xor ...      &lt;- independent subgames</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  mex = smallest non-negative integer NOT in the set. mex{} = 0, which is</span>
+<span class="cbox">// #  why a position with no moves is a loss.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  The xor is the entire point. It is why Nim is the universal impartial</span>
+<span class="cbox">// #  game and why &quot;several independent piles/heaps/components&quot; is always the</span>
+<span class="cbox">// #  same problem regardless of the theme.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// NIM: piles of sizes a1..ak, take any positive number from one pile.</span>
+<span class="c">//   G(pile of n) = n, so the whole game is xor of the sizes.</span>
+<span class="c">//   First player wins iff the xor is nonzero. The winning move is: find a pile</span>
+<span class="c">//   with (a_i xor total) &lt; a_i and reduce it to that.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #   RECOGNISING IT</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #   &quot;several independent piles / stacks / heaps / components, a move</span>
+<span class="cbox">// #    touches exactly one of them&quot;  -&gt;  Sprague-Grundy, xor the parts.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #   If a move can touch TWO components, the xor rule does NOT apply and you</span>
+<span class="cbox">// #   are in a different (usually much harder) game.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Grundy values are NOT the number of moves, and NOT 0/1. Computing &quot;win or</span>
+<span class="c">//     lose&quot; per component and xoring the booleans is wrong -- you need the</span>
+<span class="c">//     full value whenever components are combined.</span>
+<span class="c">//   For a single game with no sum, win/lose (G == 0 or not) is enough and you</span>
+<span class="c">//     can skip mex entirely.</span>
+<span class="c">//   The table below is O(maxN * moves). If the state space is large, look for</span>
+<span class="c">//     a pattern in the first 30 values -- impartial games are periodic</span>
+<span class="c">//     astonishingly often, and proving the period is usually easier than</span>
+<span class="c">//     computing it.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS / KNOWN GAMES</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   Nim                                 xor of pile sizes</span>
+<span class="c">//   subtraction game (take s in S)      grundy_subtraction() below</span>
+<span class="c">//   take 1..k from a pile               G(n) = n mod (k+1)</span>
+<span class="c">//   Misere Nim                          same as Nim UNLESS every pile is 1;</span>
+<span class="c">//                                       then the parity of the pile count</span>
+<span class="c">//                                       flips the answer</span>
+<span class="c">//   Staircase Nim                       only the ODD-indexed steps count; xor</span>
+<span class="c">//                                       those, ignore the rest</span>
+<span class="c">//   split a pile into unequal parts     G by mex over all splits</span>
+<span class="c">//   Green Hackenbush / edge deletion    grundy_graph() below -- Colon and</span>
+<span class="c">//     on a graph rooted at a vertex     Fusion principles</span>
+<span class="c">//   coin turning games                  Grundy of a single coin position,</span>
+<span class="c">//                                       xored over the heads</span>
+<span class="c">//   Wythoff (two piles, take from one   losing positions are the Beatty pairs</span>
+<span class="c">//     or equally from both)             (floor(k*phi), floor(k*phi^2))</span>
+<span class="c">//   partizan games (players differ)     NOT this -- surreal numbers</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="k">int</span> GN = <span class="n">300005</span>;
+
+<span class="c">// mex of a small set of values</span>
+<span class="k">int</span> mex(<span class="t">vector</span>&lt;<span class="k">int</span>&gt; v) {
+    sort(v.begin(), v.end());
+    <span class="k">int</span> m = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> x : v) {
+        <span class="k">if</span> (x &gt; m) <span class="k">break</span>;
+        <span class="k">if</span> (x == m) m++;
+    }
+    <span class="k">return</span> m;
+}
+<span class="c">// G[n] for the subtraction game: from a pile of n you may remove any s in S.</span>
+<span class="k">int</span> G[GN];
+<span class="k">void</span> grundy_subtraction(<span class="k">int</span> maxn, <span class="k">const</span> <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;S) {
+    <span class="k">for</span> (<span class="k">int</span> n = <span class="n">0</span>; n &lt;= maxn; n++) {
+        <span class="t">vector</span>&lt;<span class="k">int</span>&gt; reach;
+        <span class="k">for</span> (<span class="k">int</span> s : S)
+            <span class="k">if</span> (n - s &gt;= <span class="n">0</span>) reach.push_back(G[n - s]);
+        G[n] = mex(reach);
+    }
+}
+<span class="c">// whole game = several piles: xor the values, nonzero means first player wins</span>
+<span class="k">bool</span> first_player_wins(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;piles) {
+    <span class="k">int</span> x = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> p : piles) x ^= G[p];
+    <span class="k">return</span> x != <span class="n">0</span>;
+}
+
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// GRUNDY ON A GRAPH -- players delete edges; any component disconnected from</span>
+<span class="c">// the root is discarded; a player who cannot move loses.</span>
+<span class="c">//</span>
+<span class="c">// Two principles do the work:</span>
+<span class="c">//   COLON   the Grundy value of a tree is the xor of (1 + G(child subtree))</span>
+<span class="c">//           over its children -- a bridge contributes one extra move.</span>
+<span class="c">//   FUSION  two vertices on a common cycle may be contracted without changing</span>
+<span class="c">//           the value. So contract every 2-edge-connected component and the</span>
+<span class="c">//           graph becomes a tree with self-loops; each self-loop is worth 1.</span>
+<span class="c">//</span>
+<span class="c">// Taken from the other team&#x27;s reference (SPOJ 1477, IPSC 2003 G).</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; gg[GN];
+<span class="k">int</span> glow[GN], gdis[GN], gT, gn;
+
+<span class="k">int</span> grundy_graph(<span class="k">int</span> u, <span class="k">int</span> pre = <span class="n">0</span>) {
+    gdis[u] = glow[u] = ++gT;
+    <span class="k">int</span> ans = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> v : gg[u]) {
+        <span class="k">if</span> (v == pre) { pre += <span class="n">2</span> * gn; <span class="k">continue</span>; }     <span class="c">// skip ONE parent edge</span>
+        <span class="k">if</span> (gdis[v] == <span class="n">0</span>) {
+            <span class="k">int</span> res = grundy_graph(v, u);
+            glow[u] = min(glow[u], glow[v]);
+            <span class="k">if</span> (glow[v] &gt; gdis[u]) ans ^= (<span class="n">1</span> + res) ^ <span class="n">1</span>;   <span class="c">// bridge: Colon</span>
+            <span class="k">else</span> ans ^= res;                              <span class="c">// inside a cycle</span>
+        } <span class="k">else</span> glow[u] = min(glow[u], gdis[v]);
+    }
+    <span class="k">if</span> (pre &gt; gn) pre -= <span class="n">2</span> * gn;
+    <span class="k">for</span> (<span class="k">int</span> v : gg[u])
+        <span class="k">if</span> (v != pre &amp;&amp; gdis[u] &lt;= gdis[v]) ans ^= <span class="n">1</span>;      <span class="c">// self / back edges</span>
+    <span class="k">return</span> ans;
+}</code></pre>
+</div>
+<div class="file" id="retrograde">
+<h2>7.2 &nbsp;retrograde</h2>
+<p class="path">game/retrograde.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// RETROGRADE ANALYSIS -- win/lose/DRAW when the game graph has CYCLES</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Memoised win/lose DFS assumes the state graph is a DAG. The moment positions</span>
+<span class="c">// can repeat, it either infinite-loops or -- worse -- treats an unresolved</span>
+<span class="c">// state as a Loss and returns a plausible wrong answer.</span>
+<span class="c">//</span>
+<span class="c">// The fix is a BFS backwards from the terminal positions, carrying an</span>
+<span class="c">// OUT-DEGREE COUNTER per state:</span>
+<span class="c">//</span>
+<span class="c">//     a position is a WIN   if ANY move leads to a Lose      (1 predecessor</span>
+<span class="c">//                                                             resolution)</span>
+<span class="c">//     a position is a LOSE  if EVERY move leads to a Win      (decrement the</span>
+<span class="c">//                                                             counter to 0)</span>
+<span class="c">//     a position is a DRAW  if it is never labelled at all</span>
+<span class="c">//</span>
+<span class="c">// That last line is the whole point. Draw is not computed; it is what remains.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  YOU MUST WALK THE REVERSE EDGES, AND THE DEGREE IS OF THE FORWARD GRAPH</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  The BFS propagates from a resolved state to its PREDECESSORS, so you</span>
+<span class="cbox">// #  need rev[]. But `deg[v]` counts v&#x27;s FORWARD moves. Building deg from the</span>
+<span class="cbox">// #  reverse adjacency is the classic mix-up: it compiles, it runs, and every</span>
+<span class="cbox">// #  &quot;Lose&quot; is wrong.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  A STATE WITH NO MOVES IS A LOSS UNDER NORMAL PLAY -- SEED IT</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  deg[v] == 0 means the player to move cannot move, so under NORMAL play</span>
+<span class="cbox">// #  they LOSE. Those are the BFS sources. Under MISERE play they WIN, and</span>
+<span class="cbox">// #  the only change is the seed label -- everything else is identical.</span>
+<span class="cbox">// #  Forgetting to seed leaves the entire graph a draw.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Once a state is labelled it is never relabelled. Guard with `if (res[u])</span>
+<span class="c">//     continue;` on pop, and check before pushing.</span>
+<span class="c">//   The counter must be decremented exactly once per (predecessor, edge). With</span>
+<span class="c">//     multi-edges, either dedupe or count them consistently in deg[].</span>
+<span class="c">//   States are (position, whose turn) ONLY if the two players have different</span>
+<span class="c">//     move sets. For an impartial game the position alone is the state.</span>
+<span class="c">//   If the game is impartial, acyclic, and you need to COMBINE independent</span>
+<span class="c">//     components, this is the wrong tool -- you need Grundy values, not</span>
+<span class="c">//     win/lose. game/grundy.cpp.</span>
+<span class="c">//   Scoring games are neither: use minimax DP.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   win/lose/draw on a cyclic move graph            this</span>
+<span class="c">//   &quot;the game may go on forever -- who wins&quot;        this; Draw = unlabelled</span>
+<span class="c">//   two tokens on a graph, players move one          state = (u, v, turn)</span>
+<span class="c">//   pursuit / cops and robbers, small graph          state = (cop, robber,</span>
+<span class="c">//                                                    turn), this</span>
+<span class="c">//   a partizan game (different move sets)            state = (pos, turn), this</span>
+<span class="c">//   normal play, &quot;cannot move loses&quot;                 seed deg==0 as LOSE</span>
+<span class="c">//   misere play, &quot;cannot move wins&quot;                  seed deg==0 as WIN,</span>
+<span class="c">//                                                    nothing else changes</span>
+<span class="c">//   the fastest win / slowest loss                   carry a distance: WIN</span>
+<span class="c">//                                                    takes min over losing</span>
+<span class="c">//                                                    successors + 1, LOSE</span>
+<span class="c">//                                                    takes max</span>
+<span class="c">//   impartial, ACYCLIC, several independent piles    NOT this -- Grundy,</span>
+<span class="c">//                                                    game/grundy.cpp</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   acyclic and impartial and you need to xor components -&gt; Grundy.</span>
+<span class="c">//   players accumulate a score                            -&gt; minimax DP.</span>
+<span class="c">//   the state space is too large to enumerate             -&gt; find the pattern</span>
+<span class="c">//     instead; retrograde needs every state materialised.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="k">int</span> WIN = <span class="n">1</span>, LOSE = <span class="n">2</span>, DRAW = <span class="n">0</span>;
+
+<span class="k">int</span> n;                          <span class="c">// number of states</span>
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; fwd[<span class="n">1000005</span>];       <span class="c">// fwd[u] = states reachable in one move</span>
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; rev_[<span class="n">1000005</span>];      <span class="c">// rev_[v] = states that can move TO v</span>
+<span class="k">int</span> deg[<span class="n">1000005</span>];               <span class="c">// OUT-degree in the FORWARD graph</span>
+<span class="k">int</span> res[<span class="n">1000005</span>];               <span class="c">// WIN / LOSE / DRAW</span>
+<span class="k">int</span> dist_[<span class="n">1000005</span>];             <span class="c">// moves to the resolution, optional</span>
+
+<span class="k">void</span> build_rev() {
+    <span class="k">for</span> (<span class="k">int</span> u = <span class="n">0</span>; u &lt; n; u++) {
+        deg[u] = fwd[u].size();
+        <span class="k">for</span> (<span class="k">int</span> v : fwd[u]) rev_[v].push_back(u);
+    }
+}
+
+<span class="c">// normal_play = true : a player with no moves LOSES (the usual rule)</span>
+<span class="k">void</span> solve(<span class="k">bool</span> normal_play = <span class="k">true</span>) {
+    <span class="k">for</span> (<span class="k">int</span> u = <span class="n">0</span>; u &lt; n; u++) res[u] = DRAW, dist_[u] = -<span class="n">1</span>;
+    <span class="t">queue</span>&lt;<span class="k">int</span>&gt; q;
+    <span class="k">for</span> (<span class="k">int</span> u = <span class="n">0</span>; u &lt; n; u++)
+        <span class="k">if</span> (deg[u] == <span class="n">0</span>) {                        <span class="c">// terminal: seed it</span>
+            res[u] = normal_play ? LOSE : WIN;
+            dist_[u] = <span class="n">0</span>;
+            q.push(u);
+        }
+    <span class="k">while</span> (!q.empty()) {
+        <span class="k">int</span> v = q.front(); q.pop();
+        <span class="k">for</span> (<span class="k">int</span> u : rev_[v]) {
+            <span class="k">if</span> (res[u] != DRAW) <span class="k">continue</span>;         <span class="c">// already decided</span>
+            <span class="k">if</span> (res[v] == LOSE) {                 <span class="c">// one losing move is enough</span>
+                res[u] = WIN;
+                dist_[u] = dist_[v] + <span class="n">1</span>;
+                q.push(u);
+            } <span class="k">else</span> <span class="k">if</span> (--deg[u] == <span class="n">0</span>) {           <span class="c">// every move leads to a WIN</span>
+                res[u] = LOSE;
+                dist_[u] = dist_[v] + <span class="n">1</span>;
+                q.push(u);
+            }
+        }
+    }
+    <span class="c">// anything still DRAW is a genuine draw: the mover can avoid losing forever</span>
+}</code></pre>
+</div>
+</div>

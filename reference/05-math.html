@@ -1,0 +1,2216 @@
+<title>Math and Number Theory — 3ERSAN EL GANNA</title>
+<style>
+:root{
+  --paper:#ffffff; --ink:#16181c; --soft:#5a6470; --faint:#8b939d;
+  --rule:#d5dade; --rule2:#aeb6bd;
+  --accent:#0d5f6b;
+  --c:#4f7a5e;        /* comment            */
+  --cbox:#8a5a12;     /* #### box comment   */
+  --k:#1f4f9c;        /* keyword            */
+  --t:#0d6b6b;        /* type               */
+  --s:#8a4520;        /* string             */
+  --n:#8a3d6b;        /* number             */
+  --pp:#6a3d9c;       /* preprocessor       */
+  --codebg:#fafbfb;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+    --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+    --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+    --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+  --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+  --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+  --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:10.5pt; line-height:1.5;
+}
+.wrap{max-width:52rem;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+h1{font-size:1.9rem;line-height:1.15;margin:0 0 .35rem;letter-spacing:-.01em}
+.blurb{color:var(--soft);margin:0 0 .3rem;max-width:52ch}
+.meta{color:var(--faint);font-size:.85em;margin:0}
+hr{border:none;border-top:3px double var(--rule2);margin:1.6rem 0}
+
+h2{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:1.02rem;margin:0 0 .1rem;letter-spacing:-.01em;
+  color:var(--accent);
+  break-after:avoid; page-break-after:avoid;
+}
+.path{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.78em;color:var(--faint);margin:0 0 .45rem;
+  break-after:avoid; page-break-after:avoid;
+}
+.file{ margin:0 0 1.5rem; break-inside:auto; }
+
+/* ---- table of contents ---- */
+.toc{margin:0 0 1rem}
+.toc h2{color:var(--ink);font-size:1.05rem;margin-bottom:.5rem}
+.toc .grp{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--faint);margin:.75rem 0 .2rem;
+}
+.toc ol{list-style:none;margin:0;padding:0;
+  columns:2; column-gap:2rem;}
+.toc li{break-inside:avoid;margin:.08rem 0;font-size:.92em}
+.toc a{color:var(--ink);text-decoration:none;
+  display:flex;justify-content:space-between;gap:.5rem;align-items:baseline}
+.toc a:hover{color:var(--accent)}
+.toc .num{color:var(--faint);font-size:.85em;
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-variant-numeric:tabular-nums}
+
+/* ---- code ---- */
+pre{
+  margin:0; background:var(--codebg);
+  border:1px solid var(--rule); border-radius:3px;
+  padding:.6rem .75rem;
+  font-family:ui-monospace,"Cascadia Mono","DejaVu Sans Mono",Consolas,Menlo,monospace;
+  font-size:8.6pt; line-height:1.38;
+  white-space:pre-wrap;
+  overflow-wrap:break-word;
+  padding-left:2.2em; text-indent:-1.6em;   /* hanging indent on wrapped lines */
+  tab-size:4;
+}
+code{font-family:inherit}
+.c{color:var(--c)}
+.cbox{color:var(--cbox);font-weight:600}
+.k{color:var(--k);font-weight:600}
+.t{color:var(--t)}
+.s{color:var(--s)}
+.n{color:var(--n)}
+.pp{color:var(--pp)}
+
+/* ---- prose blocks (the already-markdown index files) ---- */
+.prose{font-size:.95em}
+.prose table{border-collapse:collapse;width:100%;margin:.5rem 0;font-size:.88em}
+.prose th,.prose td{border:1px solid var(--rule);padding:.28rem .5rem;
+  text-align:left;vertical-align:top}
+.prose th{background:var(--codebg);font-weight:650}
+.prose h3{font-size:1rem;margin:1rem 0 .3rem;color:var(--accent);
+  break-after:avoid;page-break-after:avoid}
+.prose h4{font-size:.92rem;margin:.8rem 0 .25rem;
+  break-after:avoid;page-break-after:avoid}
+.prose code{background:var(--codebg);padding:.05em .3em;border-radius:2px;
+  font-size:.9em;border:1px solid var(--rule)}
+.prose ul,.prose ol{padding-left:1.2rem;margin:.4rem 0}
+.prose li{margin:.15rem 0}
+.prose p{margin:.4rem 0}
+
+/* ---- print ---- */
+@page{ size:A4; margin:13mm 11mm; }
+@media print{
+  :root{
+    --paper:#fff; --ink:#000; --soft:#333; --faint:#555;
+    --rule:#bbb; --rule2:#888; --codebg:#fbfbfb; --accent:#0a4a55;
+  }
+  body{font-size:10pt}
+  .wrap{max-width:none;padding:0;margin:0}
+  .noprint{display:none !important}
+  pre{font-size:8.2pt;border-color:#ccc;break-inside:auto}
+  h2{break-after:avoid;page-break-after:avoid}
+  .path{break-after:avoid;page-break-after:avoid}
+  .file{break-inside:auto}
+  .toc{break-after:page;page-break-after:always}
+  a{color:inherit;text-decoration:none}
+  .prose tr{break-inside:avoid}
+}
+
+.hint{
+  background:var(--codebg);border:1px solid var(--rule);
+  border-left:4px double var(--rule2);
+  border-radius:3px;padding:.7rem .9rem;margin:0 0 1.4rem;
+  font-size:.9em;color:var(--soft)
+}
+.hint b{color:var(--ink)}
+</style>
+<div class="wrap">
+<h1>5. Math and Number Theory</h1>
+<p class="blurb">Modular arithmetic, linear algebra, polynomials, number theory.</p>
+<p class="meta">18 files · 3ERSAN EL GANNA team reference</p>
+<div class="hint noprint"><b>To make the PDF:</b> Ctrl+P → Destination <b>Save as PDF</b> → turn ON <b>Background graphics</b> (for the coloured code) and <b>Headers and footers</b> (for page numbers) → Margins <b>Default</b>. This box does not print.</div>
+<div class="toc"><h2>Contents</h2>
+<ol>
+<li><a href="#modular"><span>modular</span><span class="num">5.1</span></a></li>
+<li><a href="#extgcd"><span>extgcd</span><span class="num">5.2</span></a></li>
+<li><a href="#crt"><span>crt</span><span class="num">5.3</span></a></li>
+<li><a href="#phi"><span>phi</span><span class="num">5.4</span></a></li>
+<li><a href="#bsgs"><span>bsgs</span><span class="num">5.5</span></a></li>
+<li><a href="#sieve"><span>sieve</span><span class="num">5.6</span></a></li>
+<li><a href="#nt_misc"><span>nt_misc</span><span class="num">5.7</span></a></li>
+<li><a href="#floor_sum"><span>floor_sum</span><span class="num">5.8</span></a></li>
+<li><a href="#gauss"><span>gauss</span><span class="num">5.9</span></a></li>
+<li><a href="#interpolation"><span>interpolation</span><span class="num">5.10</span></a></li>
+<li><a href="#linear_recurrence"><span>linear_recurrence</span><span class="num">5.11</span></a></li>
+<li><a href="#fft_ntt"><span>fft_ntt</span><span class="num">5.12</span></a></li>
+<li><a href="#convolution_anymod"><span>convolution_anymod</span><span class="num">5.13</span></a></li>
+<li><a href="#fwht"><span>fwht</span><span class="num">5.14</span></a></li>
+<li><a href="#bitwise"><span>bitwise</span><span class="num">5.15</span></a></li>
+<li><a href="#randomization"><span>randomization</span><span class="num">5.16</span></a></li>
+<li><a href="#compare_fractions"><span>compare_fractions</span><span class="num">5.17</span></a></li>
+<li><a href="#notes"><span>notes</span><span class="num">5.18</span></a></li>
+</ol>
+</div>
+<div class="file" id="modular">
+<h2>5.1 &nbsp;modular</h2>
+<p class="path">math/modular.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// MODULAR ARITHMETIC -- the canonical add / subt / mult / fp / divi</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// This set is copy-pasted into nCr_with_mod.cpp, matrix expo.cpp, incexc.cpp</span>
+<span class="c">// and hashing/hash-vec.cpp. This is the one to copy FROM.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  divi() NEEDS A PRIME MODULUS</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  fp(b, mod-2) is Fermat&#x27;s little theorem and it is only an inverse when</span>
+<span class="cbox">// #  mod is PRIME and b is not a multiple of it.</span>
+<span class="cbox">// #      mod = 1e9+7      prime, fine</span>
+<span class="cbox">// #      mod = 998244353  prime, fine</span>
+<span class="cbox">// #      mod = 1e9        NOT prime -- divi silently returns nonsense</span>
+<span class="cbox">// #  Non-prime modulus, or you need 1/b where gcd(b,mod) may not be 1:</span>
+<span class="cbox">// #  use math/extgcd.cpp inv_mod(), which reports failure instead of guessing.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// WHY THE BRANCHES: (a += b) &lt; mod ? a : a - mod is one compare instead of a</span>
+<span class="c">//   division. Only valid because both inputs are already reduced -- feed it a</span>
+<span class="c">//   value &gt;= mod and it stays &gt;= mod. Reduce at the boundary, not everywhere.</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   fp()&#x27;s exponent is ll. mod-2 fits in int, but a raw exponent from the</span>
+<span class="c">//     problem (n up to 1e18) does not. Never narrow it.</span>
+<span class="c">//   mult() is 1ll*a*b -- the cast must be on the FIRST operand, before the</span>
+<span class="c">//     multiply, or the product overflows before it is widened.</span>
+<span class="c">//   mod &gt; 2^31 breaks mult(): 1ll*a*b overflows. Use mulmod() below.</span>
+<span class="c">//   Negative inputs: subt() assumes both are already in [0, mod). Normalise</span>
+<span class="c">//     with ((x % mod) + mod) % mod at the point where the value enters.</span>
+<span class="c">//   inv_table only works for i &lt; mod and prime mod.</span>
+<span class="c">//</span>
+<span class="c">// SUBPROBLEMS:</span>
+<span class="c">//   a^e mod p                      fp(a, e)</span>
+<span class="c">//   a^-1 mod p, p prime            fp(a, mod-2)   or divi(1, a)</span>
+<span class="c">//   a^-1 mod m, any m              math/extgcd.cpp inv_mod()</span>
+<span class="c">//   all inverses 1..n in O(n)      inv_table()</span>
+<span class="c">//   nCr mod p                      combinatorics/nCr_with_mod.cpp</span>
+<span class="c">//   a^e where e is huge            e mod (p-1) by Fermat, ONLY if gcd(a,p)=1</span>
+<span class="c">//   mod is not prime and huge      mulmod + extgcd, or CRT over its factors</span>
+<span class="c">//                                  (math/crt.cpp)</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="k">int</span> mod = <span class="n">1</span><span class="s">&#x27;000&#x27;</span><span class="n">000</span><span class="s">&#x27;007;   // 998&#x27;</span><span class="n">244</span>&#x27;<span class="n">353</span> == <span class="n">119</span>&lt;&lt;<span class="n">23</span>|<span class="n">1</span> <span class="k">for</span> NTT problems
+
+<span class="k">int</span> add(<span class="k">int</span> a, <span class="k">int</span> b) { <span class="k">return</span> (a += b) &lt; mod ? a : a - mod; }
+<span class="k">int</span> subt(<span class="k">int</span> a, <span class="k">int</span> b) { <span class="k">return</span> (a -= b) &lt; <span class="n">0</span> ? a + mod : a; }
+<span class="k">int</span> mult(<span class="k">int</span> a, <span class="k">int</span> b) { <span class="k">return</span> <span class="n">1ll</span> * a * b % mod; }
+
+<span class="k">int</span> fp(<span class="k">int</span> b, <span class="t">ll</span> e) {            <span class="c">// exponent is ll on purpose</span>
+    <span class="k">int</span> r = <span class="n">1</span>;
+    <span class="k">for</span> (; e; b = mult(b, b), e &gt;&gt;= <span class="n">1</span>)
+        <span class="k">if</span> (e &amp; <span class="n">1</span>) r = mult(r, b);
+    <span class="k">return</span> r;
+}
+<span class="k">int</span> divi(<span class="k">int</span> a, <span class="k">int</span> b) { <span class="k">return</span> mult(a, fp(b, mod - <span class="n">2</span>)); }   <span class="c">// PRIME mod only</span>
+
+<span class="c">// every inverse 1..n in O(n). inv[i] = -(mod/i) * inv[mod%i]</span>
+<span class="k">void</span> inv_table(<span class="k">int</span> n, <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;inv) {
+    inv.assign(n + <span class="n">1</span>, <span class="n">1</span>);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">2</span>; i &lt;= n; i++)
+        inv[i] = mult(mod - mod / i, inv[mod % i]);
+}
+<span class="c">// use when mod does not fit in 32 bits -- 1ll*a*b would overflow</span>
+<span class="t">ll</span> mulmod(<span class="t">ll</span> a, <span class="t">ll</span> b, <span class="t">ll</span> m) { <span class="k">return</span> (<span class="t">__int128</span>)a * b % m; }
+<span class="t">ll</span> fp_big(<span class="t">ll</span> b, <span class="t">ll</span> e, <span class="t">ll</span> m) {
+    <span class="t">ll</span> r = <span class="n">1</span> % m;
+    <span class="k">for</span> (b %= m; e; b = mulmod(b, b, m), e &gt;&gt;= <span class="n">1</span>)
+        <span class="k">if</span> (e &amp; <span class="n">1</span>) r = mulmod(r, b, m);
+    <span class="k">return</span> r;
+}</code></pre>
+</div>
+<div class="file" id="extgcd">
+<h2>5.2 &nbsp;extgcd</h2>
+<p class="path">math/extgcd.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// EXTENDED EUCLID -- gcd plus the coefficients, O(log min(a,b))</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// extgcd(a, b, x, y) returns g = gcd(a, b) and fills x, y with a solution of</span>
+<span class="c">//     a*x + b*y = g          (Bezout&#x27;s identity)</span>
+<span class="c">// Everything below is that one fact, applied.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THIS IS THE INVERSE THAT WORKS WHEN FERMAT DOES NOT</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  math/modular.cpp divi() needs a PRIME modulus. inv_mod() here needs only</span>
+<span class="cbox">// #  gcd(a, m) == 1, so it covers mod 1e9, mod 2^32, mod a product of primes.</span>
+<span class="cbox">// #  And when the inverse does not exist it RETURNS -1 instead of silently</span>
+<span class="cbox">// #  producing a wrong number -- always check the return.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   x and y can be NEGATIVE and can exceed the inputs. Normalise before using</span>
+<span class="c">//     as a residue: ((x % m) + m) % m.</span>
+<span class="c">//   inv_mod normalises a first -- passing a negative a directly is otherwise</span>
+<span class="c">//     undefined.</span>
+<span class="c">//   diophantine() returns ONE solution. The full family is</span>
+<span class="c">//         x + k*(b/g),  y - k*(a/g)   for any integer k</span>
+<span class="c">//     which is what you need for &quot;smallest positive x&quot; style questions.</span>
+<span class="c">//   Overflow: x*(c/g) can be large. Use __int128 if a, b, c approach 1e18.</span>
+<span class="c">//   extgcd is recursive, depth O(log) -- fine.</span>
+<span class="c">//</span>
+<span class="c">// SUBPROBLEMS:</span>
+<span class="c">//   modular inverse, any modulus       inv_mod(a, m)</span>
+<span class="c">//   solve a*x + b*y = c over integers  diophantine()</span>
+<span class="c">//   smallest non-negative x with       shift by k*(b/g) -- see the note above</span>
+<span class="c">//     a*x = c (mod b)</span>
+<span class="c">//   linear congruence a*x = c (mod m)  x = c/g * inv(a/g, m/g), g solutions</span>
+<span class="c">//   CRT with non-coprime moduli        math/crt.cpp, built on this</span>
+<span class="c">//   rational reconstruction            extgcd on (mod, value), stop when the</span>
+<span class="c">//                                      remainder drops below sqrt(mod)</span>
+<span class="c">//   count lattice points on a segment  gcd(dx, dy) + 1 -- geometry, but the</span>
+<span class="c">//                                      same gcd</span>
+<span class="c">// ============================================================================</span>
+
+<span class="c">// returns g = gcd(a, b); sets x, y with a*x + b*y = g</span>
+<span class="t">ll</span> extgcd(<span class="t">ll</span> a, <span class="t">ll</span> b, <span class="t">ll</span> &amp;x, <span class="t">ll</span> &amp;y) {
+    <span class="k">if</span> (!b) <span class="k">return</span> x = <span class="n">1</span>, y = <span class="n">0</span>, a;
+    <span class="t">ll</span> x1, y1, g = extgcd(b, a % b, x1, y1);
+    x = y1, y = x1 - (a / b) * y1;
+    <span class="k">return</span> g;
+}
+<span class="c">// a^-1 mod m for ANY m coprime with a. Returns -1 when it does not exist.</span>
+<span class="t">ll</span> inv_mod(<span class="t">ll</span> a, <span class="t">ll</span> m) {
+    <span class="t">ll</span> x, y;
+    a = ((a % m) + m) % m;
+    <span class="k">if</span> (extgcd(a, m, x, y) != <span class="n">1</span>) <span class="k">return</span> -<span class="n">1</span>;
+    <span class="k">return</span> ((x % m) + m) % m;
+}
+<span class="c">// one solution of a*x + b*y = c. false if c is not a multiple of gcd(a,b).</span>
+<span class="c">// g receives the gcd; the general solution is x + k*(b/g), y - k*(a/g).</span>
+<span class="k">bool</span> diophantine(<span class="t">ll</span> a, <span class="t">ll</span> b, <span class="t">ll</span> c, <span class="t">ll</span> &amp;x, <span class="t">ll</span> &amp;y, <span class="t">ll</span> &amp;g) {
+    g = extgcd(llabs(a), llabs(b), x, y);
+    <span class="k">if</span> (c % g) <span class="k">return</span> <span class="k">false</span>;
+    x *= c / g, y *= c / g;
+    <span class="k">if</span> (a &lt; <span class="n">0</span>) x = -x;
+    <span class="k">if</span> (b &lt; <span class="n">0</span>) y = -y;
+    <span class="k">return</span> <span class="k">true</span>;
+}</code></pre>
+</div>
+<div class="file" id="crt">
+<h2>5.3 &nbsp;crt</h2>
+<p class="path">math/crt.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// CHINESE REMAINDER THEOREM -- merge two congruences, NON-coprime moduli OK</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Given  x = r1 (mod m1)  and  x = r2 (mod m2),  produce the single congruence</span>
+<span class="c">//     x = r (mod lcm(m1, m2))</span>
+<span class="c">// that is equivalent to both, or report that none exists.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  MOST WRITE-UPS ASSUME COPRIME MODULI. THIS ONE DOES NOT.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  With gcd(m1, m2) = g, a solution exists IFF  (r2 - r1) % g == 0.</span>
+<span class="cbox">// #  Coprime moduli have g = 1, so that test is always true and the failure</span>
+<span class="cbox">// #  case disappears -- which is why the textbook version never mentions it.</span>
+<span class="cbox">// #  Contest inputs are frequently NOT coprime (x = 1 mod 4, x = 3 mod 6 has</span>
+<span class="cbox">// #  no solution). Always check the returned m for -1.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// FOLDING MANY CONGRUENCES: merge pairwise, left to right. Any failure makes</span>
+<span class="c">//   the whole system unsolvable, so bail on the first -1.</span>
+<span class="c">//       pair&lt;ll,ll&gt; cur = {r[0], m[0]};</span>
+<span class="c">//       for (i = 1..k-1) { cur = crt(cur.first, cur.second, r[i], m[i]);</span>
+<span class="c">//                          if (cur.second == -1) break; }</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  OVERFLOW IS THE REAL DANGER HERE</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  lcm grows as you fold. Ten moduli near 1e9 gives an lcm around 1e90 --</span>
+<span class="cbox">// #  it does NOT fit and the answer is meaningless long before you notice.</span>
+<span class="cbox">// #  The intermediate t * m1 overflows even when the final lcm fits, which is</span>
+<span class="cbox">// #  why it goes through __int128 below.</span>
+<span class="cbox">// #  If the product of all moduli can exceed ~9e18, you need big integers or</span>
+<span class="cbox">// #  a different formulation. Check the bound BEFORE coding.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Requires extgcd from math/extgcd.cpp.</span>
+<span class="c">//   Inputs must satisfy 0 &lt;= r &lt; m. Normalise first: r = ((r % m) + m) % m.</span>
+<span class="c">//   m1 or m2 equal to 1 is legal and absorbs into the other.</span>
+<span class="c">//   The result r is the SMALLEST non-negative solution; the full set is</span>
+<span class="c">//     r + k*lcm.</span>
+<span class="c">//</span>
+<span class="c">// SUBPROBLEMS:</span>
+<span class="c">//   merge two congruences               crt()</span>
+<span class="c">//   solve a system of k congruences     fold pairwise, see above</span>
+<span class="c">//   count x in [1, N] with x = r mod m  (N - r) / m + 1 after folding</span>
+<span class="c">//   huge exponent by factoring the mod  compute mod each prime power, then CRT</span>
+<span class="c">//   Garner / reconstructing a big value from residues -- same machinery, and</span>
+<span class="c">//     the reason NTT uses several primes and CRTs the results back</span>
+<span class="c">// ============================================================================</span>
+
+<span class="c">// needs extgcd() from math/extgcd.cpp</span>
+<span class="t">ll</span> extgcd(<span class="t">ll</span> a, <span class="t">ll</span> b, <span class="t">ll</span> &amp;x, <span class="t">ll</span> &amp;y);
+
+<span class="c">// x = r1 (mod m1), x = r2 (mod m2)  -&gt;  {r, lcm}, or {-1, -1} if impossible</span>
+<span class="t">pair</span>&lt;<span class="t">ll</span>, <span class="t">ll</span>&gt; crt(<span class="t">ll</span> r1, <span class="t">ll</span> m1, <span class="t">ll</span> r2, <span class="t">ll</span> m2) {
+    <span class="t">ll</span> x, y, g = extgcd(m1, m2, x, y);
+    <span class="k">if</span> ((r2 - r1) % g) <span class="k">return</span> {-<span class="n">1</span>, -<span class="n">1</span>};          <span class="c">// see the box</span>
+    <span class="t">ll</span> lcm = m1 / g * m2;
+    <span class="t">ll</span> md = m2 / g;
+    <span class="t">ll</span> t = ((<span class="t">__int128</span>)((r2 - r1) / g) % md) * x % md;
+    <span class="t">ll</span> r = (<span class="t">ll</span>)(((<span class="t">__int128</span>)t * m1 + r1) % lcm);
+    <span class="k">return</span> {(r % lcm + lcm) % lcm, lcm};
+}</code></pre>
+</div>
+<div class="file" id="phi">
+<h2>5.4 &nbsp;phi</h2>
+<p class="path">math/phi.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// EULER TOTIENT -- phi(n) = how many of 1..n are coprime with n</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   phi(n) = n * prod over distinct primes p | n of (1 - 1/p)</span>
+<span class="c">// Written as r -= r/p so it stays in integers -- never compute the fractions.</span>
+<span class="c">//</span>
+<span class="c">//   phi(p)     = p - 1          phi(p^k) = p^k - p^(k-1)</span>
+<span class="c">//   phi(a*b)   = phi(a)*phi(b)  when gcd(a,b) = 1      (multiplicative)</span>
+<span class="c">//   sum of phi(d) over d | n    = n                    (this is the useful one)</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  WHY YOU ACTUALLY REACH FOR IT: EULER&#x27;S THEOREM</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #      a^phi(m) = 1 (mod m)      whenever gcd(a, m) = 1</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  so a huge exponent reduces:  a^e = a^(e mod phi(m)) (mod m).</span>
+<span class="cbox">// #  Fermat is just this with m prime, where phi(m) = m-1.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  THE TRAP: gcd(a, m) != 1 breaks it. The correct general rule is</span>
+<span class="cbox">// #      a^e = a^(e mod phi(m) + phi(m))  (mod m)   for e &gt;= log2(m)</span>
+<span class="cbox">// #  Dropping the &quot;+ phi(m)&quot; is the classic wrong answer on power towers.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   phi(1) = 1 by convention. The loop below returns 1 -- correct.</span>
+<span class="c">//   The single-value version is O(sqrt n) and does trial division; for n up to</span>
+<span class="c">//     1e18 you need Pollard rho to factor first.</span>
+<span class="c">//   `r -= r / p` must run ONCE per DISTINCT prime -- that is what the inner</span>
+<span class="c">//     while loop guarantees by stripping p out completely first.</span>
+<span class="c">//   The sieve version is O(n log log n) and gives every phi up to n. Prefer it</span>
+<span class="c">//     whenever you need more than a handful of values.</span>
+<span class="c">//</span>
+<span class="c">// SUBPROBLEMS:</span>
+<span class="c">//   phi of one n                        phi()</span>
+<span class="c">//   phi of everything up to n           phi_sieve()</span>
+<span class="c">//   a^e mod m with astronomical e       Euler&#x27;s theorem, see the box</span>
+<span class="c">//   count coprime pairs / fractions     sum of phi(i) -- Farey sequence length</span>
+<span class="c">//   sum over d|n of phi(d) = n          telescoping identity, used in</span>
+<span class="c">//                                       counting-by-gcd problems</span>
+<span class="c">//   count x in [1,n] coprime to m       inclusion-exclusion over m&#x27;s distinct</span>
+<span class="c">//                                       primes, NOT phi (phi is x in [1,m])</span>
+<span class="c">//   multiplicative order of a mod m     divides phi(m) -- test the divisors</span>
+<span class="c">//   primitive root mod p                test g^((p-1)/q) != 1 for each prime</span>
+<span class="c">//                                       q | p-1</span>
+<span class="c">//   gcd-sum: sum of gcd(i, n) for i&lt;=n  sum over d|n of d * phi(n/d)</span>
+<span class="c">//   DP/incexc.cpp uses the mu-sieve counterpart of phi_sieve</span>
+<span class="c">// ============================================================================</span>
+
+<span class="c">// O(sqrt n), by trial division</span>
+<span class="t">ll</span> phi(<span class="t">ll</span> n) {
+    <span class="t">ll</span> r = n;
+    <span class="k">for</span> (<span class="t">ll</span> p = <span class="n">2</span>; p * p &lt;= n; p++)
+        <span class="k">if</span> (n % p == <span class="n">0</span>) {
+            <span class="k">while</span> (n % p == <span class="n">0</span>) n /= p;    <span class="c">// strip it out: one factor per prime</span>
+            r -= r / p;
+        }
+    <span class="k">if</span> (n &gt; <span class="n">1</span>) r -= r / n;                <span class="c">// the leftover prime &gt; sqrt</span>
+    <span class="k">return</span> r;
+}
+<span class="c">// phi for every value in [0, n], O(n log log n)</span>
+<span class="k">void</span> phi_sieve(<span class="k">int</span> n, <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;f) {
+    f.resize(n + <span class="n">1</span>);
+    iota(f.begin(), f.end(), <span class="n">0</span>);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">2</span>; i &lt;= n; i++)
+        <span class="k">if</span> (f[i] == i)                    <span class="c">// i is prime</span>
+            <span class="k">for</span> (<span class="k">int</span> j = i; j &lt;= n; j += i) f[j] -= f[j] / i;
+}</code></pre>
+</div>
+<div class="file" id="bsgs">
+<h2>5.5 &nbsp;bsgs</h2>
+<p class="path">math/bsgs.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// BABY-STEP GIANT-STEP -- discrete logarithm, O(sqrt(m) log m)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Solve   a^x = b  (mod m)   for the smallest x &gt;= 0.</span>
+<span class="c">//</span>
+<span class="c">// Write x = p*n - q with n = ceil(sqrt(m)) and 0 &lt;= q &lt; n. Then</span>
+<span class="c">//     a^(p*n) = b * a^q  (mod m)</span>
+<span class="c">// Store every right-hand side for q in [0, n) in a table (the BABY steps),</span>
+<span class="c">// then walk p = 1, 2, ... computing a^(p*n) (the GIANT steps) and look each up.</span>
+<span class="c">// Two O(sqrt m) loops instead of one O(m) loop.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THE COPRIME CASE AND THE GENERAL CASE ARE DIFFERENT FUNCTIONS</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  gcd(a, m) == 1  -&gt;  bsgs(). Clean, and the only version most write-ups</span>
+<span class="cbox">// #                      give.</span>
+<span class="cbox">// #  gcd(a, m) != 1  -&gt;  bsgs_any(). Repeatedly divide out the common factor,</span>
+<span class="cbox">// #                      tracking a multiplier, until a and the modulus are</span>
+<span class="cbox">// #                      coprime, then call the coprime version.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Using the coprime version on a non-coprime input does not crash -- it</span>
+<span class="cbox">// #  reports &quot;no solution&quot; for equations that do have one.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   The table must map value -&gt; SMALLEST q (or be built with descending q) or</span>
+<span class="c">//     you get a valid x that is not the minimum. Below, later writes overwrite</span>
+<span class="c">//     earlier ones and q ascends, so the table holds the LARGEST q -- which is</span>
+<span class="c">//     what makes x = p*n - q smallest. Do not &quot;fix&quot; this.</span>
+<span class="c">//   x = 0 is a legal answer when b == 1. Check it before the loop.</span>
+<span class="c">//   All arithmetic needs __int128 or careful ll if m approaches 1e18.</span>
+<span class="c">//   m need not be prime. Nothing here assumes it.</span>
+<span class="c">//   Memory is O(sqrt m) hash entries; at m = 1e18 that is 1e9 -- BSGS is for</span>
+<span class="c">//     m up to about 1e12-1e14 in practice.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   a^x = b (mod m), find x                bsgs / bsgs_any</span>
+<span class="c">//   multiplicative ORDER of a mod m        smallest x &gt; 0 with a^x = 1;</span>
+<span class="c">//                                          divides phi(m), so factor phi(m)</span>
+<span class="c">//                                          and test its divisors -- cheaper</span>
+<span class="c">//                                          than BSGS</span>
+<span class="c">//   primitive root mod p                   test g^((p-1)/q) != 1 for every</span>
+<span class="c">//                                          prime q | p-1</span>
+<span class="c">//   x^k = b (mod p)                        take a primitive root g, write</span>
+<span class="c">//                                          everything as a power of g, and it</span>
+<span class="c">//                                          becomes k*y = log_g(b) mod (p-1),</span>
+<span class="c">//                                          a linear congruence</span>
+<span class="c">//   how many steps until a cycle repeats    order, as above</span>
+<span class="c">//   &quot;smallest t with f^t(x) == y&quot; for an    same shape on a functional graph;</span>
+<span class="c">//     arbitrary function                    or just rho-detect with Floyd</span>
+<span class="c">//   Diffie-Hellman style toy crypto        the literal reading</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS: if the modulus is small enough to walk (m &lt;= 1e7), a plain loop is</span>
+<span class="c">//   shorter and faster. If you need the order, factor phi(m) instead.</span>
+<span class="c">// ============================================================================</span>
+
+<span class="c">// requires gcd(a, m) == 1. Returns the smallest x &gt;= 0, or -1.</span>
+<span class="t">ll</span> bsgs(<span class="t">ll</span> a, <span class="t">ll</span> b, <span class="t">ll</span> m) {
+    a %= m, b %= m;
+    <span class="k">if</span> (m == <span class="n">1</span>) <span class="k">return</span> <span class="n">0</span>;
+    <span class="k">if</span> (b == <span class="n">1</span>) <span class="k">return</span> <span class="n">0</span>;                        <span class="c">// a^0 = 1</span>
+    <span class="t">ll</span> n = (<span class="t">ll</span>)sqrtl((<span class="k">long</span> <span class="k">double</span>)m) + <span class="n">1</span>;
+    <span class="t">unordered_map</span>&lt;<span class="t">ll</span>, <span class="t">ll</span>&gt; tbl;
+    <span class="t">ll</span> cur = b % m;
+    <span class="k">for</span> (<span class="t">ll</span> q = <span class="n">0</span>; q &lt; n; q++) {                 <span class="c">// baby steps: b * a^q</span>
+        tbl[cur] = q;                            <span class="c">// later q overwrites -&gt; largest q</span>
+        cur = (<span class="t">__int128</span>)cur * a % m;
+    }
+    <span class="t">ll</span> an = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="t">ll</span> i = <span class="n">0</span>; i &lt; n; i++) an = (<span class="t">__int128</span>)an * a % m;
+    cur = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="t">ll</span> p = <span class="n">1</span>; p &lt;= n + <span class="n">1</span>; p++) {            <span class="c">// giant steps: a^(p*n)</span>
+        cur = (<span class="t">__int128</span>)cur * an % m;
+        <span class="k">auto</span> it = tbl.find(cur);
+        <span class="k">if</span> (it != tbl.end()) {
+            <span class="t">ll</span> x = p * n - it-&gt;second;
+            <span class="k">if</span> (x &gt;= <span class="n">0</span>) <span class="k">return</span> x;
+        }
+    }
+    <span class="k">return</span> -<span class="n">1</span>;
+}
+<span class="c">// general m: no coprimality required</span>
+<span class="t">ll</span> bsgs_any(<span class="t">ll</span> a, <span class="t">ll</span> b, <span class="t">ll</span> m) {
+    a %= m, b %= m;
+    <span class="t">ll</span> k = <span class="n">1</span>, add = <span class="n">0</span>, g;
+    <span class="k">while</span> ((g = __gcd(a, m)) &gt; <span class="n">1</span>) {
+        <span class="k">if</span> (b == k) <span class="k">return</span> add;                  <span class="c">// matched during the reduction</span>
+        <span class="k">if</span> (b % g) <span class="k">return</span> -<span class="n">1</span>;                    <span class="c">// no solution</span>
+        b /= g, m /= g, add++;
+        k = (<span class="t">__int128</span>)k * (a / g) % m;
+    }
+    <span class="c">// now gcd(a, m) == 1; solve a^x * k = b  -&gt;  a^x = b * k^-1</span>
+    <span class="t">ll</span> n = (<span class="t">ll</span>)sqrtl((<span class="k">long</span> <span class="k">double</span>)m) + <span class="n">1</span>;
+    <span class="t">unordered_map</span>&lt;<span class="t">ll</span>, <span class="t">ll</span>&gt; tbl;
+    <span class="t">ll</span> cur = b % m;
+    <span class="k">for</span> (<span class="t">ll</span> q = <span class="n">0</span>; q &lt; n; q++) {
+        tbl[cur] = q;
+        cur = (<span class="t">__int128</span>)cur * a % m;
+    }
+    <span class="t">ll</span> an = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="t">ll</span> i = <span class="n">0</span>; i &lt; n; i++) an = (<span class="t">__int128</span>)an * a % m;
+    cur = k % m;
+    <span class="k">for</span> (<span class="t">ll</span> p = <span class="n">1</span>; p &lt;= n + <span class="n">1</span>; p++) {
+        cur = (<span class="t">__int128</span>)cur * an % m;
+        <span class="k">auto</span> it = tbl.find(cur);
+        <span class="k">if</span> (it != tbl.end()) {
+            <span class="t">ll</span> x = p * n - it-&gt;second + add;
+            <span class="k">if</span> (x &gt;= add) <span class="k">return</span> x;
+        }
+    }
+    <span class="k">return</span> -<span class="n">1</span>;
+}</code></pre>
+</div>
+<div class="file" id="sieve">
+<h2>5.6 &nbsp;sieve</h2>
+<p class="path">number theory/sieve.cpp</p>
+<pre><code><span class="t">bitset</span>&lt;N + <span class="n">5</span>&gt;prime;
+<span class="k">void</span> sieve(<span class="k">long</span> <span class="k">long</span> N) {
+  <span class="k">for</span>(<span class="k">int</span> i = <span class="n">2</span>; i &lt; N; ++i) {
+    prime[i] = <span class="n">1</span>;
+  }
+  <span class="k">for</span>(<span class="k">long</span> <span class="k">long</span> i = <span class="n">2</span>; i * i &lt;= N; ++i) {
+    <span class="k">if</span> (prime[i] == <span class="n">0</span>) {
+      <span class="k">continue</span>;
+    }
+    <span class="k">for</span>(<span class="k">long</span> <span class="k">long</span> j = i * i; j &lt;= N; j += i) {
+      prime[j] = <span class="n">0</span>;
+    }
+  }
+}</code></pre>
+</div>
+<div class="file" id="nt_misc">
+<h2>5.7 &nbsp;nt_misc</h2>
+<p class="path">math/nt_misc.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// NUMBER-THEORY ODDS AND ENDS -- Tonelli-Shanks, Josephus, Zeckendorf,</span>
+<span class="c">// Frobenius, Stern-Brocot, Pell</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Six small results that are each one function, each unrecognisable from the</span>
+<span class="c">// statement, and none of which are in the printed Number Theory PDF.</span>
+<span class="c">// The sieve / Lucas / Miller-Rabin / CRT family lives there; this file is the</span>
+<span class="c">// remainder.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  a^((p+1)/4) IS NOT A SQUARE ROOT TEST</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  When p = 3 (mod 4) that shortcut RETURNS A VALUE for every a, including</span>
+<span class="cbox">// #  the non-residues -- it just is not a root of a. Always test the Legendre</span>
+<span class="cbox">// #  symbol first:  a^((p-1)/2) == 1  means a is a residue, p-1 means it is</span>
+<span class="cbox">// #  not. Skipping the test is the classic silent wrong answer here.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  FROBENIUS ab-a-b IS FOR EXACTLY TWO COPRIME COINS</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Three or more coins has NO closed form. Model it as a shortest path over</span>
+<span class="cbox">// #  residues mod the smallest coin (the &quot;coin graph&quot; / Round-Robin</span>
+<span class="cbox">// #  algorithm) -- frobenius_multi() below. Applying the two-coin formula to</span>
+<span class="cbox">// #  three coins produces a plausible number that is simply wrong.</span>
+<span class="cbox">// #  Also: gcd of all coins must be 1, or infinitely many amounts are unpayable.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Josephus: the recurrence J(n,k) = (J(n-1,k) + k) mod n is 0-INDEXED. Add 1</span>
+<span class="c">//     at the end for 1-indexed people. It is O(n); the O(k log n) version is</span>
+<span class="c">//     for n up to 1e18 with small k.</span>
+<span class="c">//   Zeckendorf: greedy from the largest Fibonacci down. The representation</span>
+<span class="c">//     uses no two CONSECUTIVE Fibonacci numbers, and that is what makes it</span>
+<span class="c">//     unique.</span>
+<span class="c">//   Stern-Brocot: single steps are O(p+q) and will TLE. Jump whole runs with</span>
+<span class="c">//     a division -- that is the difference between O(log) and O(n).</span>
+<span class="c">//   Pell: the fundamental solution can be astronomically large (D = 61 gives</span>
+<span class="c">//     x = 1766319049). Use __int128 or big integers if D can be adversarial.</span>
+<span class="c">//   Tonelli-Shanks is O(log^2 p) worst case; for p = 3 mod 4 the shortcut is</span>
+<span class="c">//     O(log p) and worth keeping.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   x^2 = a (mod p), p prime                        sqrt_mod()</span>
+<span class="c">//   is a a quadratic residue mod p                   legendre()</span>
+<span class="c">//   x^2 = a (mod p^k) or composite                   lift with Hensel, or CRT</span>
+<span class="c">//                                                    over the factorisation</span>
+<span class="c">//   people in a circle, every k-th eliminated         josephus()</span>
+<span class="c">//   ... n up to 1e18, k small                         josephus_fast()</span>
+<span class="c">//   &quot;the last survivor&quot;                               same</span>
+<span class="c">//   decompose n into non-consecutive Fibonaccis       zeckendorf()</span>
+<span class="c">//   Fibonacci Nim losing condition                    the Zeckendorf smallest</span>
+<span class="c">//                                                    term</span>
+<span class="c">//   largest unpayable amount, 2 coprime coins         a*b - a - b</span>
+<span class="c">//   ... 3 or more coins                               frobenius_multi()</span>
+<span class="c">//   how many amounts are unpayable, 2 coins           (a-1)(b-1)/2</span>
+<span class="c">//   best rational approximation with q &lt;= Q           stern_brocot() /</span>
+<span class="c">//                                                    continued fractions</span>
+<span class="c">//   the fraction in (lo, hi) with the smallest        stern_brocot_between()</span>
+<span class="c">//     denominator</span>
+<span class="c">//   x^2 - D y^2 = 1                                   pell()</span>
+<span class="c">//   &quot;the smallest integer solution to this quadratic&quot; often Pell in disguise</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   primality / factorisation      -&gt; Miller-Rabin, Pollard rho: their</span>
+<span class="c">//                                     Number Theory PDF.</span>
+<span class="c">//   nCr mod p, CRT, phi, Mobius     -&gt; also the PDF, and math/ here.</span>
+<span class="c">//   linear Diophantine ax + by = c  -&gt; math/extgcd.cpp.</span>
+<span class="c">// ============================================================================</span>
+<span class="t">ll</span> pw(<span class="t">ll</span> b, <span class="t">ll</span> e, <span class="t">ll</span> m) {
+    <span class="t">ll</span> r = <span class="n">1</span>; b %= m; <span class="k">if</span> (b &lt; <span class="n">0</span>) b += m;
+    <span class="k">while</span> (e) { <span class="k">if</span> (e &amp; <span class="n">1</span>) r = (<span class="t">__int128</span>)r * b % m; b = (<span class="t">__int128</span>)b * b % m, e &gt;&gt;= <span class="n">1</span>; }
+    <span class="k">return</span> r;
+}
+
+<span class="c">// ---- Legendre symbol: 1 residue, -1 non-residue, 0 if p | a ---------------</span>
+<span class="k">int</span> legendre(<span class="t">ll</span> a, <span class="t">ll</span> p) {
+    a %= p; <span class="k">if</span> (a &lt; <span class="n">0</span>) a += p;
+    <span class="k">if</span> (!a) <span class="k">return</span> <span class="n">0</span>;
+    <span class="k">return</span> pw(a, (p - <span class="n">1</span>) / <span class="n">2</span>, p) == <span class="n">1</span> ? <span class="n">1</span> : -<span class="n">1</span>;
+}
+
+<span class="c">// ---- Tonelli-Shanks: one square root of a mod an odd prime p, or -1 -------</span>
+<span class="t">ll</span> sqrt_mod(<span class="t">ll</span> a, <span class="t">ll</span> p) {
+    a %= p; <span class="k">if</span> (a &lt; <span class="n">0</span>) a += p;
+    <span class="k">if</span> (!a) <span class="k">return</span> <span class="n">0</span>;
+    <span class="k">if</span> (p == <span class="n">2</span>) <span class="k">return</span> a;
+    <span class="k">if</span> (legendre(a, p) != <span class="n">1</span>) <span class="k">return</span> -<span class="n">1</span>;              <span class="c">// TEST FIRST. See the box.</span>
+    <span class="k">if</span> (p % <span class="n">4</span> == <span class="n">3</span>) <span class="k">return</span> pw(a, (p + <span class="n">1</span>) / <span class="n">4</span>, p);    <span class="c">// the shortcut, now safe</span>
+
+    <span class="t">ll</span> q = p - <span class="n">1</span>, s = <span class="n">0</span>;
+    <span class="k">while</span> (q % <span class="n">2</span> == <span class="n">0</span>) q /= <span class="n">2</span>, s++;
+    <span class="t">ll</span> z = <span class="n">2</span>;
+    <span class="k">while</span> (legendre(z, p) != -<span class="n">1</span>) z++;                <span class="c">// any non-residue</span>
+    <span class="t">ll</span> m = s, c = pw(z, q, p), t = pw(a, q, p), r = pw(a, (q + <span class="n">1</span>) / <span class="n">2</span>, p);
+    <span class="k">while</span> (t != <span class="n">1</span>) {
+        <span class="t">ll</span> i = <span class="n">0</span>, tt = t;
+        <span class="k">while</span> (tt != <span class="n">1</span>) tt = (<span class="t">__int128</span>)tt * tt % p, i++;
+        <span class="t">ll</span> b = c;
+        <span class="k">for</span> (<span class="t">ll</span> j = <span class="n">0</span>; j &lt; m - i - <span class="n">1</span>; j++) b = (<span class="t">__int128</span>)b * b % p;
+        m = i;
+        c = (<span class="t">__int128</span>)b * b % p;
+        t = (<span class="t">__int128</span>)t * c % p;
+        r = (<span class="t">__int128</span>)r * b % p;
+    }
+    <span class="k">return</span> r;                                        <span class="c">// p - r is the other root</span>
+}
+
+<span class="c">// ---- Josephus: 0-indexed survivor among n people, every k-th removed ------</span>
+<span class="k">int</span> josephus(<span class="k">int</span> n, <span class="k">int</span> k) {
+    <span class="k">int</span> r = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">2</span>; i &lt;= n; i++) r = (r + k) % i;
+    <span class="k">return</span> r;                                        <span class="c">// add 1 for 1-indexed</span>
+}
+<span class="c">// n up to 1e18 with small k: skip whole blocks of eliminations at once</span>
+<span class="t">ll</span> josephus_fast(<span class="t">ll</span> n, <span class="t">ll</span> k) {
+    <span class="k">if</span> (k == <span class="n">1</span>) <span class="k">return</span> n - <span class="n">1</span>;
+    <span class="t">ll</span> r = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="t">ll</span> i = <span class="n">2</span>; i &lt;= n; ) {
+        <span class="k">if</span> (r + k &gt;= i) { r = (r + k) % i; i++; <span class="k">continue</span>; }
+        <span class="t">ll</span> blocks = (i - r - <span class="n">1</span>) / (k - <span class="n">1</span>);           <span class="c">// how many steps fit</span>
+        <span class="k">if</span> (i + blocks &gt; n) blocks = n - i + <span class="n">1</span>;
+        r += blocks * k;
+        i += blocks;
+        r %= i - <span class="n">1</span>;
+    }
+    <span class="k">return</span> r;
+}
+
+<span class="c">// ---- Zeckendorf: n as a sum of non-consecutive Fibonacci numbers ----------</span>
+<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; zeckendorf(<span class="t">ll</span> n) {
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; f{<span class="n">1</span>, <span class="n">2</span>};
+    <span class="k">while</span> (f.back() &lt;= n) f.push_back(f[f.size() - <span class="n">1</span>] + f[f.size() - <span class="n">2</span>]);
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; res;
+    <span class="k">for</span> (<span class="k">int</span> i = (<span class="k">int</span>)f.size() - <span class="n">1</span>; i &gt;= <span class="n">0</span> &amp;&amp; n &gt; <span class="n">0</span>; i--)
+        <span class="k">if</span> (f[i] &lt;= n) res.push_back(f[i]), n -= f[i];   <span class="c">// greedy from the top</span>
+    <span class="k">return</span> res;                                          <span class="c">// descending</span>
+}
+
+<span class="c">// ---- Frobenius: largest amount NOT payable -------------------------------</span>
+<span class="t">ll</span> frobenius2(<span class="t">ll</span> a, <span class="t">ll</span> b) { <span class="k">return</span> a * b - a - b; }      <span class="c">// gcd(a,b) == 1 only</span>
+<span class="t">ll</span> unpayable_count2(<span class="t">ll</span> a, <span class="t">ll</span> b) { <span class="k">return</span> (a - <span class="n">1</span>) * (b - <span class="n">1</span>) / <span class="n">2</span>; }
+
+<span class="c">// 3+ coins: shortest path over residues mod the smallest coin.</span>
+<span class="c">// d[r] = smallest payable amount that is r (mod c0). Answer = max d[r] - c0.</span>
+<span class="t">ll</span> frobenius_multi(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; coins) {
+    sort(coins.begin(), coins.end());
+    <span class="t">ll</span> g = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="t">ll</span> c : coins) g = __gcd(g, c);
+    <span class="k">if</span> (g != <span class="n">1</span>) <span class="k">return</span> -<span class="n">1</span>;                           <span class="c">// infinitely many unpayable</span>
+    <span class="t">ll</span> c0 = coins[<span class="n">0</span>];
+    <span class="k">if</span> (c0 == <span class="n">1</span>) <span class="k">return</span> -<span class="n">1</span>;                          <span class="c">// everything is payable</span>
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; d(c0, LLONG_MAX);
+    d[<span class="n">0</span>] = <span class="n">0</span>;
+    <span class="t">priority_queue</span>&lt;<span class="t">pair</span>&lt;<span class="t">ll</span>, <span class="t">ll</span>&gt;, <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="t">ll</span>, <span class="t">ll</span>&gt;&gt;, <span class="t">greater</span>&lt;&gt;&gt; pq;
+    pq.push({<span class="n">0</span>, <span class="n">0</span>});
+    <span class="k">while</span> (!pq.empty()) {
+        <span class="k">auto</span> [cur, r] = pq.top(); pq.pop();
+        <span class="k">if</span> (cur &gt; d[r]) <span class="k">continue</span>;
+        <span class="k">for</span> (<span class="t">size_t</span> i = <span class="n">1</span>; i &lt; coins.size(); i++) {
+            <span class="t">ll</span> nr = (r + coins[i]) % c0, nd = cur + coins[i];
+            <span class="k">if</span> (nd &lt; d[nr]) d[nr] = nd, pq.push({nd, nr});
+        }
+    }
+    <span class="t">ll</span> best = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="t">ll</span> x : d) <span class="k">if</span> (x != LLONG_MAX) best = max(best, x);
+    <span class="k">return</span> best - c0;
+}
+
+<span class="c">// ---- Stern-Brocot: the fraction in (lo, hi) with the smallest denominator -</span>
+<span class="c">// Strictly between ln/ld and hn/hd. Non-negative, ln/ld &lt; hn/hd. O(log) --</span>
+<span class="c">// each level strips the integer part and flips to the reciprocal interval,</span>
+<span class="c">// which is exactly the continued-fraction descent. Single Stern-Brocot steps</span>
+<span class="c">// would be O(p+q); this jumps whole runs with one division.</span>
+<span class="t">pair</span>&lt;<span class="t">ll</span>, <span class="t">ll</span>&gt; stern_brocot_between(<span class="t">ll</span> ln, <span class="t">ll</span> ld, <span class="t">ll</span> hn, <span class="t">ll</span> hd) {
+    <span class="t">ll</span> k = ln / ld;                                  <span class="c">// strip the integer part</span>
+    ln -= k * ld, hn -= k * hd;                      <span class="c">// now 0 &lt;= ln/ld &lt; 1</span>
+    <span class="k">if</span> (hn &gt; hd)                                     <span class="c">// an integer fits inside</span>
+        <span class="k">return</span> {k + <span class="n">1</span>, <span class="n">1</span>};
+    <span class="k">if</span> (ln == <span class="n">0</span>) {                                   <span class="c">// interval is (0, hn/hd)</span>
+        <span class="t">ll</span> q = hd / hn + <span class="n">1</span>;                          <span class="c">// smallest q with 1/q &lt; hn/hd</span>
+        <span class="k">return</span> {k * q + <span class="n">1</span>, q};
+    }
+    <span class="c">// reciprocal: 1/x lies in (hd/hn, ld/ln)</span>
+    <span class="k">auto</span> [p, q] = stern_brocot_between(hd, hn, ld, ln);
+    <span class="k">return</span> {k * p + q, p};                           <span class="c">// x = q/p, plus k</span>
+}
+
+<span class="c">// ---- Pell: fundamental solution of x^2 - D y^2 = 1, D not a perfect square</span>
+<span class="c">// From the continued-fraction expansion of sqrt(D). Values grow FAST.</span>
+<span class="t">pair</span>&lt;<span class="t">__int128</span>, <span class="t">__int128</span>&gt; pell(<span class="t">ll</span> D) {
+    <span class="t">ll</span> a0 = (<span class="t">ll</span>)sqrtl((<span class="k">long</span> <span class="k">double</span>)D);
+    <span class="k">while</span> (a0 * a0 &gt; D) a0--;
+    <span class="k">while</span> ((a0 + <span class="n">1</span>) * (a0 + <span class="n">1</span>) &lt;= D) a0++;
+    <span class="k">if</span> (a0 * a0 == D) <span class="k">return</span> {<span class="n">0</span>, <span class="n">0</span>};                 <span class="c">// perfect square: no solution</span>
+    <span class="t">ll</span> m = <span class="n">0</span>, d = <span class="n">1</span>, a = a0;
+    <span class="t">__int128</span> num1 = <span class="n">1</span>, num = a0, den1 = <span class="n">0</span>, den = <span class="n">1</span>;
+    <span class="k">while</span> ((<span class="t">__int128</span>)num * num - (<span class="t">__int128</span>)D * den * den != <span class="n">1</span>) {
+        m = d * a - m;
+        d = (D - m * m) / d;
+        a = (a0 + m) / d;
+        <span class="t">__int128</span> nn = a * num + num1, dn = a * den + den1;
+        num1 = num, num = nn;
+        den1 = den, den = dn;
+    }
+    <span class="k">return</span> {num, den};
+}</code></pre>
+</div>
+<div class="file" id="floor_sum">
+<h2>5.8 &nbsp;floor_sum</h2>
+<p class="path">math/floor_sum.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// FLOOR SUM + DIVISOR BLOCKS -- the two &quot;sum over floors&quot; primitives</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// [A] floor_sum(n, m, a, b) = sum_{i=0}^{n-1} floor((a*i + b) / m),  O(log)</span>
+<span class="c">//     A Euclid-like recursion: reduce a and b mod m, then SWAP the roles of</span>
+<span class="c">//     the two axes exactly like the gcd algorithm. Geometrically it counts</span>
+<span class="c">//     lattice points under the line y = (a*x + b)/m.</span>
+<span class="c">//</span>
+<span class="c">// [B] divisor blocks: floor(n/i) takes only O(sqrt n) DISTINCT values, and</span>
+<span class="c">//     each value occupies a contiguous block of i. The block containing i</span>
+<span class="c">//     ends at  n / (n / i).  So</span>
+<span class="c">//         for (ll i = 1, j; i &lt;= n; i = j + 1) { j = n / (n / i); ... }</span>
+<span class="c">//     visits every block once, ~2*sqrt(n) iterations.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  floor_sum OVERFLOWS BEFORE IT EVER REDUCES</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  The term `a * n * (n-1) / 2` is ~1e36 for n = 1e9 and a = 1e9. It blows</span>
+<span class="cbox">// #  past 64 bits BEFORE any modulus is applied, so a `% MOD` at the end does</span>
+<span class="cbox">// #  not save you. Either keep every intermediate in __int128 (done below),</span>
+<span class="cbox">// #  or reduce a and b mod m up front -- which the first two lines do, and</span>
+<span class="cbox">// #  which is what keeps the recursion cheap as well.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THE DIVISOR-BLOCK LOOP DIVIDES BY ZERO WHEN n == 0</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  `n / (n / i)` is a division by `n / i`, which is 0 as soon as i &gt; n.</span>
+<span class="cbox">// #  With n = 0 the loop body runs once with i = 1 and crashes. Guard n &gt;= 1</span>
+<span class="cbox">// #  before entering, every time -- it is the single most common way this</span>
+<span class="cbox">// #  loop fails, and it only fires on a degenerate test.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Same trap in the two-variable form: when iterating blocks of BOTH n/i</span>
+<span class="cbox">// #  and m/i, the block end is min(n/(n/i), m/(m/i)) and BOTH divisors must</span>
+<span class="cbox">// #  be non-zero -- clamp with `i &gt; n ? LLONG_MAX : n/(n/i)`.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   floor_sum&#x27;s i runs over [0, n-1], not [1, n]. Off by one here changes the</span>
+<span class="c">//     answer by floor(b/m) or floor((a*n+b)/m) depending on which end.</span>
+<span class="c">//   Negative a or b: the version below assumes a, b &gt;= 0 and m &gt; 0. For</span>
+<span class="c">//     negatives, shift b up by a multiple of m and correct afterwards.</span>
+<span class="c">//   `n / i` is INTEGER division throughout; writing it as a double is wrong</span>
+<span class="c">//     past 2^53.</span>
+<span class="c">//   The RETURN type is ll, and the internal accumulator is __int128. The</span>
+<span class="c">//     intermediates are safe, but if the true ANSWER exceeds 2^63 the return</span>
+<span class="c">//     truncates. n = 1e9 with a = 1e9 already does (the true value is ~5e26).</span>
+<span class="c">//     Change the return type to __int128, or take it mod p inside.</span>
+<span class="c">//   Same for divisor_block_weighted: sum sigma(i) is about 0.82*n^2, so it</span>
+<span class="c">//     leaves 64 bits somewhere past n = 3e9.</span>
+<span class="c">//   Divisor blocks give you the VALUE floor(n/i) and the block [i, j]. The</span>
+<span class="c">//     count of i in the block is j - i + 1 -- that factor is what most uses</span>
+<span class="c">//     multiply by.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   sum floor((a*i+b)/m) for i in [0,n)              floor_sum()</span>
+<span class="c">//   lattice points strictly under a line              same, adjust the boundary</span>
+<span class="c">//   lattice points inside a right triangle            same</span>
+<span class="c">//   count i in [1,n] with (a*i+b) mod m &lt; c           floor_sum difference:</span>
+<span class="c">//                                                     F(c) - F(0) style</span>
+<span class="c">//   sum of i * floor(n/i)                             divisor blocks + the</span>
+<span class="c">//                                                     arithmetic series of i</span>
+<span class="c">//                                                     over each block</span>
+<span class="c">//   sum of floor(n/i) for i = 1..n                    divisor_block_sum()</span>
+<span class="c">//   number of divisors summed: sum_{i=1..n} d(i)      = sum floor(n/i) --</span>
+<span class="c">//                                                     the same call</span>
+<span class="c">//   sum_{i=1..n} sigma(i)                             = sum i*floor(n/i)</span>
+<span class="c">//   count pairs (i,j) with i*j &lt;= n                   = sum floor(n/i)</span>
+<span class="c">//   &quot;sum over i of f(floor(n/i))&quot;                     divisor blocks -- the</span>
+<span class="c">//                                                     entry point to the Du</span>
+<span class="c">//                                                     and Min_25 sieves</span>
+<span class="c">//   sum_{i=1..n} floor(n/i) * floor(m/i)              two-variable blocks,</span>
+<span class="c">//                                                     divisor_block_pair()</span>
+<span class="c">//   sum of gcd / lcm over pairs                       Mobius over divisor</span>
+<span class="c">//                                                     blocks -- DP/incexc.cpp</span>
+<span class="c">//                                                     for the inversion</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   you need the actual divisors of one n  -&gt; trial division to sqrt n.</span>
+<span class="c">//   n is small (&lt;= 1e6)                     -&gt; a plain loop or a sieve is</span>
+<span class="c">//                                              clearer and just as fast.</span>
+<span class="c">// ============================================================================</span>
+
+<span class="c">// [A] sum_{i=0}^{n-1} floor((a*i + b) / m).  Requires n &gt;= 0, m &gt; 0, a,b &gt;= 0.</span>
+<span class="c">// __int128 throughout: the quadratic term overflows 64 bits long before the end.</span>
+<span class="t">ll</span> floor_sum(<span class="t">ll</span> n, <span class="t">ll</span> m, <span class="t">ll</span> a, <span class="t">ll</span> b) {
+    <span class="t">__int128</span> ans = <span class="n">0</span>;
+    <span class="k">while</span> (<span class="k">true</span>) {
+        <span class="k">if</span> (a &gt;= m) {                             <span class="c">// strip the whole part of a</span>
+            ans += (<span class="t">__int128</span>)(n - <span class="n">1</span>) * n / <span class="n">2</span> * (a / m);
+            a %= m;
+        }
+        <span class="k">if</span> (b &gt;= m) {                             <span class="c">// strip the whole part of b</span>
+            ans += (<span class="t">__int128</span>)n * (b / m);
+            b %= m;
+        }
+        <span class="t">__int128</span> ymax = (<span class="t">__int128</span>)a * n + b;
+        <span class="k">if</span> (ymax &lt; m) <span class="k">break</span>;                      <span class="c">// the line never reaches y=1</span>
+        <span class="c">// swap the axes, exactly like the Euclidean algorithm</span>
+        n = (<span class="t">ll</span>)(ymax / m);
+        b = (<span class="t">ll</span>)(ymax % m);
+        swap(m, a);
+    }
+    <span class="k">return</span> (<span class="t">ll</span>)ans;
+}
+
+<span class="c">// [B] sum_{i=1}^{n} floor(n / i).  Also: the number of pairs (i,j) with i*j &lt;= n,</span>
+<span class="c">// and sum_{i=1}^{n} d(i).</span>
+<span class="t">ll</span> divisor_block_sum(<span class="t">ll</span> n) {
+    <span class="k">if</span> (n &lt;= <span class="n">0</span>) <span class="k">return</span> <span class="n">0</span>;                         <span class="c">// the guard from the box</span>
+    <span class="t">ll</span> res = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="t">ll</span> i = <span class="n">1</span>, j; i &lt;= n; i = j + <span class="n">1</span>) {
+        <span class="t">ll</span> v = n / i;
+        j = n / v;                                <span class="c">// last index with this value</span>
+        res += v * (j - i + <span class="n">1</span>);
+    }
+    <span class="k">return</span> res;
+}
+
+<span class="c">// sum_{i=1}^{n} i * floor(n / i).  Equals sum_{i=1}^{n} sigma(i).</span>
+<span class="t">ll</span> divisor_block_weighted(<span class="t">ll</span> n) {
+    <span class="k">if</span> (n &lt;= <span class="n">0</span>) <span class="k">return</span> <span class="n">0</span>;
+    <span class="t">ll</span> res = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="t">ll</span> i = <span class="n">1</span>, j; i &lt;= n; i = j + <span class="n">1</span>) {
+        <span class="t">ll</span> v = n / i;
+        j = n / v;
+        res += v * (i + j) * (j - i + <span class="n">1</span>) / <span class="n">2</span>;     <span class="c">// v * (sum of i over [i,j])</span>
+    }
+    <span class="k">return</span> res;
+}
+
+<span class="c">// sum_{i=1}^{min(n,m)} floor(n/i) * floor(m/i).  Blocks of BOTH, clamped.</span>
+<span class="t">ll</span> divisor_block_pair(<span class="t">ll</span> n, <span class="t">ll</span> m) {
+    <span class="t">ll</span> lim = min(n, m);
+    <span class="k">if</span> (lim &lt;= <span class="n">0</span>) <span class="k">return</span> <span class="n">0</span>;
+    <span class="t">ll</span> res = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="t">ll</span> i = <span class="n">1</span>, j; i &lt;= lim; i = j + <span class="n">1</span>) {
+        <span class="t">ll</span> vn = n / i, vm = m / i;
+        j = min(n / vn, m / vm);                  <span class="c">// both divisors are non-zero</span>
+        j = min(j, lim);
+        res += vn * vm * (j - i + <span class="n">1</span>);
+    }
+    <span class="k">return</span> res;
+}</code></pre>
+</div>
+<div class="file" id="gauss">
+<h2>5.9 &nbsp;gauss</h2>
+<p class="path">math/gauss.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// GAUSSIAN ELIMINATION -- solve, rank, determinant, inverse.  O(n^3)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Three variants, and picking the wrong one is the usual mistake:</span>
+<span class="c">//   MOD P   exact, needs a PRIME modulus for the inverse. Default choice.</span>
+<span class="c">//   REAL    doubles + partial pivoting + EPS. Only when the problem is</span>
+<span class="c">//           genuinely continuous (geometry, probability, physics).</span>
+<span class="c">//   GF(2)   rows are bitsets, elimination is one xor. O(n*m/64).</span>
+<span class="c">//           For a BASIS only (no right-hand side) use the xor basis instead:</span>
+<span class="c">//           DP/sub-problems xorbasis.cpp.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  FIND THE PIVOT BEFORE YOU INVERT IT</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  A zero pivot means the column is a FREE VARIABLE, not an error -- skip</span>
+<span class="cbox">// #  the column and keep the same row. Computing modInverse(0) first is the</span>
+<span class="cbox">// #  standard slip: it returns 0 rather than failing, so the bug survives to</span>
+<span class="cbox">// #  the answer instead of crashing.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  REAL version: pivot on the LARGEST |value| in the column, not the first</span>
+<span class="cbox">// #  nonzero. Without partial pivoting a tiny pivot amplifies rounding until</span>
+<span class="cbox">// #  the answer is noise -- and it still looks like a plausible number.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// RETURN CONVENTION of solve_mod: -1 = no solution, otherwise the number of</span>
+<span class="c">//   FREE variables. 0 free means the solution is unique; k free means p^k</span>
+<span class="c">//   solutions exist and sol[] is one particular member (free vars set to 0).</span>
+<span class="c">//   Reporting &quot;unique&quot; when free &gt; 0 is the classic wrong answer.</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   mod must be PRIME for solve_mod / det_mod / inverse_mod -- they use</span>
+<span class="c">//     Fermat. Composite modulus: math/extgcd.cpp inv_mod, and pivots must be</span>
+<span class="c">//     chosen coprime with the modulus, which is a different algorithm.</span>
+<span class="c">//   The consistency check runs against the REDUCED rows, which is valid: row</span>
+<span class="c">//     operations preserve the solution set, so a zero row with nonzero RHS is</span>
+<span class="c">//     exactly &quot;no solution&quot;.</span>
+<span class="c">//   n^3 at n = 500 is 1.25e8 with a modmul inside -- that is the practical</span>
+<span class="c">//     ceiling. GF(2) with bitsets pushes it to a few thousand.</span>
+<span class="c">//   The matrix is taken BY VALUE. These destroy it; that is intentional.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   solve a linear system mod p          solve_mod()</span>
+<span class="c">//   count solutions of a system          p^(free vars), or 0</span>
+<span class="c">//   rank of a matrix                     m - free, or count pivots</span>
+<span class="c">//   determinant                          det_mod()</span>
+<span class="c">//   matrix inverse                       inverse_mod()</span>
+<span class="c">//   number of spanning trees             Kirchhoff -- graph/kirchhoff.cpp,</span>
+<span class="c">//                                        which is det_mod of a minor</span>
+<span class="c">//   xor system / GF(2) equations         gauss_gf2(), or the xor basis</span>
+<span class="c">//   &quot;assign 0/1 to satisfy parity        GF(2) -- every parity constraint is</span>
+<span class="c">//    constraints&quot;                        one row</span>
+<span class="c">//   probability / expected value with    REAL version; states become</span>
+<span class="c">//     cycles in the state graph          variables, transitions become rows</span>
+<span class="c">//   random walk hitting times            same shape</span>
+<span class="c">//   fit a polynomial through points      REAL, or Lagrange interpolation</span>
+<span class="c">//                                        directly (cheaper, O(n^2))</span>
+<span class="c">//   linear recurrence from terms         Berlekamp-Massey is the right tool,</span>
+<span class="c">//                                        not this</span>
+<span class="c">// ============================================================================</span>
+<span class="c">// needs mod, add, subt, mult, fp from math/modular.cpp</span>
+
+<span class="c">// Solve a*x = b, given as an n x (m+1) augmented matrix.</span>
+<span class="c">// Returns -1 if inconsistent, else the number of free variables.</span>
+<span class="k">int</span> solve_mod(<span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="k">int</span>&gt;&gt; a, <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;sol) {
+    <span class="k">int</span> n = a.size(), m = (<span class="k">int</span>)a[<span class="n">0</span>].size() - <span class="n">1</span>;
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; where(m, -<span class="n">1</span>);
+    <span class="k">for</span> (<span class="k">int</span> col = <span class="n">0</span>, row = <span class="n">0</span>; col &lt; m &amp;&amp; row &lt; n; col++) {
+        <span class="k">int</span> sel = -<span class="n">1</span>;
+        <span class="k">for</span> (<span class="k">int</span> i = row; i &lt; n; i++)
+            <span class="k">if</span> (a[i][col]) { sel = i; <span class="k">break</span>; }
+        <span class="k">if</span> (sel == -<span class="n">1</span>) <span class="k">continue</span>;                      <span class="c">// free variable</span>
+        swap(a[sel], a[row]);
+        where[col] = row;
+        <span class="k">int</span> inv = fp(a[row][col], mod - <span class="n">2</span>);           <span class="c">// pivot is nonzero HERE</span>
+        <span class="k">for</span> (<span class="k">int</span> j = col; j &lt;= m; j++) a[row][j] = mult(a[row][j], inv);
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)
+            <span class="k">if</span> (i != row &amp;&amp; a[i][col]) {
+                <span class="k">int</span> f = a[i][col];
+                <span class="k">for</span> (<span class="k">int</span> j = col; j &lt;= m; j++)
+                    a[i][j] = subt(a[i][j], mult(f, a[row][j]));
+            }
+        row++;
+    }
+    sol.assign(m, <span class="n">0</span>);
+    <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++)
+        <span class="k">if</span> (where[j] != -<span class="n">1</span>) sol[j] = a[where[j]][m];
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) {                     <span class="c">// consistency</span>
+        <span class="k">int</span> s = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++) s = add(s, mult(sol[j], a[i][j]));
+        <span class="k">if</span> (s != a[i][m]) <span class="k">return</span> -<span class="n">1</span>;
+    }
+    <span class="k">int</span> freev = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++) freev += (where[j] == -<span class="n">1</span>);
+    <span class="k">return</span> freev;
+}
+<span class="c">// determinant of an n x n matrix mod p. 0 means singular.</span>
+<span class="k">int</span> det_mod(<span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="k">int</span>&gt;&gt; a) {
+    <span class="k">int</span> n = a.size(), res = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        <span class="k">int</span> sel = -<span class="n">1</span>;
+        <span class="k">for</span> (<span class="k">int</span> j = i; j &lt; n; j++)
+            <span class="k">if</span> (a[j][i]) { sel = j; <span class="k">break</span>; }
+        <span class="k">if</span> (sel == -<span class="n">1</span>) <span class="k">return</span> <span class="n">0</span>;                      <span class="c">// singular</span>
+        <span class="k">if</span> (sel != i) swap(a[sel], a[i]), res = res ? mod - res : <span class="n">0</span>;
+        res = mult(res, a[i][i]);
+        <span class="k">int</span> inv = fp(a[i][i], mod - <span class="n">2</span>);
+        <span class="k">for</span> (<span class="k">int</span> j = i; j &lt; n; j++) a[i][j] = mult(a[i][j], inv);
+        <span class="k">for</span> (<span class="k">int</span> j = i + <span class="n">1</span>; j &lt; n; j++)
+            <span class="k">if</span> (a[j][i]) {
+                <span class="k">int</span> f = a[j][i];
+                <span class="k">for</span> (<span class="k">int</span> k = i; k &lt; n; k++)
+                    a[j][k] = subt(a[j][k], mult(f, a[i][k]));
+            }
+    }
+    <span class="k">return</span> res;
+}
+<span class="c">// inverse of an n x n matrix mod p; empty vector if singular</span>
+<span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="k">int</span>&gt;&gt; inverse_mod(<span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="k">int</span>&gt;&gt; a) {
+    <span class="k">int</span> n = a.size();
+    <span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="k">int</span>&gt;&gt; inv(n, <span class="t">vector</span>&lt;<span class="k">int</span>&gt;(n, <span class="n">0</span>));
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) inv[i][i] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        <span class="k">int</span> sel = -<span class="n">1</span>;
+        <span class="k">for</span> (<span class="k">int</span> j = i; j &lt; n; j++)
+            <span class="k">if</span> (a[j][i]) { sel = j; <span class="k">break</span>; }
+        <span class="k">if</span> (sel == -<span class="n">1</span>) <span class="k">return</span> {};                     <span class="c">// singular</span>
+        swap(a[sel], a[i]), swap(inv[sel], inv[i]);
+        <span class="k">int</span> iv = fp(a[i][i], mod - <span class="n">2</span>);
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; n; j++)
+            a[i][j] = mult(a[i][j], iv), inv[i][j] = mult(inv[i][j], iv);
+        <span class="k">for</span> (<span class="k">int</span> r = <span class="n">0</span>; r &lt; n; r++)
+            <span class="k">if</span> (r != i &amp;&amp; a[r][i]) {
+                <span class="k">int</span> f = a[r][i];
+                <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; n; j++) {
+                    a[r][j] = subt(a[r][j], mult(f, a[i][j]));
+                    inv[r][j] = subt(inv[r][j], mult(f, inv[i][j]));
+                }
+            }
+    }
+    <span class="k">return</span> inv;
+}
+
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// GF(2): rows are bitsets of width m, column m holds the RHS. O(n*m/64).</span>
+<span class="c">// Returns -1 inconsistent, else the number of free variables; sol is one</span>
+<span class="c">// particular solution.</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="k">const</span> <span class="k">int</span> GB = <span class="n">512</span>;                                   <span class="c">// &gt;= m + 1</span>
+<span class="k">int</span> gauss_gf2(<span class="t">vector</span>&lt;<span class="t">bitset</span>&lt;GB&gt;&gt; a, <span class="k">int</span> n, <span class="k">int</span> m, <span class="t">bitset</span>&lt;GB&gt; &amp;sol) {
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; where(m, -<span class="n">1</span>);
+    <span class="k">for</span> (<span class="k">int</span> col = <span class="n">0</span>, row = <span class="n">0</span>; col &lt; m &amp;&amp; row &lt; n; col++) {
+        <span class="k">int</span> sel = -<span class="n">1</span>;
+        <span class="k">for</span> (<span class="k">int</span> i = row; i &lt; n; i++)
+            <span class="k">if</span> (a[i][col]) { sel = i; <span class="k">break</span>; }
+        <span class="k">if</span> (sel == -<span class="n">1</span>) <span class="k">continue</span>;
+        swap(a[sel], a[row]);
+        where[col] = row;
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)
+            <span class="k">if</span> (i != row &amp;&amp; a[i][col]) a[i] ^= a[row];
+        row++;
+    }
+    sol.reset();
+    <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++)
+        <span class="k">if</span> (where[j] != -<span class="n">1</span>) sol[j] = a[where[j]][m];
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        <span class="k">int</span> s = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++) s ^= (sol[j] &amp; a[i][j]);
+        <span class="k">if</span> (s != (<span class="k">int</span>)a[i][m]) <span class="k">return</span> -<span class="n">1</span>;
+    }
+    <span class="k">int</span> freev = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++) freev += (where[j] == -<span class="n">1</span>);
+    <span class="k">return</span> freev;
+}
+
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// REAL version -- partial pivoting, EPS. Only for genuinely continuous data.</span>
+<span class="c">// Same return convention. EPS of 1e-9 suits values around 1; scale it with</span>
+<span class="c">// your magnitudes.</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="k">const</span> <span class="k">double</span> EPS = <span class="n">1e-9</span>;
+<span class="k">int</span> solve_real(<span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="k">double</span>&gt;&gt; a, <span class="t">vector</span>&lt;<span class="k">double</span>&gt; &amp;sol) {
+    <span class="k">int</span> n = a.size(), m = (<span class="k">int</span>)a[<span class="n">0</span>].size() - <span class="n">1</span>;
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; where(m, -<span class="n">1</span>);
+    <span class="k">for</span> (<span class="k">int</span> col = <span class="n">0</span>, row = <span class="n">0</span>; col &lt; m &amp;&amp; row &lt; n; col++) {
+        <span class="k">int</span> sel = row;
+        <span class="k">for</span> (<span class="k">int</span> i = row; i &lt; n; i++)                 <span class="c">// LARGEST pivot, not first</span>
+            <span class="k">if</span> (fabs(a[i][col]) &gt; fabs(a[sel][col])) sel = i;
+        <span class="k">if</span> (fabs(a[sel][col]) &lt; EPS) <span class="k">continue</span>;
+        swap(a[sel], a[row]);
+        where[col] = row;
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)
+            <span class="k">if</span> (i != row) {
+                <span class="k">double</span> f = a[i][col] / a[row][col];
+                <span class="k">for</span> (<span class="k">int</span> j = col; j &lt;= m; j++) a[i][j] -= a[row][j] * f;
+            }
+        row++;
+    }
+    sol.assign(m, <span class="n">0</span>);
+    <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++)
+        <span class="k">if</span> (where[j] != -<span class="n">1</span>) sol[j] = a[where[j]][m] / a[where[j]][j];
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        <span class="k">double</span> s = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++) s += sol[j] * a[i][j];
+        <span class="k">if</span> (fabs(s - a[i][m]) &gt; EPS) <span class="k">return</span> -<span class="n">1</span>;
+    }
+    <span class="k">int</span> freev = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; m; j++) freev += (where[j] == -<span class="n">1</span>);
+    <span class="k">return</span> freev;
+}</code></pre>
+</div>
+<div class="file" id="interpolation">
+<h2>5.10 &nbsp;interpolation</h2>
+<p class="path">math/interpolation.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// LAGRANGE INTERPOLATION -- a degree-d polynomial from d+1 points</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// If f is a polynomial of degree &lt;= d and you can compute f(0..d), you can</span>
+<span class="c">// evaluate f ANYWHERE. Two versions:</span>
+<span class="c">//</span>
+<span class="c">//   general points  O(d^2) per query</span>
+<span class="c">//   CONSECUTIVE points x = 0,1,...,d  O(d) per query, using prefix/suffix</span>
+<span class="c">//                     products of (x - i) and the fact that the denominators</span>
+<span class="c">//                     are just factorials with alternating signs</span>
+<span class="c">//</span>
+<span class="c">// Use it whenever a quantity &quot;looks polynomial in n&quot; and n is astronomically</span>
+<span class="c">// large: brute-force the first d+1 values, then interpolate. The commonest</span>
+<span class="c">// case by far is `sum of i^k for i = 1..n`, which is a polynomial in n of</span>
+<span class="c">// degree k+1.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  GET THE DEGREE RIGHT, AND IT IS ALMOST ALWAYS ONE MORE THAN YOU THINK</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #      sum_{i=1..n} i^k   is degree k+1, so it needs k+2 points.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  One point short does not error -- it silently fits a lower-degree</span>
+<span class="cbox">// #  polynomial through your data and returns a plausible wrong number.</span>
+<span class="cbox">// #  VERIFY by finite differences: take the (d+1)-th difference of your</span>
+<span class="cbox">// #  sample values; it must be identically 0. If it is not, either the degree</span>
+<span class="cbox">// #  is higher or the quantity is not polynomial.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THIS NEEDS p &gt; d</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  The denominators are products of (i - j) for i, j &lt;= d. If p &lt;= d one of</span>
+<span class="cbox">// #  those is 0 mod p and the inverse does not exist. Fine for p = 1e9+7 and</span>
+<span class="cbox">// #  any sane d; fatal for a small modulus.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Also: if the query x happens to be one of the sample points, return the</span>
+<span class="cbox">// #  sample directly -- the general formula divides by zero there.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Precompute factorials and inverse factorials once, not per query.</span>
+<span class="c">//   The sign is (-1)^(d-i); with a modulus, add mod before storing.</span>
+<span class="c">//   Interpolating at x &lt; d (inside the sample range) works but is pointless --</span>
+<span class="c">//     just index the array.</span>
+<span class="c">//   For &quot;sum of i^k&quot;, the sample values y[j] = sum_{i=1..j} i^k must be</span>
+<span class="c">//     PREFIX SUMS, not i^k itself.</span>
+<span class="c">//   The x values must be distinct. Duplicated sample points give a 0</span>
+<span class="c">//     denominator.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   f is polynomial of degree d, need f(n), n huge     lagrange_consecutive()</span>
+<span class="c">//   sum of i^k for i = 1..n, n up to 1e18              sum_powers() -- degree</span>
+<span class="c">//                                                      k+1</span>
+<span class="c">//   &quot;the answer looks smooth in n&quot;                     sample, verify by finite</span>
+<span class="c">//                                                      differences, interpolate</span>
+<span class="c">//   a counting DP whose answer is polynomial in the    same recipe; this is how</span>
+<span class="c">//   grid size                                          most &quot;huge n&quot; counting</span>
+<span class="c">//                                                      problems fall</span>
+<span class="c">//   fit through ARBITRARY points                       lagrange_general(),</span>
+<span class="c">//                                                      O(d^2)</span>
+<span class="c">//   the answer is a LINEAR RECURRENCE, not polynomial  different tool --</span>
+<span class="c">//                                                      math/linear_recurrence.cpp</span>
+<span class="c">//   sum of i^k * r^i (geometric weight)                NOT polynomial. It is</span>
+<span class="c">//                                                      polynomial * r^n; use</span>
+<span class="c">//                                                      the recurrence, or</span>
+<span class="c">//                                                      differentiate the</span>
+<span class="c">//                                                      geometric series</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   the sequence is exponential or has a recurrence -&gt; Berlekamp-Massey,</span>
+<span class="c">//     math/linear_recurrence.cpp.</span>
+<span class="c">//   you need the COEFFICIENTS, not evaluations      -&gt; build them by Newton&#x27;s</span>
+<span class="c">//     divided differences, O(d^2). Interpolation here only evaluates.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="t">ll</span> MOD = <span class="n">1000000007</span>;
+
+<span class="t">ll</span> pw(<span class="t">ll</span> b, <span class="t">ll</span> e, <span class="t">ll</span> m = MOD) {
+    <span class="t">ll</span> r = <span class="n">1</span>; b %= m;
+    <span class="k">while</span> (e) { <span class="k">if</span> (e &amp; <span class="n">1</span>) r = r * b % m; b = b * b % m, e &gt;&gt;= <span class="n">1</span>; }
+    <span class="k">return</span> r;
+}
+<span class="t">ll</span> inv(<span class="t">ll</span> a) { <span class="k">return</span> pw(a, MOD - <span class="n">2</span>); }
+
+<span class="c">// ---- CONSECUTIVE sample points: y[i] = f(i) for i = 0..d, evaluate f(x) ---</span>
+<span class="c">// O(d) per query after an O(d) factorial precompute.</span>
+<span class="t">ll</span> lagrange_consecutive(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;y, <span class="t">ll</span> x) {
+    <span class="k">int</span> d = (<span class="k">int</span>)y.size() - <span class="n">1</span>;
+    <span class="k">if</span> (x &lt;= d) <span class="k">return</span> y[x];                       <span class="c">// inside the sample</span>
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; fact(d + <span class="n">2</span>), ifact(d + <span class="n">2</span>);
+    fact[<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>; i &lt;= d + <span class="n">1</span>; i++) fact[i] = fact[i - <span class="n">1</span>] * i % MOD;
+    ifact[d + <span class="n">1</span>] = inv(fact[d + <span class="n">1</span>]);
+    <span class="k">for</span> (<span class="k">int</span> i = d + <span class="n">1</span>; i &gt;= <span class="n">1</span>; i--) ifact[i - <span class="n">1</span>] = ifact[i] * i % MOD;
+
+    <span class="c">// pre[i] = prod_{j&lt;i} (x - j),  suf[i] = prod_{j&gt;i} (x - j)</span>
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; pre(d + <span class="n">2</span>, <span class="n">1</span>), suf(d + <span class="n">2</span>, <span class="n">1</span>);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt;= d; i++) pre[i + <span class="n">1</span>] = pre[i] * ((x - i) % MOD) % MOD;
+    <span class="k">for</span> (<span class="k">int</span> i = d; i &gt;= <span class="n">0</span>; i--) suf[i] = suf[i + <span class="n">1</span>] * ((x - i) % MOD) % MOD;
+
+    <span class="t">ll</span> res = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt;= d; i++) {
+        <span class="t">ll</span> num = pre[i] * suf[i + <span class="n">1</span>] % MOD;
+        <span class="t">ll</span> den = ifact[i] * ifact[d - i] % MOD;
+        <span class="t">ll</span> term = y[i] % MOD * num % MOD * den % MOD;
+        <span class="k">if</span> ((d - i) &amp; <span class="n">1</span>) res = (res - term + MOD) % MOD;   <span class="c">// sign (-1)^(d-i)</span>
+        <span class="k">else</span>             res = (res + term) % MOD;
+    }
+    <span class="k">return</span> res;
+}
+
+<span class="c">// ---- ARBITRARY sample points, O(d^2) -------------------------------------</span>
+<span class="t">ll</span> lagrange_general(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;xs, <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;ys, <span class="t">ll</span> x) {
+    <span class="k">int</span> n = xs.size();
+    <span class="t">ll</span> res = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        <span class="k">if</span> (x % MOD == xs[i] % MOD) <span class="k">return</span> ys[i] % MOD;
+        <span class="t">ll</span> num = <span class="n">1</span>, den = <span class="n">1</span>;
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; n; j++) {
+            <span class="k">if</span> (i == j) <span class="k">continue</span>;
+            num = num * ((x - xs[j]) % MOD + MOD) % MOD;
+            den = den * ((xs[i] - xs[j]) % MOD + MOD) % MOD;
+        }
+        res = (res + ys[i] % MOD * num % MOD * inv(den)) % MOD;
+    }
+    <span class="k">return</span> res;
+}
+
+<span class="c">// ---- sum_{i=1..n} i^k mod p, n up to 1e18. Degree is k+1, so k+2 points. --</span>
+<span class="t">ll</span> sum_powers(<span class="t">ll</span> n, <span class="k">int</span> k) {
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; y(k + <span class="n">2</span>);
+    y[<span class="n">0</span>] = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>; i &lt;= k + <span class="n">1</span>; i++) y[i] = (y[i - <span class="n">1</span>] + pw(i, k)) % MOD;
+    <span class="k">return</span> lagrange_consecutive(y, n);          <span class="c">// n is used raw, not reduced:</span>
+                                                <span class="c">// the (x - i) terms reduce it</span>
+}
+
+<span class="c">// ---- the degree check: the (d+1)-th finite difference must vanish ---------</span>
+<span class="c">// Run this on your sample before trusting an interpolation.</span>
+<span class="k">bool</span> degree_at_most(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; y, <span class="k">int</span> d) {
+    <span class="k">for</span> (<span class="k">int</span> r = <span class="n">0</span>; r &lt;= d; r++) {
+        <span class="k">if</span> ((<span class="k">int</span>)y.size() &lt; <span class="n">2</span>) <span class="k">return</span> <span class="k">true</span>;
+        <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; nx(y.size() - <span class="n">1</span>);
+        <span class="k">for</span> (<span class="t">size_t</span> i = <span class="n">0</span>; i + <span class="n">1</span> &lt; y.size(); i++)
+            nx[i] = ((y[i + <span class="n">1</span>] - y[i]) % MOD + MOD) % MOD;
+        y = nx;
+    }
+    <span class="k">for</span> (<span class="t">ll</span> v : y) <span class="k">if</span> (v % MOD) <span class="k">return</span> <span class="k">false</span>;
+    <span class="k">return</span> <span class="k">true</span>;
+}</code></pre>
+</div>
+<div class="file" id="linear_recurrence">
+<h2>5.11 &nbsp;linear_recurrence</h2>
+<p class="path">math/linear_recurrence.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// BERLEKAMP-MASSEY + KITAMASA -- find the recurrence, then jump to term 1e18</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Two halves that are almost always used together:</span>
+<span class="c">//</span>
+<span class="c">//   BERLEKAMP-MASSEY   given the first terms of a sequence, recover the</span>
+<span class="c">//                      shortest linear recurrence</span>
+<span class="c">//                          a[n] = c[0]a[n-1] + c[1]a[n-2] + ... + c[d-1]a[n-d]</span>
+<span class="c">//                      O(n^2). You never have to derive the recurrence.</span>
+<span class="c">//</span>
+<span class="c">//   KITAMASA           given c[] and the first d terms, compute a[k] for</span>
+<span class="c">//                      k up to 1e18 in O(d^2 log k) -- polynomial powering</span>
+<span class="c">//                      modulo the characteristic polynomial.</span>
+<span class="c">//</span>
+<span class="c">// Together: brute-force ~2d terms of ANY DP with a fixed finite state and</span>
+<span class="c">// linear transitions, and you get term 1e18 without ever writing a matrix.</span>
+<span class="c">// Compare O(d^3 log k) for matrix power -- Kitamasa wins from d ~ 30 up.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  FEED IT AT LEAST 2d TERMS, AND PREFERABLY MORE</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  BM returns the shortest recurrence CONSISTENT WITH THE INPUT. With only</span>
+<span class="cbox">// #  2d-1 terms it can return a shorter, wrong one that reproduces every</span>
+<span class="cbox">// #  value you gave it and diverges immediately after. There is no error</span>
+<span class="cbox">// #  signal.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Rule: generate 2d + 10 terms if you can, then CHECK -- run the returned</span>
+<span class="cbox">// #  recurrence forward over your own samples and confirm it reproduces the</span>
+<span class="cbox">// #  tail you held back. verify() below does exactly that. Do not skip it.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THE MODULUS MUST BE PRIME</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  BM inverts the discrepancy. Composite modulus means the inverse may not</span>
+<span class="cbox">// #  exist and the algorithm produces silent garbage. For a composite</span>
+<span class="cbox">// #  modulus, factor it and run per prime power, or work over the rationals.</span>
+<span class="cbox">// #  Zero-only prefixes are fine -- BM handles a leading run of zeros.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Index convention: c[i] multiplies a[n-1-i]. Getting this backwards</span>
+<span class="c">//     reverses the recurrence and still runs.</span>
+<span class="c">//   a[] must be reduced mod p before BM, and non-negative.</span>
+<span class="c">//   The returned degree d can be 0 (all-zero sequence) -- guard k &lt; d by</span>
+<span class="c">//     returning a[k] directly.</span>
+<span class="c">//   Kitamasa needs at least d initial terms; feed it the same array you gave BM.</span>
+<span class="c">//   If your sequence is POLYNOMIAL in n, this works too (a polynomial of</span>
+<span class="c">//     degree m satisfies a recurrence of order m+1) -- but Lagrange</span>
+<span class="c">//     interpolation is O(d) instead of O(d^2 log k). math/interpolation.cpp.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   &quot;term k of this sequence&quot;, k up to 1e18            BM then Kitamasa</span>
+<span class="c">//   a DP with a fixed small state and huge n            brute 2d terms, BM,</span>
+<span class="c">//                                                       Kitamasa. Works even</span>
+<span class="c">//                                                       when you cannot see</span>
+<span class="c">//                                                       the recurrence</span>
+<span class="c">//   count walks of length k in a small graph            same; d &lt;= number of</span>
+<span class="c">//                                                       states</span>
+<span class="c">//   count strings of length n avoiding a pattern        KMP/Aho automaton is</span>
+<span class="c">//                                                       linear -&gt; BM works</span>
+<span class="c">//   nth Fibonacci / Tribonacci / any fixed recurrence   skip BM, Kitamasa</span>
+<span class="c">//                                                       directly</span>
+<span class="c">//   the sequence is a POLYNOMIAL in n                   Lagrange is cheaper --</span>
+<span class="c">//                                                       math/interpolation.cpp</span>
+<span class="c">//   you have the recurrence but want a matrix anyway    DP/matrix/matrix expo.cpp</span>
+<span class="c">//   determinant of a huge structured matrix             BM on the sequence of</span>
+<span class="c">//                                                       determinants by size</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   the transition coefficients DEPEND ON n  -&gt; not linear-recurrent; neither</span>
+<span class="c">//     BM nor matrix power applies.</span>
+<span class="c">//   the state count is not bounded            -&gt; there is no finite recurrence.</span>
+<span class="c">//   you only need small n                     -&gt; just run the DP.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="t">ll</span> MOD = <span class="n">1000000007</span>;
+
+<span class="t">ll</span> pw(<span class="t">ll</span> b, <span class="t">ll</span> e, <span class="t">ll</span> m = MOD) {
+    <span class="t">ll</span> r = <span class="n">1</span>; b %= m;
+    <span class="k">while</span> (e) { <span class="k">if</span> (e &amp; <span class="n">1</span>) r = r * b % m; b = b * b % m, e &gt;&gt;= <span class="n">1</span>; }
+    <span class="k">return</span> r;
+}
+<span class="t">ll</span> inv(<span class="t">ll</span> a) { <span class="k">return</span> pw(a, MOD - <span class="n">2</span>); }
+
+<span class="c">// ---- Berlekamp-Massey: shortest c[] with a[n] = sum c[i]*a[n-1-i] --------</span>
+<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; berlekamp_massey(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a) {
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; ls, cur;                 <span class="c">// last failing candidate, current</span>
+    <span class="k">int</span> lf = <span class="n">0</span>;                         <span class="c">// index where ls last failed</span>
+    <span class="t">ll</span> ld = <span class="n">0</span>;                          <span class="c">// the discrepancy at that failure</span>
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; (<span class="k">int</span>)a.size(); i++) {
+        <span class="t">ll</span> t = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; (<span class="k">int</span>)cur.size(); j++)
+            t = (t + cur[j] * a[i - <span class="n">1</span> - j]) % MOD;
+        <span class="k">if</span> ((a[i] - t) % MOD == <span class="n">0</span>) <span class="k">continue</span>;             <span class="c">// prediction was right</span>
+        <span class="k">if</span> (cur.empty()) {                               <span class="c">// first failure</span>
+            cur.assign(i + <span class="n">1</span>, <span class="n">0</span>);
+            lf = i, ld = (a[i] - t) % MOD;
+            <span class="k">continue</span>;
+        }
+        <span class="t">ll</span> k = (a[i] - t) % MOD * inv(ld) % MOD;
+        <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; c(i - lf - <span class="n">1</span>);                        <span class="c">// shift by the gap</span>
+        c.push_back(k);
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; (<span class="k">int</span>)ls.size(); j++)
+            c.push_back(-ls[j] * k % MOD);
+        <span class="k">if</span> (c.size() &lt; cur.size()) c.resize(cur.size());
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; (<span class="k">int</span>)cur.size(); j++)
+            c[j] = (c[j] + cur[j]) % MOD;
+        <span class="k">if</span> (i - (<span class="k">int</span>)cur.size() &gt;= lf - (<span class="k">int</span>)ls.size())  <span class="c">// keep the better one</span>
+            ls = cur, lf = i, ld = (a[i] - t) % MOD;
+        cur = c;
+    }
+    <span class="k">for</span> (<span class="t">ll</span> &amp;x : cur) x = (x % MOD + MOD) % MOD;
+    <span class="k">return</span> cur;
+}
+
+<span class="c">// ---- run the recurrence forward and check it reproduces `a` --------------</span>
+<span class="c">// ALWAYS call this. It is the only defence against a too-short recurrence.</span>
+<span class="k">bool</span> verify(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a, <span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;c) {
+    <span class="k">int</span> d = c.size();
+    <span class="k">if</span> (d == <span class="n">0</span>) {
+        <span class="k">for</span> (<span class="t">ll</span> x : a) <span class="k">if</span> (x % MOD) <span class="k">return</span> <span class="k">false</span>;
+        <span class="k">return</span> <span class="k">true</span>;
+    }
+    <span class="k">for</span> (<span class="k">int</span> i = d; i &lt; (<span class="k">int</span>)a.size(); i++) {
+        <span class="t">ll</span> t = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; d; j++) t = (t + c[j] * a[i - <span class="n">1</span> - j]) % MOD;
+        <span class="k">if</span> ((t - a[i]) % MOD) <span class="k">return</span> <span class="k">false</span>;
+    }
+    <span class="k">return</span> <span class="k">true</span>;
+}
+
+<span class="c">// ---- polynomial multiply modulo the characteristic polynomial ------------</span>
+<span class="c">// char poly: x^d - c[0]x^(d-1) - ... - c[d-1]</span>
+<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; poly_mul_mod(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;x, <span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;y,
+                        <span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;c) {
+    <span class="k">int</span> d = c.size();
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; r(x.size() + y.size() - <span class="n">1</span>, <span class="n">0</span>);
+    <span class="k">for</span> (<span class="t">size_t</span> i = <span class="n">0</span>; i &lt; x.size(); i++)
+        <span class="k">for</span> (<span class="t">size_t</span> j = <span class="n">0</span>; j &lt; y.size(); j++)
+            r[i + j] = (r[i + j] + x[i] * y[j]) % MOD;
+    <span class="c">// reduce from the top: x^n = sum c[j] * x^(n-1-j)</span>
+    <span class="k">for</span> (<span class="k">int</span> i = (<span class="k">int</span>)r.size() - <span class="n">1</span>; i &gt;= d; i--) {
+        <span class="k">if</span> (!r[i]) <span class="k">continue</span>;
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; d; j++)
+            r[i - <span class="n">1</span> - j] = (r[i - <span class="n">1</span> - j] + r[i] * c[j]) % MOD;
+        r[i] = <span class="n">0</span>;
+    }
+    r.resize(d);
+    <span class="k">return</span> r;
+}
+
+<span class="c">// ---- Kitamasa: a[k] from the recurrence c[] and the first d terms --------</span>
+<span class="t">ll</span> kitamasa(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a, <span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;c, <span class="t">ll</span> k) {
+    <span class="k">int</span> d = c.size();
+    <span class="k">if</span> (d == <span class="n">0</span>) <span class="k">return</span> <span class="n">0</span>;
+    <span class="k">if</span> (k &lt; d) <span class="k">return</span> a[k] % MOD;
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; res{<span class="n">1</span>}, base{<span class="n">0</span>, <span class="n">1</span>};                       <span class="c">// res = 1, base = x</span>
+    <span class="k">if</span> (d == <span class="n">1</span>) base = {c[<span class="n">0</span>]};                           <span class="c">// x reduces immediately</span>
+    <span class="k">while</span> (k) {
+        <span class="k">if</span> (k &amp; <span class="n">1</span>) res = poly_mul_mod(res, base, c);
+        base = poly_mul_mod(base, base, c);
+        k &gt;&gt;= <span class="n">1</span>;
+    }
+    <span class="t">ll</span> r = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; d &amp;&amp; i &lt; (<span class="k">int</span>)res.size(); i++)
+        r = (r + res[i] * (a[i] % MOD)) % MOD;
+    <span class="k">return</span> r;
+}
+
+<span class="c">// ---- the whole pipeline: samples in, a[k] out. Returns -1 if unverified. --</span>
+<span class="t">ll</span> nth_term(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a, <span class="t">ll</span> k) {
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; c = berlekamp_massey(a);
+    <span class="k">if</span> (!verify(a, c)) <span class="k">return</span> -<span class="n">1</span>;                        <span class="c">// needs more samples</span>
+    <span class="k">if</span> ((<span class="k">int</span>)a.size() &lt; <span class="n">2</span> * (<span class="k">int</span>)c.size()) <span class="k">return</span> -<span class="n">1</span>;    <span class="c">// too few to trust</span>
+    <span class="k">return</span> kitamasa(a, c, k);
+}</code></pre>
+</div>
+<div class="file" id="fft_ntt">
+<h2>5.12 &nbsp;fft_ntt</h2>
+<p class="path">math/fft_ntt.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// FFT / NTT -- convolution in O(n log n)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// c[k] = sum over i+j==k of a[i]*b[j].  Any problem that is &quot;combine every</span>
+<span class="c">// pair and index by the sum&quot; is a convolution, whether or not it mentions</span>
+<span class="c">// polynomials.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  PICK THE RIGHT ONE. THIS IS THE DECISION, NOT THE CODE.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #   mod is 998244353 (or any p = c*2^k + 1)   -&gt; NTT.  Exact. Use this.</span>
+<span class="cbox">// #   answers fit in ll and no mod at all       -&gt; NTT anyway, mod is big</span>
+<span class="cbox">// #                                                enough; or FFT if values</span>
+<span class="cbox">// #                                                are small</span>
+<span class="cbox">// #   mod is 1e9+7 or arbitrary                 -&gt; see ARBITRARY MOD below.</span>
+<span class="cbox">// #                                                Plain FFT will NOT survive</span>
+<span class="cbox">// #                                                the precision.</span>
+<span class="cbox">// #   real / floating data (geometry, signal)   -&gt; FFT</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  998244353 = 119 * 2^23 + 1, so it supports transforms up to length 2^23.</span>
+<span class="cbox">// #  1e9+7 is NOT of that form -- there is no NTT modulo 1e9+7, which is the</span>
+<span class="cbox">// #  single most common misunderstanding here.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  FFT PRECISION IS A HARD LIMIT</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  doubles hold ~53 bits. The largest intermediate is about</span>
+<span class="cbox">// #        n * max|a| * max|b|</span>
+<span class="cbox">// #  and once that passes ~9e15 the rounding is bigger than 0.5 and llround()</span>
+<span class="cbox">// #  returns the wrong integer. At n = 1e6 that means values up to ~3e4 are</span>
+<span class="cbox">// #  safe and 1e9 is nowhere close.</span>
+<span class="cbox">// #  Symptom: answers correct on samples, off by one or two on big tests.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Resize to a POWER OF TWO that is &gt;= |a| + |b| - 1. Too small and the</span>
+<span class="c">//     result wraps around cyclically -- which is silent, and is exactly what</span>
+<span class="c">//     you want if you actually need a cyclic convolution.</span>
+<span class="c">//   The inverse transform is the forward one with conjugated roots plus a</span>
+<span class="c">//     division by n. Forgetting the division gives everything scaled by n.</span>
+<span class="c">//   Bit-reversal must happen before the butterflies, not after.</span>
+<span class="c">//   NTT input must already be reduced mod p; negative values wrap wrongly.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS -- everything that is secretly a convolution</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   polynomial multiplication            multiply()</span>
+<span class="c">//   big integer multiplication           digits are coefficients, then carry</span>
+<span class="c">//   count pairs (i,j) with a[i]+b[j]=k   convolve the count arrays</span>
+<span class="c">//   count pairs with a[i]-b[j]=k         reverse one side first</span>
+<span class="cbox">//   # of ways to reach each sum with     convolve the item-count arrays; with</span>
+<span class="c">//     k items from a multiset            k items, take the k-th power</span>
+<span class="c">//   string matching with wildcards       sum over shifts of</span>
+<span class="c">//                                        (s[i]-p[j])^2 * s[i] * p[j]; expand</span>
+<span class="c">//                                        into three convolutions</span>
+<span class="c">//   all pairwise distances / sums        convolve the indicator arrays</span>
+<span class="c">//   subset sum COUNT (not feasibility)   convolution; feasibility is a bitset,</span>
+<span class="c">//                                        DS/bitset.cpp</span>
+<span class="c">//   xor / and / or convolution           NOT this -- that is FWHT, a different</span>
+<span class="c">//                                        transform with the same shape</span>
+<span class="c">//   polynomial inverse / log / exp /     Newton iteration on top of this;</span>
+<span class="c">//     division / sqrt                    each is O(n log n)</span>
+<span class="c">//   linear recurrence, huge n            Kitamasa / Bostan-Mori on top of this</span>
+<span class="c">//</span>
+<span class="c">// ARBITRARY MOD (e.g. 1e9+7), two standard routes:</span>
+<span class="c">//   1. THREE NTTs modulo three different NTT primes, then CRT the results.</span>
+<span class="c">//      Exact, ~3x the work, no precision worries. Preferred.</span>
+<span class="c">//   2. SPLIT each coefficient into high and low 15 bits and run 4 (or 3, with</span>
+<span class="c">//      the conjugate trick) complex FFTs. Faster, fiddlier, and still has a</span>
+<span class="c">//      precision budget.</span>
+<span class="c">// ============================================================================</span>
+
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// NTT -- exact, modulo a prime of the form c*2^k + 1</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="k">const</span> <span class="k">int</span> NMOD = <span class="n">998244353</span>, NROOT = <span class="n">3</span>;      <span class="c">// 119 * 2^23 + 1</span>
+
+<span class="k">int</span> npow(<span class="k">int</span> b, <span class="t">ll</span> e) {
+    <span class="k">int</span> r = <span class="n">1</span>;
+    <span class="k">for</span> (; e; b = (<span class="t">ll</span>)b * b % NMOD, e &gt;&gt;= <span class="n">1</span>)
+        <span class="k">if</span> (e &amp; <span class="n">1</span>) r = (<span class="t">ll</span>)r * b % NMOD;
+    <span class="k">return</span> r;
+}
+<span class="k">void</span> ntt(<span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;a, <span class="k">bool</span> inv) {
+    <span class="k">int</span> n = a.size();
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>, j = <span class="n">0</span>; i &lt; n; i++) {            <span class="c">// bit reversal</span>
+        <span class="k">int</span> bit = n &gt;&gt; <span class="n">1</span>;
+        <span class="k">for</span> (; j &amp; bit; bit &gt;&gt;= <span class="n">1</span>) j ^= bit;
+        j ^= bit;
+        <span class="k">if</span> (i &lt; j) swap(a[i], a[j]);
+    }
+    <span class="k">for</span> (<span class="k">int</span> len = <span class="n">2</span>; len &lt;= n; len &lt;&lt;= <span class="n">1</span>) {
+        <span class="k">int</span> w = npow(NROOT, (NMOD - <span class="n">1</span>) / len);
+        <span class="k">if</span> (inv) w = npow(w, NMOD - <span class="n">2</span>);
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i += len) {
+            <span class="k">int</span> wn = <span class="n">1</span>;
+            <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; len / <span class="n">2</span>; j++) {
+                <span class="k">int</span> u = a[i + j], v = (<span class="t">ll</span>)a[i + j + len / <span class="n">2</span>] * wn % NMOD;
+                a[i + j] = u + v &lt; NMOD ? u + v : u + v - NMOD;
+                a[i + j + len / <span class="n">2</span>] = u - v &gt;= <span class="n">0</span> ? u - v : u - v + NMOD;
+                wn = (<span class="t">ll</span>)wn * w % NMOD;
+            }
+        }
+    }
+    <span class="k">if</span> (inv) {
+        <span class="k">int</span> ninv = npow(n, NMOD - <span class="n">2</span>);
+        <span class="k">for</span> (<span class="k">int</span> &amp;x : a) x = (<span class="t">ll</span>)x * ninv % NMOD;
+    }
+}
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; multiply(<span class="t">vector</span>&lt;<span class="k">int</span>&gt; a, <span class="t">vector</span>&lt;<span class="k">int</span>&gt; b) {
+    <span class="k">if</span> (a.empty() || b.empty()) <span class="k">return</span> {};
+    <span class="k">int</span> need = a.size() + b.size() - <span class="n">1</span>, n = <span class="n">1</span>;
+    <span class="k">while</span> (n &lt; need) n &lt;&lt;= <span class="n">1</span>;
+    a.resize(n), b.resize(n);
+    ntt(a, <span class="k">false</span>), ntt(b, <span class="k">false</span>);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) a[i] = (<span class="t">ll</span>)a[i] * b[i] % NMOD;
+    ntt(a, <span class="k">true</span>);
+    a.resize(need);
+    <span class="k">return</span> a;
+}
+
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// FFT -- doubles. Only for real data, or small integers. Read the box.</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="k">typedef</span> complex&lt;<span class="k">double</span>&gt; cd;
+
+<span class="k">void</span> fft(<span class="t">vector</span>&lt;cd&gt; &amp;a, <span class="k">bool</span> inv) {
+    <span class="k">int</span> n = a.size();
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>, j = <span class="n">0</span>; i &lt; n; i++) {
+        <span class="k">int</span> bit = n &gt;&gt; <span class="n">1</span>;
+        <span class="k">for</span> (; j &amp; bit; bit &gt;&gt;= <span class="n">1</span>) j ^= bit;
+        j ^= bit;
+        <span class="k">if</span> (i &lt; j) swap(a[i], a[j]);
+    }
+    <span class="k">for</span> (<span class="k">int</span> len = <span class="n">2</span>; len &lt;= n; len &lt;&lt;= <span class="n">1</span>) {
+        <span class="k">double</span> ang = <span class="n">2</span> * acos(-<span class="n">1.0</span>) / len * (inv ? -<span class="n">1</span> : <span class="n">1</span>);
+        cd w(cos(ang), sin(ang));
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i += len) {
+            cd wn(<span class="n">1</span>);
+            <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; len / <span class="n">2</span>; j++) {
+                cd u = a[i + j], v = a[i + j + len / <span class="n">2</span>] * wn;
+                a[i + j] = u + v;
+                a[i + j + len / <span class="n">2</span>] = u - v;
+                wn *= w;
+            }
+        }
+    }
+    <span class="k">if</span> (inv)
+        <span class="k">for</span> (cd &amp;x : a) x /= n;
+}
+<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; multiply_fft(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;A, <span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;B) {
+    <span class="k">if</span> (A.empty() || B.empty()) <span class="k">return</span> {};
+    <span class="k">int</span> need = A.size() + B.size() - <span class="n">1</span>, n = <span class="n">1</span>;
+    <span class="k">while</span> (n &lt; need) n &lt;&lt;= <span class="n">1</span>;
+    <span class="t">vector</span>&lt;cd&gt; a(n), b(n);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; (<span class="k">int</span>)A.size(); i++) a[i] = cd((<span class="k">double</span>)A[i], <span class="n">0</span>);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; (<span class="k">int</span>)B.size(); i++) b[i] = cd((<span class="k">double</span>)B[i], <span class="n">0</span>);
+    fft(a, <span class="k">false</span>), fft(b, <span class="k">false</span>);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) a[i] *= b[i];
+    fft(a, <span class="k">true</span>);
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; res(need);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; need; i++) res[i] = llround(a[i].real());
+    <span class="k">return</span> res;
+}</code></pre>
+</div>
+<div class="file" id="convolution_anymod">
+<h2>5.13 &nbsp;convolution_anymod</h2>
+<p class="path">math/convolution_anymod.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// CONVOLUTION MODULO ANYTHING -- three NTTs plus CRT, exact</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// There is no NTT modulo 1e9+7. The fix: convolve under THREE different</span>
+<span class="c">// NTT-friendly primes, then reconstruct each coefficient by CRT. The true</span>
+<span class="c">// value is bounded by n * (mod-1)^2 &lt; 1e6 * 1e18 = 1e24, and the three primes</span>
+<span class="c">// multiply to ~2.2e26, so the reconstruction is exact.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  WHY THREE AND NOT TWO</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Two primes cover ~9.4e17 -- less than a single coefficient can reach</span>
+<span class="cbox">// #  (n * (p-1)^2 is around 1e24 for n = 1e6, p = 1e9). Two is enough only if</span>
+<span class="cbox">// #  you can bound the coefficients yourself; three is enough always.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Fewer primes is the standard silent failure: correct on small tests,</span>
+<span class="cbox">// #  wrong once a coefficient exceeds the product.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// THE PRIMES, all of the form c*2^k + 1 with primitive root 3:</span>
+<span class="c">//   998244353  = 119 * 2^23 + 1     supports length up to 2^23</span>
+<span class="c">//   1004535809 = 479 * 2^21 + 1     up to 2^21</span>
+<span class="c">//   469762049  =   7 * 2^26 + 1     up to 2^26</span>
+<span class="c">// The transform length is capped by the SMALLEST of these, so n &lt;= 2^21.</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Reduce inputs mod your target M first; negative or oversized inputs break</span>
+<span class="c">//     the bound argument.</span>
+<span class="c">//   The Garner step below uses __int128 -- it must, the intermediate exceeds</span>
+<span class="c">//     ll.</span>
+<span class="c">//   3x the work of a single NTT. If your modulus happens to be 998244353, do</span>
+<span class="c">//     not use this file; use math/fft_ntt.cpp directly.</span>
+<span class="c">//   Alternative: split each coefficient into high/low 15 bits and run 4</span>
+<span class="c">//     complex FFTs. Faster, fiddlier, and still has a precision budget. Prefer</span>
+<span class="c">//     this version unless the time limit is genuinely tight.</span>
+<span class="c">//</span>
+<span class="c">// SUBPROBLEMS: the same list as math/fft_ntt.cpp -- polynomial multiplication,</span>
+<span class="c">//   counting pairs by sum, big integers, string matching with wildcards -- but</span>
+<span class="c">//   whenever the answer must come out modulo an arbitrary M.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">namespace</span> anymod {
+<span class="k">const</span> <span class="k">int</span> P[<span class="n">3</span>] = {<span class="n">998244353</span>, <span class="n">1004535809</span>, <span class="n">469762049</span>};
+
+<span class="k">int</span> pw(<span class="k">int</span> b, <span class="t">ll</span> e, <span class="k">int</span> m) {
+    <span class="k">int</span> r = <span class="n">1</span>;
+    <span class="k">for</span> (b %= m; e; b = (<span class="t">ll</span>)b * b % m, e &gt;&gt;= <span class="n">1</span>)
+        <span class="k">if</span> (e &amp; <span class="n">1</span>) r = (<span class="t">ll</span>)r * b % m;
+    <span class="k">return</span> r;
+}
+<span class="k">void</span> ntt(<span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;a, <span class="k">bool</span> inv, <span class="k">int</span> m) {
+    <span class="k">int</span> n = a.size();
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>, j = <span class="n">0</span>; i &lt; n; i++) {
+        <span class="k">int</span> bit = n &gt;&gt; <span class="n">1</span>;
+        <span class="k">for</span> (; j &amp; bit; bit &gt;&gt;= <span class="n">1</span>) j ^= bit;
+        j ^= bit;
+        <span class="k">if</span> (i &lt; j) swap(a[i], a[j]);
+    }
+    <span class="k">for</span> (<span class="k">int</span> len = <span class="n">2</span>; len &lt;= n; len &lt;&lt;= <span class="n">1</span>) {
+        <span class="k">int</span> w = pw(<span class="n">3</span>, (m - <span class="n">1</span>) / len, m);
+        <span class="k">if</span> (inv) w = pw(w, m - <span class="n">2</span>, m);
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i += len) {
+            <span class="k">int</span> wn = <span class="n">1</span>;
+            <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; len / <span class="n">2</span>; j++) {
+                <span class="k">int</span> u = a[i + j], v = (<span class="t">ll</span>)a[i + j + len / <span class="n">2</span>] * wn % m;
+                a[i + j] = u + v &lt; m ? u + v : u + v - m;
+                a[i + j + len / <span class="n">2</span>] = u - v &gt;= <span class="n">0</span> ? u - v : u - v + m;
+                wn = (<span class="t">ll</span>)wn * w % m;
+            }
+        }
+    }
+    <span class="k">if</span> (inv) {
+        <span class="k">int</span> ninv = pw(n, m - <span class="n">2</span>, m);
+        <span class="k">for</span> (<span class="k">int</span> &amp;x : a) x = (<span class="t">ll</span>)x * ninv % m;
+    }
+}
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; mul_mod(<span class="t">vector</span>&lt;<span class="k">int</span>&gt; a, <span class="t">vector</span>&lt;<span class="k">int</span>&gt; b, <span class="k">int</span> m) {
+    <span class="k">int</span> need = a.size() + b.size() - <span class="n">1</span>, n = <span class="n">1</span>;
+    <span class="k">while</span> (n &lt; need) n &lt;&lt;= <span class="n">1</span>;
+    a.resize(n), b.resize(n);
+    <span class="k">for</span> (<span class="k">int</span> &amp;x : a) x %= m;
+    <span class="k">for</span> (<span class="k">int</span> &amp;x : b) x %= m;
+    ntt(a, <span class="k">false</span>, m), ntt(b, <span class="k">false</span>, m);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) a[i] = (<span class="t">ll</span>)a[i] * b[i] % m;
+    ntt(a, <span class="k">true</span>, m);
+    a.resize(need);
+    <span class="k">return</span> a;
+}
+<span class="c">// Garner: recover x mod M from x mod P[0], P[1], P[2]</span>
+<span class="k">int</span> garner(<span class="k">int</span> r0, <span class="k">int</span> r1, <span class="k">int</span> r2, <span class="k">int</span> M) {
+    <span class="c">// x = r0 + P0*t1 + P0*P1*t2</span>
+    <span class="t">ll</span> inv01 = pw(P[<span class="n">0</span>] % P[<span class="n">1</span>], P[<span class="n">1</span>] - <span class="n">2</span>, P[<span class="n">1</span>]);
+    <span class="t">ll</span> t1 = (<span class="t">ll</span>)((r1 - r0) % P[<span class="n">1</span>] + P[<span class="n">1</span>]) % P[<span class="n">1</span>] * inv01 % P[<span class="n">1</span>];
+    <span class="t">ll</span> inv02 = pw((<span class="t">ll</span>)P[<span class="n">0</span>] % P[<span class="n">2</span>] * (P[<span class="n">1</span>] % P[<span class="n">2</span>]) % P[<span class="n">2</span>], P[<span class="n">2</span>] - <span class="n">2</span>, P[<span class="n">2</span>]);
+    <span class="t">ll</span> cur = ((<span class="t">__int128</span>)P[<span class="n">0</span>] * t1 + r0) % P[<span class="n">2</span>];
+    <span class="t">ll</span> t2 = (<span class="t">ll</span>)((r2 - cur) % P[<span class="n">2</span>] + P[<span class="n">2</span>]) % P[<span class="n">2</span>] * inv02 % P[<span class="n">2</span>];
+    <span class="t">__int128</span> x = (<span class="t">__int128</span>)r0 + (<span class="t">__int128</span>)P[<span class="n">0</span>] * t1
+               + (<span class="t">__int128</span>)P[<span class="n">0</span>] * P[<span class="n">1</span>] % M * t2;
+    <span class="k">return</span> (<span class="k">int</span>)(x % M);
+}
+<span class="c">// convolution of a and b, every coefficient modulo M. M may be ANY modulus.</span>
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; convolve(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;a, <span class="k">const</span> <span class="t">vector</span>&lt;<span class="k">int</span>&gt; &amp;b, <span class="k">int</span> M) {
+    <span class="k">if</span> (a.empty() || b.empty()) <span class="k">return</span> {};
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; c0 = mul_mod(a, b, P[<span class="n">0</span>]);
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; c1 = mul_mod(a, b, P[<span class="n">1</span>]);
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; c2 = mul_mod(a, b, P[<span class="n">2</span>]);
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; res(c0.size());
+    <span class="k">for</span> (<span class="t">size_t</span> i = <span class="n">0</span>; i &lt; c0.size(); i++) res[i] = garner(c0[i], c1[i], c2[i], M);
+    <span class="k">return</span> res;
+}
+}  <span class="c">// namespace anymod</span></code></pre>
+</div>
+<div class="file" id="fwht">
+<h2>5.14 &nbsp;fwht</h2>
+<p class="path">math/fwht.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// FWHT -- xor / and / or convolution in O(n log n), n a power of two</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   c[k] = sum over i OP j == k of a[i] * b[j],   OP in { xor, and, or }</span>
+<span class="c">//</span>
+<span class="c">// Same shape as FFT -- transform both, multiply pointwise, transform back --</span>
+<span class="c">// but the transform is different and far simpler: no roots of unity, no</span>
+<span class="c">// complex numbers, no precision. Just add/subtract in place.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THIS IS NOT FFT, AND FFT IS NOT THIS</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  FFT/NTT convolves by the SUM of indices  (i + j).</span>
+<span class="cbox">// #  FWHT convolves by a BITWISE op            (i ^ j, i &amp; j, i | j).</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Reaching for FFT on an xor problem is the standard mistake. The index</span>
+<span class="cbox">// #  set here is a hypercube, not a line, and the size must be a power of two</span>
+<span class="cbox">// #  covering the whole value range -- never n + m - 1.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  ONLY THE XOR INVERSE DIVIDES BY n</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #    xor  forward (u+v, u-v)      inverse: same, then divide everything by n</span>
+<span class="cbox">// #    or   forward a[hi] += a[lo]  inverse: a[hi] -= a[lo]</span>
+<span class="cbox">// #    and  forward a[lo] += a[hi]  inverse: a[lo] -= a[hi]</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  and/or are their own inverses up to the sign, with NO division. Dividing</span>
+<span class="cbox">// #  them by n is the usual copy-paste error and scales the answer wrong.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Size must be a POWER OF TWO &gt;= 2^(bits in the largest value). Pad with 0.</span>
+<span class="c">//   Working mod p: replace + and - with add/subt, and the xor inverse&#x27;s</span>
+<span class="c">//     division by n with multiplication by n^-1. Never integer-divide mod p.</span>
+<span class="c">//   Values grow: xor convolution of two arrays with entries up to 1e9 and</span>
+<span class="c">//     n = 2^20 overflows ll during the transform. Reduce mod p as you go, or</span>
+<span class="c">//     bound the magnitudes first.</span>
+<span class="c">//   Self-convolution (a with itself) is one transform, square pointwise, one</span>
+<span class="c">//     inverse -- do not transform twice.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="cbox">//   # of pairs with a[i] ^ a[j] == k     xor convolve the count array with itself</span>
+<span class="cbox">//   # of pairs with a[i] &amp; a[j] == k     and convolution</span>
+<span class="cbox">//   # of pairs with a[i] | a[j] == k     or convolution</span>
+<span class="cbox">//   # of pairs with a[i] &amp; a[j] == 0     the k = 0 entry of the and transform</span>
+<span class="c">//   ... or via SOS over complements      DP/sos.cpp -- often simpler</span>
+<span class="c">//   k-fold xor convolution               transform once, take the k-th power</span>
+<span class="c">//                                        pointwise, transform back</span>
+<span class="c">//   &quot;choose a subset, xor is x&quot;          xor convolution of (1 + z^a_i) terms,</span>
+<span class="c">//                                        or an xor basis if you only need</span>
+<span class="c">//                                        reachability -- DP/sub-problems xorbasis.cpp</span>
+<span class="c">//   xor-sum over all subsets             usually the basis, not this</span>
+<span class="c">//   SUBSET-SUM convolution (disjoint     ranked transform: add a &quot;popcount</span>
+<span class="c">//     union only, i &amp; j == 0)            layer&quot; dimension, or convolution</span>
+<span class="c">//                                        over 2^n * n</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS: sums of indices -&gt; math/fft_ntt.cpp. Aggregating over submasks</span>
+<span class="c">//   (not convolving) -&gt; SOS DP, DP/sos.cpp, which is O(2^n * n) and simpler.</span>
+<span class="c">// ============================================================================</span>
+
+<span class="c">// dir = +1 forward, -1 inverse</span>
+<span class="k">void</span> fwht_xor(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a, <span class="k">int</span> dir) {
+    <span class="k">int</span> n = a.size();
+    <span class="k">for</span> (<span class="k">int</span> len = <span class="n">1</span>; len &lt; n; len &lt;&lt;= <span class="n">1</span>)
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i += len &lt;&lt; <span class="n">1</span>)
+            <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; len; j++) {
+                <span class="t">ll</span> u = a[i + j], v = a[i + j + len];
+                a[i + j] = u + v, a[i + j + len] = u - v;
+            }
+    <span class="k">if</span> (dir &lt; <span class="n">0</span>)
+        <span class="k">for</span> (<span class="t">ll</span> &amp;x : a) x /= n;                 <span class="c">// ONLY xor divides -- see the box</span>
+}
+<span class="k">void</span> fwht_or(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a, <span class="k">int</span> dir) {
+    <span class="k">int</span> n = a.size();
+    <span class="k">for</span> (<span class="k">int</span> len = <span class="n">1</span>; len &lt; n; len &lt;&lt;= <span class="n">1</span>)
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i += len &lt;&lt; <span class="n">1</span>)
+            <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; len; j++)
+                a[i + j + len] += dir * a[i + j];
+}
+<span class="k">void</span> fwht_and(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a, <span class="k">int</span> dir) {
+    <span class="k">int</span> n = a.size();
+    <span class="k">for</span> (<span class="k">int</span> len = <span class="n">1</span>; len &lt; n; len &lt;&lt;= <span class="n">1</span>)
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i += len &lt;&lt; <span class="n">1</span>)
+            <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; len; j++)
+                a[i + j] += dir * a[i + j + len];
+}
+<span class="c">// op: 0 = xor, 1 = or, 2 = and.  a and b must already be the same power of two.</span>
+<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; convolve_bitwise(<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; a, <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; b, <span class="k">int</span> op) {
+    <span class="k">auto</span> T = [&amp;](<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;v, <span class="k">int</span> d) {
+        <span class="k">if</span> (op == <span class="n">0</span>) fwht_xor(v, d);
+        <span class="k">else</span> <span class="k">if</span> (op == <span class="n">1</span>) fwht_or(v, d);
+        <span class="k">else</span> fwht_and(v, d);
+    };
+    T(a, <span class="n">1</span>), T(b, <span class="n">1</span>);
+    <span class="k">for</span> (<span class="t">size_t</span> i = <span class="n">0</span>; i &lt; a.size(); i++) a[i] *= b[i];
+    T(a, -<span class="n">1</span>);
+    <span class="k">return</span> a;
+}</code></pre>
+</div>
+<div class="file" id="bitwise">
+<h2>5.15 &nbsp;bitwise</h2>
+<p class="path">math/bitwise.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// BITWISE -- operations, identities, and the loops that live on them</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Three separate things in one file, because they get reached for together:</span>
+<span class="c">//   [A] the primitives and the builtins</span>
+<span class="c">//   [B] enumeration -- submasks, supermasks, k-subsets</span>
+<span class="c">//   [C] arithmetic expressed bitwise, and the identities worth memorising</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THE FOUR THAT ACTUALLY BITE</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #   1.  1 &lt;&lt; 63  IS UNDEFINED.  `1` is int. Write 1LL &lt;&lt; 63, always. The</span>
+<span class="cbox">// #       same for any shift past 31 on an int -- including 1 &lt;&lt; n inside a</span>
+<span class="cbox">// #       bitmask DP where n reached 32.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #   2.  __builtin_ctz(0) AND __builtin_clz(0) ARE UNDEFINED. They do not</span>
+<span class="cbox">// #       return 32, they return garbage that changes between compilers.</span>
+<span class="cbox">// #       Guard x != 0 before every single call.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #   3.  SHIFTING BY &gt;= THE WIDTH IS UNDEFINED.  x &lt;&lt; 64 on a 64-bit type is</span>
+<span class="cbox">// #       not 0. On x86 it is often x, because the CPU masks the shift count.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #   4.  &amp; AND | BIND LOOSER THAN ==.  `a &amp; 1 == 0` parses as `a &amp; (1 == 0)`</span>
+<span class="cbox">// #       which is `a &amp; 0` which is 0. Parenthesise: `(a &amp; 1) == 0`.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// [A] PRIMITIVES</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   test bit i          (x &gt;&gt; i) &amp; 1</span>
+<span class="c">//   set bit i           x |= 1 &lt;&lt; i</span>
+<span class="c">//   clear bit i         x &amp;= ~(1 &lt;&lt; i)</span>
+<span class="c">//   toggle bit i        x ^= 1 &lt;&lt; i</span>
+<span class="c">//   set i to v          x = (x &amp; ~(1 &lt;&lt; i)) | ((ll)v &lt;&lt; i)</span>
+<span class="c">//</span>
+<span class="c">//   lowest set bit      x &amp; -x            (the VALUE, e.g. 12 -&gt; 4)</span>
+<span class="c">//   clear lowest set    x &amp; (x - 1)       (12 -&gt; 8)   &lt;- the popcount loop</span>
+<span class="c">//   isolate lowest 0    ~x &amp; (x + 1)</span>
+<span class="c">//   all bits below i    (1 &lt;&lt; i) - 1</span>
+<span class="c">//   is a power of two   x &amp;&amp; !(x &amp; (x - 1))</span>
+<span class="c">//   round DOWN to pow2  1 &lt;&lt; __lg(x)</span>
+<span class="c">//   round UP to pow2    x == 1 ? 1 : 1 &lt;&lt; (__lg(x - 1) + 1)</span>
+<span class="c">//</span>
+<span class="c">//   BUILTINS -- add ll for 64-bit: __builtin_popcountll etc.</span>
+<span class="c">//     __builtin_popcount(x)   set bits</span>
+<span class="c">//     __builtin_ctz(x)        trailing zeros = index of lowest set bit</span>
+<span class="c">//     __builtin_clz(x)        leading zeros; 31 - clz(x) = index of highest</span>
+<span class="c">//     __builtin_parity(x)     popcount &amp; 1</span>
+<span class="c">//     __lg(x)                 index of highest set bit, cleaner than 31-clz</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// [C] IDENTITIES WORTH MEMORISING</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   x ^ x = 0        x ^ 0 = x        xor is its own inverse</span>
+<span class="c">//   a + b = (a ^ b) + 2*(a &amp; b)        xor is add-without-carry, and is the</span>
+<span class="c">//   a + b = (a | b) + (a &amp; b)          reason &quot;sum vs xor&quot; problems reduce to</span>
+<span class="c">//                                      &quot;where do carries happen&quot;</span>
+<span class="c">//   a | b = (a ^ b) + (a &amp; b)</span>
+<span class="c">//   -x    = ~x + 1                     two&#x27;s complement</span>
+<span class="c">//   x &amp; -x                             lowest set bit, and why Fenwick works</span>
+<span class="c">//</span>
+<span class="c">//   XOR OF 1..n, closed form -- n%4: 0 -&gt; n, 1 -&gt; 1, 2 -&gt; n+1, 3 -&gt; 0</span>
+<span class="c">//     so xor over [l, r] is xor1n(r) ^ xor1n(l-1). Constant time.</span>
+<span class="c">//</span>
+<span class="c">//   nCr IS ODD  &lt;=&gt;  (n &amp; r) == r        (Lucas mod 2 -- r is a submask of n)</span>
+<span class="c">//     so the number of odd entries in row n is 2^popcount(n).</span>
+<span class="c">//</span>
+<span class="c">//   a + b = (a ^ b) when a &amp; b == 0      disjoint bits: sum == xor == or</span>
+<span class="c">//     This is the whole reason &quot;partition into two sets with equal xor&quot; and</span>
+<span class="c">//     &quot;sum equals xor&quot; problems are really about disjointness.</span>
+<span class="c">//</span>
+<span class="c">//   GRAY CODE   g(i) = i ^ (i &gt;&gt; 1)      consecutive codes differ in one bit</span>
+<span class="c">//     inverse: for (; j; j &gt;&gt;= 1) i ^= j;   (start j = g, i = g)</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS -- what bitwise turns into</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   subset DP over n &lt;= 20 items        [B] iterate submasks, O(3^n)</span>
+<span class="c">//   &quot;for each mask, sum over submasks&quot;  SOS DP -- DP/sos.cpp</span>
+<span class="c">//   maximum xor of a pair               binary trie, DS/Trie/binary_trie.cpp</span>
+<span class="c">//   max xor of a SUBSET                 xor basis, DP/sub-problems xorbasis.cpp</span>
+<span class="c">//   count pairs with a&amp;b == 0           SOS over the complement</span>
+<span class="c">//   count pairs with a|b == full        same, complemented</span>
+<span class="c">//   count pairs by popcount             bucket by __builtin_popcount</span>
+<span class="c">//   Nim / impartial games               xor of Grundy numbers</span>
+<span class="c">//   &quot;even number of every type&quot;         parity vector, then xor basis</span>
+<span class="c">//   choose k of n, all combinations     [B] Gosper&#x27;s hack</span>
+<span class="c">//   feasibility over a boolean DP       bitset, DS/bitset.cpp</span>
+<span class="c">//   subset sum reachable                bitset shifts, DS/bitset.cpp [1]</span>
+<span class="c">//   binary lifting / doubling           the exponent IS the bit decomposition</span>
+<span class="c">//   lowest set bit as a tree index      Fenwick, DS/BIT/</span>
+<span class="c">// ============================================================================</span>
+
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// [B] ENUMERATION</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+
+<span class="c">// every SUBMASK of mask, including mask and 0. O(2^popcount(mask)).</span>
+<span class="c">// Over all masks this is O(3^n), not O(4^n) -- each bit is in/out/absent.</span>
+<span class="k">void</span> submasks(<span class="k">int</span> mask) {
+    <span class="k">for</span> (<span class="k">int</span> s = mask;; s = (s - <span class="n">1</span>) &amp; mask) {
+        <span class="c">// s is a submask of mask</span>
+        <span class="k">if</span> (!s) <span class="k">break</span>;
+    }
+}
+<span class="c">// every SUPERMASK of mask within n bits. Also O(3^n) overall.</span>
+<span class="k">void</span> supermasks(<span class="k">int</span> mask, <span class="k">int</span> n) {
+    <span class="k">for</span> (<span class="k">int</span> s = mask; s &lt; (<span class="n">1</span> &lt;&lt; n); s = (s + <span class="n">1</span>) | mask) {
+        <span class="c">// s contains mask</span>
+    }
+}
+<span class="c">// GOSPER&#x27;S HACK -- next integer with the same popcount.</span>
+<span class="c">// Walks every k-subset of n bits in increasing order.</span>
+<span class="c">//   for (int x = (1&lt;&lt;k)-1; x &lt; (1&lt;&lt;n); x = next_same_popcount(x))</span>
+<span class="k">int</span> next_same_popcount(<span class="k">int</span> x) {
+    <span class="k">int</span> c = x &amp; -x, r = x + c;
+    <span class="k">return</span> (((r ^ x) &gt;&gt; <span class="n">2</span>) / c) | r;
+}
+
+<span class="c">// xor of 0..n inclusive, O(1)</span>
+<span class="t">ll</span> xor1n(<span class="t">ll</span> n) {
+    <span class="k">if</span> (n &lt; <span class="n">0</span>) <span class="k">return</span> <span class="n">0</span>;
+    <span class="k">switch</span> (n &amp; <span class="n">3</span>) {
+        <span class="k">case</span> <span class="n">0</span>: <span class="k">return</span> n;
+        <span class="k">case</span> <span class="n">1</span>: <span class="k">return</span> <span class="n">1</span>;
+        <span class="k">case</span> <span class="n">2</span>: <span class="k">return</span> n + <span class="n">1</span>;
+        <span class="k">default</span>: <span class="k">return</span> <span class="n">0</span>;
+    }
+}
+<span class="t">ll</span> xor_range(<span class="t">ll</span> l, <span class="t">ll</span> r) { <span class="k">return</span> xor1n(r) ^ xor1n(l - <span class="n">1</span>); }
+
+<span class="c">// nCr is odd  &lt;=&gt;  r is a submask of n</span>
+<span class="k">bool</span> ncr_is_odd(<span class="t">ll</span> n, <span class="t">ll</span> r) { <span class="k">return</span> (n &amp; r) == r; }
+
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// [C] ARITHMETIC WITHOUT + - * /</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// Not faster than the operators -- the compiler emits better code. They are</span>
+<span class="c">// here because problems ASK for them (&quot;no arithmetic operators&quot;), and because</span>
+<span class="c">// the add loop is the clearest statement of what a carry is.</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="t">ll</span> bit_add(<span class="t">ll</span> a, <span class="t">ll</span> b) {                 <span class="c">// xor is the sum, and is the carry</span>
+    <span class="k">while</span> (b) {
+        <span class="t">ll</span> carry = (<span class="t">ll</span>)((<span class="k">unsigned</span> <span class="k">long</span> <span class="k">long</span>)(a &amp; b) &lt;&lt; <span class="n">1</span>);   <span class="c">// shift unsigned: signed overflow is UB</span>
+        a ^= b, b = carry;
+    }
+    <span class="k">return</span> a;
+}
+<span class="t">ll</span> bit_neg(<span class="t">ll</span> a) { <span class="k">return</span> bit_add(~a, <span class="n">1</span>); }
+<span class="t">ll</span> bit_sub(<span class="t">ll</span> a, <span class="t">ll</span> b) { <span class="k">return</span> bit_add(a, bit_neg(b)); }
+
+<span class="t">ll</span> bit_mul(<span class="t">ll</span> a, <span class="t">ll</span> b) {                 <span class="c">// shift-and-add, the schoolbook method</span>
+    <span class="k">bool</span> neg = (a &lt; <span class="n">0</span>) ^ (b &lt; <span class="n">0</span>);
+    <span class="k">unsigned</span> <span class="k">long</span> <span class="k">long</span> x = a &lt; <span class="n">0</span> ? -(<span class="k">unsigned</span> <span class="k">long</span> <span class="k">long</span>)a : (<span class="k">unsigned</span> <span class="k">long</span> <span class="k">long</span>)a;
+    <span class="k">unsigned</span> <span class="k">long</span> <span class="k">long</span> y = b &lt; <span class="n">0</span> ? -(<span class="k">unsigned</span> <span class="k">long</span> <span class="k">long</span>)b : (<span class="k">unsigned</span> <span class="k">long</span> <span class="k">long</span>)b;
+    <span class="k">unsigned</span> <span class="k">long</span> <span class="k">long</span> r = <span class="n">0</span>;
+    <span class="k">for</span> (; y; y &gt;&gt;= <span class="n">1</span>, x &lt;&lt;= <span class="n">1</span>)
+        <span class="k">if</span> (y &amp; <span class="n">1</span>) r += x;
+    <span class="k">return</span> neg ? -(<span class="t">ll</span>)r : (<span class="t">ll</span>)r;
+}
+<span class="c">// floor division for NON-NEGATIVE inputs, by long division on bits</span>
+<span class="t">ll</span> bit_div(<span class="t">ll</span> a, <span class="t">ll</span> b) {
+    <span class="t">ll</span> q = <span class="n">0</span>, rem = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">62</span>; i &gt;= <span class="n">0</span>; i--) {
+        rem = (rem &lt;&lt; <span class="n">1</span>) | ((a &gt;&gt; i) &amp; <span class="n">1</span>);
+        <span class="k">if</span> (rem &gt;= b) rem -= b, q |= <span class="n">1LL</span> &lt;&lt; i;
+    }
+    <span class="k">return</span> q;
+}
+<span class="c">// branchless min/max: -(x &lt; y) is all-ones when true, all-zeros when false</span>
+<span class="t">ll</span> bit_min(<span class="t">ll</span> x, <span class="t">ll</span> y) { <span class="k">return</span> y ^ ((x ^ y) &amp; -(<span class="t">ll</span>)(x &lt; y)); }
+<span class="t">ll</span> bit_max(<span class="t">ll</span> x, <span class="t">ll</span> y) { <span class="k">return</span> x ^ ((x ^ y) &amp; -(<span class="t">ll</span>)(x &lt; y)); }
+<span class="t">ll</span> bit_abs(<span class="t">ll</span> x) { <span class="t">ll</span> m = x &gt;&gt; <span class="n">63</span>; <span class="k">return</span> (x ^ m) - m; }
+
+<span class="c">// gray code and back</span>
+<span class="t">ll</span> gray(<span class="t">ll</span> i) { <span class="k">return</span> i ^ (i &gt;&gt; <span class="n">1</span>); }
+<span class="t">ll</span> ungray(<span class="t">ll</span> g) { <span class="t">ll</span> i = <span class="n">0</span>; <span class="k">for</span> (<span class="t">ll</span> j = g; j; j &gt;&gt;= <span class="n">1</span>) i ^= j; <span class="k">return</span> i; }</code></pre>
+</div>
+<div class="file" id="randomization">
+<h2>5.16 &nbsp;randomization</h2>
+<p class="path">math/randomization.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// RANDOMIZATION -- when randomness is the algorithm, not the input</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// The MECHANICS (mt19937 seeding, uniform_int_distribution, shuffle) are in the</span>
+<span class="c">// other team&#x27;s Misc sheet. This file is the part that decides problems: WHEN</span>
+<span class="c">// randomising turns something hard into something easy, and what failure</span>
+<span class="c">// probability you are accepting.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  SEED FROM THE CLOCK, NEVER FROM A CONSTANT</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #      mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  A fixed seed is deterministic, so an anti-test written against your</span>
+<span class="cbox">// #  submission works every time. This matters on Codeforces open hacking and</span>
+<span class="cbox">// #  on any judge with rejudging.</span>
+<span class="cbox">// #  rand() is worse still: 15-bit RAND_MAX on MinGW, and a weak generator.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  MONTE CARLO vs LAS VEGAS -- know which one you shipped</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #    Monte Carlo   always fast, sometimes WRONG.  Choose the repeat count so</span>
+<span class="cbox">// #                  the error probability is negligible.</span>
+<span class="cbox">// #    Las Vegas     always right, sometimes SLOW.  Expected time is the claim.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  k independent trials each wrong with probability p give error p^k.</span>
+<span class="cbox">// #  p = 1/2, k = 60  -&gt;  1e-18. That is the usual budget: 30-60 rounds.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// WHERE RANDOMNESS IS THE ANSWER</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// [1] VERIFY A PRODUCT WITHOUT COMPUTING IT -- Freivalds, below.</span>
+<span class="c">//     &quot;Is A*B == C&quot; in O(n^2) instead of O(n^3). Multiply by a random 0/1</span>
+<span class="c">//     vector: A(Bx) vs Cx. If A*B != C the test fails with probability &gt;= 1/2</span>
+<span class="c">//     per trial, so 30 trials is certainty in practice.</span>
+<span class="c">//</span>
+<span class="c">// [2] KILL THE ADVERSARIAL CASE by shuffling.</span>
+<span class="c">//     Quicksort pivots, unordered_map insertion order, &quot;sorted input&quot; traps.</span>
+<span class="c">//     shuffle(v.begin(), v.end(), rng) before sorting or inserting removes the</span>
+<span class="c">//     worst case entirely. Also the fix for anti-quicksort tests.</span>
+<span class="c">//     unordered_map is attackable on Codeforces -- use a splitmix64 custom hash</span>
+<span class="c">//     with a clock-seeded salt, or just use map.</span>
+<span class="c">//</span>
+<span class="c">// [3] SALT YOUR HASHES. A fixed base is what anti-hash tests target. Random</span>
+<span class="c">//     base per run makes a targeted collision impossible.</span>
+<span class="c">//     hashing/hash.cpp does this; hashing/hash_ms.cpp is Zobrist, which IS</span>
+<span class="c">//     this idea taken all the way.</span>
+<span class="c">//</span>
+<span class="c">// [4] RANDOM SAMPLING FOR MAJORITY / HEAVY ELEMENTS.</span>
+<span class="c">//     &quot;Does some value occupy more than half the range?&quot; Sample 30 positions</span>
+<span class="c">//     and test each properly. A majority element is picked with probability</span>
+<span class="c">//     1 - 2^-30. Generalises: an element with frequency &gt; 1/k needs ~k*30</span>
+<span class="c">//     samples. Turns many &quot;range majority&quot; problems into a check plus a</span>
+<span class="c">//     frequency structure.</span>
+<span class="c">//</span>
+<span class="c">// [5] BREAK TIES TO MAKE A SOLUTION UNIQUE. Add tiny random weights and the</span>
+<span class="c">//     minimum becomes unique with high probability (isolation lemma). Useful</span>
+<span class="c">//     when an algorithm needs &quot;the unique minimum&quot; to be well defined.</span>
+<span class="c">//</span>
+<span class="c">// [6] RANDOM PIVOT / RANDOM ORDER makes many expected bounds work:</span>
+<span class="c">//     nth_element is O(n) expected, treap priorities are random on purpose</span>
+<span class="c">//     (DS/bst/treap_implicit.cpp), and randomized incremental construction is</span>
+<span class="c">//     how smallest-enclosing-circle gets to O(n).</span>
+<span class="c">//</span>
+<span class="c">// [7] BIRTHDAY BOUND. Among k random values from a space of size N, a</span>
+<span class="c">//     collision appears once k ~ sqrt(N). Two consequences:</span>
+<span class="c">//       - 64-bit hashes collide at ~2^32 items. Fine for n = 1e6, not for a</span>
+<span class="c">//         structure that hashes 1e10 things.</span>
+<span class="c">//       - Pollard&#x27;s rho and BSGS both live on this bound.</span>
+<span class="c">//</span>
+<span class="c">// [8] WHEN NOTHING ELSE FITS: random restarts / simulated annealing for</span>
+<span class="c">//     NP-hard optimisation with a generous time limit. Last resort, but it</span>
+<span class="c">//     scores on problems where nothing exact fits.</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   rng() % k is BIASED when k does not divide 2^64. It rarely matters for</span>
+<span class="c">//     generating tests; it matters when the argument depends on uniformity.</span>
+<span class="c">//     Use uniform_int_distribution then.</span>
+<span class="c">//   &quot;Random&quot; tests are not adversarial tests. See stress/gen.cpp -- a uniform</span>
+<span class="c">//     random tree will not find your stack overflow.</span>
+<span class="c">//   Do not reseed inside a loop. Construct the generator once, globally.</span>
+<span class="c">// ============================================================================</span>
+<span class="t">mt19937_64</span> rng(chrono::steady_clock::now().time_since_epoch().count());
+
+<span class="t">ll</span> rnd(<span class="t">ll</span> l, <span class="t">ll</span> r) { <span class="k">return</span> uniform_int_distribution&lt;<span class="t">ll</span>&gt;(l, r)(rng); }
+
+<span class="c">// [1] FREIVALDS -- is A*B == C? O(n^2) per trial, error &lt;= 2^-trials.</span>
+<span class="c">// Returns false only if it is CERTAIN they differ; true means &quot;probably equal&quot;.</span>
+<span class="k">bool</span> freivalds(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; &amp;A, <span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; &amp;B,
+               <span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; &amp;C, <span class="k">int</span> n, <span class="t">ll</span> mod, <span class="k">int</span> trials = <span class="n">30</span>) {
+    <span class="k">for</span> (<span class="k">int</span> t = <span class="n">0</span>; t &lt; trials; t++) {
+        <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; x(n), Bx(n, <span class="n">0</span>), ABx(n, <span class="n">0</span>), Cx(n, <span class="n">0</span>);
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) x[i] = rnd(<span class="n">0</span>, <span class="n">1</span>);
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)
+            <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; n; j++) Bx[i] = (Bx[i] + B[i][j] * x[j]) % mod;
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)
+            <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; n; j++) ABx[i] = (ABx[i] + A[i][j] * Bx[j]) % mod;
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)
+            <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; n; j++) Cx[i] = (Cx[i] + C[i][j] * x[j]) % mod;
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)
+            <span class="k">if</span> (((ABx[i] - Cx[i]) % mod + mod) % mod) <span class="k">return</span> <span class="k">false</span>;
+    }
+    <span class="k">return</span> <span class="k">true</span>;
+}
+<span class="c">// [4] sample-based majority: is there a value covering more than half of v?</span>
+<span class="c">// Returns it, or -1. Wrong with probability &lt;= 2^-trials when one exists.</span>
+<span class="t">ll</span> sampled_majority(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;v, <span class="k">int</span> trials = <span class="n">30</span>) {
+    <span class="k">int</span> n = v.size();
+    <span class="k">if</span> (!n) <span class="k">return</span> -<span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> t = <span class="n">0</span>; t &lt; trials; t++) {
+        <span class="t">ll</span> cand = v[rnd(<span class="n">0</span>, n - <span class="n">1</span>)];
+        <span class="k">int</span> c = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="t">ll</span> x : v) c += (x == cand);
+        <span class="k">if</span> (c * <span class="n">2</span> &gt; n) <span class="k">return</span> cand;
+    }
+    <span class="k">return</span> -<span class="n">1</span>;
+}
+<span class="c">// [2] custom hash for unordered_map / gp_hash_table -- defeats anti-hash tests</span>
+<span class="k">struct</span> SafeHash {
+    <span class="k">static</span> <span class="t">uint64_t</span> splitmix64(<span class="t">uint64_t</span> x) {
+        x += <span class="n">0x9e3779b97f4a7c15ULL</span>;
+        x = (x ^ (x &gt;&gt; <span class="n">30</span>)) * <span class="n">0xbf58476d1ce4e5b9ULL</span>;
+        x = (x ^ (x &gt;&gt; <span class="n">27</span>)) * <span class="n">0x94d049bb133111ebULL</span>;
+        <span class="k">return</span> x ^ (x &gt;&gt; <span class="n">31</span>);
+    }
+    <span class="t">size_t</span> <span class="k">operator</span>()(<span class="t">uint64_t</span> x) <span class="k">const</span> {
+        <span class="k">static</span> <span class="k">const</span> <span class="t">uint64_t</span> SALT =
+            chrono::steady_clock::now().time_since_epoch().count();
+        <span class="k">return</span> splitmix64(x + SALT);
+    }
+};</code></pre>
+</div>
+<div class="file" id="compare_fractions">
+<h2>5.17 &nbsp;compare_fractions</h2>
+<p class="path">math/compare_fractions.cpp</p>
+<pre><code><span class="k">bool</span> cmp(<span class="t">pair</span>&lt;<span class="k">long</span> <span class="k">long</span>,<span class="k">long</span> <span class="k">long</span>&gt; a,<span class="t">pair</span>&lt;<span class="k">long</span> <span class="k">long</span>,<span class="k">long</span> <span class="k">long</span>&gt; b)
+{
+  <span class="k">return</span> a.first * b.second &lt; a.second * b.first;
+}</code></pre>
+</div>
+<div class="file" id="notes">
+<h2>5.18 &nbsp;notes</h2>
+<p class="path">math/notes.cpp</p>
+<pre><code><span class="c">//All primes greater than 3 can be written in the form 6k + or - 1</span></code></pre>
+</div>
+</div>

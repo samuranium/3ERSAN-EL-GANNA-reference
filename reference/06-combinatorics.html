@@ -1,0 +1,962 @@
+<title>Combinatorics — 3ERSAN EL GANNA</title>
+<style>
+:root{
+  --paper:#ffffff; --ink:#16181c; --soft:#5a6470; --faint:#8b939d;
+  --rule:#d5dade; --rule2:#aeb6bd;
+  --accent:#0d5f6b;
+  --c:#4f7a5e;        /* comment            */
+  --cbox:#8a5a12;     /* #### box comment   */
+  --k:#1f4f9c;        /* keyword            */
+  --t:#0d6b6b;        /* type               */
+  --s:#8a4520;        /* string             */
+  --n:#8a3d6b;        /* number             */
+  --pp:#6a3d9c;       /* preprocessor       */
+  --codebg:#fafbfb;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+    --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+    --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+    --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+  --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+  --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+  --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:10.5pt; line-height:1.5;
+}
+.wrap{max-width:52rem;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+h1{font-size:1.9rem;line-height:1.15;margin:0 0 .35rem;letter-spacing:-.01em}
+.blurb{color:var(--soft);margin:0 0 .3rem;max-width:52ch}
+.meta{color:var(--faint);font-size:.85em;margin:0}
+hr{border:none;border-top:3px double var(--rule2);margin:1.6rem 0}
+
+h2{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:1.02rem;margin:0 0 .1rem;letter-spacing:-.01em;
+  color:var(--accent);
+  break-after:avoid; page-break-after:avoid;
+}
+.path{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.78em;color:var(--faint);margin:0 0 .45rem;
+  break-after:avoid; page-break-after:avoid;
+}
+.file{ margin:0 0 1.5rem; break-inside:auto; }
+
+/* ---- table of contents ---- */
+.toc{margin:0 0 1rem}
+.toc h2{color:var(--ink);font-size:1.05rem;margin-bottom:.5rem}
+.toc .grp{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--faint);margin:.75rem 0 .2rem;
+}
+.toc ol{list-style:none;margin:0;padding:0;
+  columns:2; column-gap:2rem;}
+.toc li{break-inside:avoid;margin:.08rem 0;font-size:.92em}
+.toc a{color:var(--ink);text-decoration:none;
+  display:flex;justify-content:space-between;gap:.5rem;align-items:baseline}
+.toc a:hover{color:var(--accent)}
+.toc .num{color:var(--faint);font-size:.85em;
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-variant-numeric:tabular-nums}
+
+/* ---- code ---- */
+pre{
+  margin:0; background:var(--codebg);
+  border:1px solid var(--rule); border-radius:3px;
+  padding:.6rem .75rem;
+  font-family:ui-monospace,"Cascadia Mono","DejaVu Sans Mono",Consolas,Menlo,monospace;
+  font-size:8.6pt; line-height:1.38;
+  white-space:pre-wrap;
+  overflow-wrap:break-word;
+  padding-left:2.2em; text-indent:-1.6em;   /* hanging indent on wrapped lines */
+  tab-size:4;
+}
+code{font-family:inherit}
+.c{color:var(--c)}
+.cbox{color:var(--cbox);font-weight:600}
+.k{color:var(--k);font-weight:600}
+.t{color:var(--t)}
+.s{color:var(--s)}
+.n{color:var(--n)}
+.pp{color:var(--pp)}
+
+/* ---- prose blocks (the already-markdown index files) ---- */
+.prose{font-size:.95em}
+.prose table{border-collapse:collapse;width:100%;margin:.5rem 0;font-size:.88em}
+.prose th,.prose td{border:1px solid var(--rule);padding:.28rem .5rem;
+  text-align:left;vertical-align:top}
+.prose th{background:var(--codebg);font-weight:650}
+.prose h3{font-size:1rem;margin:1rem 0 .3rem;color:var(--accent);
+  break-after:avoid;page-break-after:avoid}
+.prose h4{font-size:.92rem;margin:.8rem 0 .25rem;
+  break-after:avoid;page-break-after:avoid}
+.prose code{background:var(--codebg);padding:.05em .3em;border-radius:2px;
+  font-size:.9em;border:1px solid var(--rule)}
+.prose ul,.prose ol{padding-left:1.2rem;margin:.4rem 0}
+.prose li{margin:.15rem 0}
+.prose p{margin:.4rem 0}
+
+/* ---- print ---- */
+@page{ size:A4; margin:13mm 11mm; }
+@media print{
+  :root{
+    --paper:#fff; --ink:#000; --soft:#333; --faint:#555;
+    --rule:#bbb; --rule2:#888; --codebg:#fbfbfb; --accent:#0a4a55;
+  }
+  body{font-size:10pt}
+  .wrap{max-width:none;padding:0;margin:0}
+  .noprint{display:none !important}
+  pre{font-size:8.2pt;border-color:#ccc;break-inside:auto}
+  h2{break-after:avoid;page-break-after:avoid}
+  .path{break-after:avoid;page-break-after:avoid}
+  .file{break-inside:auto}
+  .toc{break-after:page;page-break-after:always}
+  a{color:inherit;text-decoration:none}
+  .prose tr{break-inside:avoid}
+}
+
+.hint{
+  background:var(--codebg);border:1px solid var(--rule);
+  border-left:4px double var(--rule2);
+  border-radius:3px;padding:.7rem .9rem;margin:0 0 1.4rem;
+  font-size:.9em;color:var(--soft)
+}
+.hint b{color:var(--ink)}
+</style>
+<div class="wrap">
+<h1>6. Combinatorics</h1>
+<p class="blurb">Counting, symmetry, determinant formulas.</p>
+<p class="meta">6 files · 3ERSAN EL GANNA team reference</p>
+<div class="hint noprint"><b>To make the PDF:</b> Ctrl+P → Destination <b>Save as PDF</b> → turn ON <b>Background graphics</b> (for the coloured code) and <b>Headers and footers</b> (for page numbers) → Margins <b>Default</b>. This box does not print.</div>
+<div class="toc"><h2>Contents</h2>
+<ol>
+<li><a href="#ncr_with_mod"><span>nCr_with_mod</span><span class="num">6.1</span></a></li>
+<li><a href="#ncr_without_mod"><span>nCr_without_mod</span><span class="num">6.2</span></a></li>
+<li><a href="#catalan"><span>catalan</span><span class="num">6.3</span></a></li>
+<li><a href="#stirling"><span>stirling</span><span class="num">6.4</span></a></li>
+<li><a href="#burnside"><span>burnside</span><span class="num">6.5</span></a></li>
+<li><a href="#counting_formulas"><span>counting_formulas</span><span class="num">6.6</span></a></li>
+</ol>
+</div>
+<div class="file" id="ncr_with_mod">
+<h2>6.1 &nbsp;nCr_with_mod</h2>
+<p class="path">combinatorics/nCr_with_mod.cpp</p>
+<pre><code><span class="pp">#include &lt;bits/stdc++.h&gt;</span>
+<span class="k">const</span> <span class="k">int</span> N = <span class="n">2</span><span class="s">&#x27;000&#x27;</span><span class="n">123</span>, mod = <span class="c">//1&#x27;000&#x27;000&#x27;007;</span>
+<span class="k">int</span> fac[N], ifac[N], n;
+<span class="k">int</span> add(<span class="k">int</span>  a, <span class="k">int</span> b){ <span class="k">return</span> (a += b) &lt; mod? a : a - mod; }
+<span class="k">int</span> subt(<span class="k">int</span> a, <span class="k">int</span> b){ <span class="k">return</span> (a -= b) &lt; <span class="n">0</span>? a + mod : a; }
+<span class="k">int</span> mult(<span class="k">int</span> a, <span class="k">int</span> b){ <span class="k">return</span> <span class="n">1ll</span>*a*b%mod; }
+<span class="k">int</span> fp(<span class="k">int</span> b, <span class="k">int</span> e){
+  <span class="k">int</span> r = <span class="n">1</span>;
+  <span class="k">for</span>(; e; b = mult(b, b), e &gt;&gt;= <span class="n">1</span>)
+    <span class="k">if</span>(e&amp;<span class="n">1</span>) r = mult(r, b); 
+  <span class="k">return</span> r;
+}
+<span class="k">int</span> divi(<span class="k">int</span> a, <span class="k">int</span> b){ <span class="k">return</span> mult(a, fp(b, mod-<span class="n">2</span>)); }
+<span class="k">int</span> ncr(<span class="k">int</span> n, <span class="k">int</span> r){
+  <span class="k">if</span>(n &lt; r || r &lt; <span class="n">0</span>) <span class="k">return</span> <span class="n">0</span>;
+  <span class="k">return</span> mult(fac[n], mult(ifac[n - r], ifac[r]));
+}
+<span class="k">int</span> main(){ 
+  ifac[<span class="n">0</span>] = fac[<span class="n">0</span>] = <span class="n">1</span>;
+  <span class="k">for</span>(<span class="k">int</span> i = <span class="n">1</span>; i &lt; N; i++)
+    fac[i] = mult(fac[i-<span class="n">1</span>], i);
+  ifac[N-<span class="n">1</span>] = fp(fac[N-<span class="n">1</span>], mod-<span class="n">2</span>);
+  <span class="k">for</span>(<span class="k">int</span> i = N-<span class="n">2</span>; i &gt; <span class="n">0</span>; i--)
+    ifac[i] = mult(ifac[i+<span class="n">1</span>], i+<span class="n">1</span>);
+}
+<span class="c">/////////////////////////////////////////////////////////////////</span>
+<span class="c">/////////////////////////////////////////////////////////////////</span>
+
+<span class="k">int</span> factorial[n + <span class="n">1</span>] = {}, factorial_inverse[n + <span class="n">1</span>] = {};
+<span class="k">int</span> mult(<span class="k">long</span> <span class="k">long</span> a, <span class="k">int</span> b) { <span class="c">// be careful a , b &lt; mod</span>
+  <span class="k">return</span> a * b % mod;
+}
+<span class="k">int</span> fp(<span class="k">int</span> b, <span class="k">int</span> p) {
+  <span class="k">int</span> result = <span class="n">1</span>;
+  <span class="k">while</span> (p &gt; <span class="n">0</span>)
+  {
+    <span class="k">if</span> (p &amp; <span class="n">1</span>) {
+      result = mult(result, b);
+    }
+    b = mult(b, b);
+    p /= <span class="n">2</span>;
+  }
+  <span class="k">return</span> result;
+}
+<span class="k">void</span> init(<span class="k">int</span> n) {
+  factorial[<span class="n">0</span>] = <span class="n">1</span>;
+  <span class="k">for</span>(<span class="k">int</span> i = <span class="n">1</span>; i &lt;= n; ++i) {
+    factorial[i] = mult(factorial[i - <span class="n">1</span>], i);
+  }
+  factorial_inverse[n] = fp(factorial[n], mod - <span class="n">2</span>);
+  <span class="k">for</span>(<span class="k">int</span> i = n - <span class="n">1</span>; i &gt;= <span class="n">0</span>; --i) {
+    factorial_inverse[i] = mult(factorial_inverse[i + <span class="n">1</span>], (i + <span class="n">1</span>));
+  }
+}
+<span class="k">int</span> nCr(<span class="k">int</span> n, <span class="k">int</span> r) {
+  <span class="k">if</span> (r &lt; <span class="n">0</span> || r &gt; n) <span class="k">return</span> <span class="n">0</span>;
+  <span class="k">return</span> mult(mult(factorial[n], factorial_inverse[r]), factorial_inverse[n - r]);
+}</code></pre>
+</div>
+<div class="file" id="ncr_without_mod">
+<h2>6.2 &nbsp;nCr_without_mod</h2>
+<p class="path">combinatorics/nCr_without_mod.cpp</p>
+<pre><code><span class="k">int</span> nCr[N][N] = {};
+<span class="k">for</span>(<span class="k">int</span> i = <span class="n">0</span>; i &lt; N; ++i)
+{
+  nCr[i][<span class="n">0</span>] = <span class="n">1</span>;
+  <span class="k">for</span>(<span class="k">int</span> j = <span class="n">1</span>; j &lt;= i; ++j)
+  {
+    nCr[i][j] = nCr[i - <span class="n">1</span>][j - <span class="n">1</span>] + nCr[i - <span class="n">1</span>][j];
+  }
+}
+
+<span class="k">int</span> nPr[N][N] = {};
+<span class="k">for</span>(<span class="k">int</span> i = <span class="n">0</span>; i &lt; N; ++i)
+{
+  nPr[i][<span class="n">0</span>] = <span class="n">1</span>;
+  <span class="k">for</span>(<span class="k">int</span> j = <span class="n">1</span>; j &lt;= i; ++j)
+  {
+    nPr[i][j] = j * nPr[i - <span class="n">1</span>][j - <span class="n">1</span>] + nPr[i - <span class="n">1</span>][j]; <span class="c">// overflow</span>
+  }
+}</code></pre>
+</div>
+<div class="file" id="catalan">
+<h2>6.3 &nbsp;catalan</h2>
+<p class="path">combinatorics/catalan.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// CATALAN NUMBERS -- C(n) = 1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, ...</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   C(n) = binom(2n, n) / (n+1)  =  binom(2n, n) - binom(2n, n+1)</span>
+<span class="c">//   C(n) = sum over i of C(i)*C(n-1-i)          (split at the matching close)</span>
+<span class="c">//   C(n) = C(n-1) * 2(2n-1) / (n+1)             (one step, no factorials)</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  RECOGNISING IT -- the shape behind every application below</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Count sequences of n &quot;+1&quot; and n &quot;-1&quot; whose every PREFIX SUM stays &gt;= 0.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Open/close, push/pop, up/right, left-child/right-child -- they are all</span>
+<span class="cbox">// #  that one statement. If you can phrase your objects as a walk that must</span>
+<span class="cbox">// #  never go below zero and ends at zero, the answer is C(n).</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  The proof is the reflection argument, and it is also the formula:</span>
+<span class="cbox">// #  binom(2n,n) total walks minus binom(2n,n+1) bad ones.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THE OFF-BY-ONE THAT COSTS THE MOST</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  n TRIANGLES from a polygon needs C(n) but the polygon has n+2 VERTICES.</span>
+<span class="cbox">// #  n INTERNAL NODES in a binary tree gives C(n) shapes, but n NODES TOTAL</span>
+<span class="cbox">// #  also gives C(n) -- different trees, same count, different n.</span>
+<span class="cbox">// #  Always fix WHICH quantity is n by checking a tiny case by hand:</span>
+<span class="cbox">// #  a square (4 vertices) has 2 triangulations, and C(2) = 2.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// APPLICATIONS -- all of these are C(n), and all are the same problem</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   balanced bracket sequences of length 2n</span>
+<span class="c">//   ways to fully parenthesise n+1 factors</span>
+<span class="c">//   rooted binary trees with n internal nodes (or n nodes -- see the box)</span>
+<span class="c">//   triangulations of a convex polygon with n+2 vertices</span>
+<span class="c">//   monotone lattice paths from (0,0) to (n,n) staying weakly below y = x</span>
+<span class="c">//   permutations of 1..n that are STACK-SORTABLE</span>
+<span class="c">//   permutations avoiding any ONE pattern of length 3 (231, 132, ...)</span>
+<span class="c">//   non-crossing partitions of an n-set</span>
+<span class="c">//   non-crossing chord pairings of 2n points on a circle</span>
+<span class="c">//   Dyck paths of semilength n</span>
+<span class="c">//   ways to cut a staircase of height n into n rectangles</span>
+<span class="c">//   rooted plane trees with n+1 vertices</span>
+<span class="c">//   sequences of n pushes and n pops of a stack, never popping empty</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// NEIGHBOURS -- when it is ALMOST Catalan</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   paths that may touch but not cross, from (0,0) to (a,b), staying below</span>
+<span class="c">//     the diagonal          -&gt; BALLOT / cycle lemma:  (a-b)/(a+b) * binom(a+b, a)</span>
+<span class="c">//   paths from (0,0) to (n,n) that must stay strictly below except at the</span>
+<span class="c">//     ends                  -&gt; C(n-1)</span>
+<span class="c">//   paths in a grid avoiding a line y = x + k</span>
+<span class="c">//                           -&gt; reflection again: binom(total, up) - binom(total, up - k - 1)</span>
+<span class="c">//   steps of +1, -1 AND 0 with the same non-negativity condition</span>
+<span class="c">//                           -&gt; MOTZKIN numbers</span>
+<span class="c">//   Dyck paths with exactly k peaks</span>
+<span class="c">//                           -&gt; NARAYANA:  binom(n,k)*binom(n,k-1)/n</span>
+<span class="c">//   binary trees counted by shape AND labels</span>
+<span class="c">//                           -&gt; C(n) * n!</span>
+<span class="c">//   partitions into k non-crossing blocks</span>
+<span class="c">//                           -&gt; Narayana again</span>
+<span class="c">//   &quot;at least as many A as B at every prefix&quot;, |A| != |B|</span>
+<span class="c">//                           -&gt; the ballot formula, not C(n)</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   C(n) grows like 4^n / n^1.5. C(35) already exceeds 2^63 -- work mod p</span>
+<span class="c">//     unless n is tiny.</span>
+<span class="c">//   The division by (n+1) is modular: multiply by the inverse, never integer-</span>
+<span class="c">//     divide. Needs a prime modulus -- math/modular.cpp.</span>
+<span class="c">//   The convolution recurrence is O(n^2); use it only when you need every</span>
+<span class="c">//     value AND the modulus is awkward. The closed form is O(1) per value</span>
+<span class="c">//     after factorials.</span>
+<span class="c">// ============================================================================</span>
+<span class="c">// needs mod / add / mult / fp and factorials -- combinatorics/nCr_with_mod.cpp</span>
+
+<span class="c">// C(n) from factorials, O(1) each once fac/ifac are built</span>
+<span class="k">int</span> catalan(<span class="k">int</span> n) {
+    <span class="k">return</span> mult(ncr(<span class="n">2</span> * n, n), fp(n + <span class="n">1</span>, mod - <span class="n">2</span>));
+}
+<span class="c">// every C(0..n) in O(n) with one inverse per step, no factorials needed</span>
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; catalan_table(<span class="k">int</span> n) {
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; c(n + <span class="n">1</span>);
+    c[<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++)                    <span class="c">// C(i+1) = C(i)*2(2i+1)/(i+2)</span>
+        c[i + <span class="n">1</span>] = mult(mult(c[i], <span class="n">2</span> * (<span class="n">2</span> * i + <span class="n">1</span>) % mod), fp(i + <span class="n">2</span>, mod - <span class="n">2</span>));
+    <span class="k">return</span> c;
+}
+<span class="c">// the convolution form -- O(n^2), but assumes nothing about the modulus</span>
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; catalan_conv(<span class="k">int</span> n) {
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; c(n + <span class="n">1</span>, <span class="n">0</span>);
+    c[<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>; i &lt;= n; i++)
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; i; j++)
+            c[i] = add(c[i], mult(c[j], c[i - <span class="n">1</span> - j]));
+    <span class="k">return</span> c;
+}
+<span class="c">// BALLOT / cycle lemma: paths to (a,b) with a &gt;= b that stay strictly ahead</span>
+<span class="k">int</span> ballot(<span class="k">int</span> a, <span class="k">int</span> b) {
+    <span class="k">if</span> (a &lt; b) <span class="k">return</span> <span class="n">0</span>;
+    <span class="k">return</span> mult(mult(a - b, fp(a + b, mod - <span class="n">2</span>)), ncr(a + b, a));
+}
+<span class="c">// NARAYANA N(n,k): Dyck paths of semilength n with exactly k peaks; sums to C(n)</span>
+<span class="k">int</span> narayana(<span class="k">int</span> n, <span class="k">int</span> k) {
+    <span class="k">if</span> (k &lt; <span class="n">1</span> || k &gt; n) <span class="k">return</span> <span class="n">0</span>;
+    <span class="k">return</span> mult(mult(ncr(n, k), ncr(n, k - <span class="n">1</span>)), fp(n, mod - <span class="n">2</span>));
+}</code></pre>
+</div>
+<div class="file" id="stirling">
+<h2>6.4 &nbsp;stirling</h2>
+<p class="path">combinatorics/stirling.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// STIRLING / BELL / DERANGEMENTS / TWELVEFOLD WAY -- the &quot;balls in boxes&quot; file</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Almost every counting statement is one of twelve problems. Fix these four</span>
+<span class="c">// labels FIRST and the formula follows mechanically:</span>
+<span class="c">//</span>
+<span class="c">//     are the BALLS distinguishable?   are the BOXES distinguishable?</span>
+<span class="c">//     any / injective / surjective?</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  THE TWELVEFOLD WAY -- n balls into k boxes</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #   balls   boxes   any                     injective    surjective</span>
+<span class="cbox">// #   -----   -----   ---------------------   ----------   -------------------</span>
+<span class="cbox">// #   dist    dist    k^n                     k!/(k-n)!    k! * S2(n,k)</span>
+<span class="cbox">// #   same    dist    C(n+k-1, n)             C(k, n)      C(n-1, n-k)</span>
+<span class="cbox">// #   dist    same    sum_{j=1..k} S2(n,j)    [n &lt;= k]     S2(n,k)</span>
+<span class="cbox">// #   same    same    p(n, k) partitions      [n &lt;= k]     p(n-k) partitions</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  &quot;distinct balls, identical boxes, any&quot; is the BELL number when k &gt;= n.</span>
+<span class="cbox">// #  Getting the labels backwards is the single most common counting error,</span>
+<span class="cbox">// #  and every one of these formulas is a plausible-looking wrong answer for</span>
+<span class="cbox">// #  the other cells.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  S2(n,k) BY THE EXPLICIT SUM NEEDS THE SIGN, AND IT ALTERNATES</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #      S2(n,k) = (1/k!) * sum_{j=0}^{k} (-1)^j C(k,j) (k-j)^n</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Under a modulus every negative term must have `mod` added before it is</span>
+<span class="cbox">// #  stored. Dropping the sign gives a number that is far too large but still</span>
+<span class="cbox">// #  &quot;looks like a count&quot;. The O(n*k) recurrence below has no signs at all</span>
+<span class="cbox">// #  and is the safer default when n*k fits.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   S2(0,0) = 1, S2(n,0) = 0 for n &gt; 0, S2(0,k) = 0 for k &gt; 0. The empty</span>
+<span class="c">//     partition of the empty set is one partition, not zero.</span>
+<span class="c">//   Bell(n) = sum_{k=0..n} S2(n,k). Bell(0) = 1.</span>
+<span class="c">//   Derangements: D(0) = 1, D(1) = 0. D(1) = 0 is the case that breaks a</span>
+<span class="c">//     naive `n! / e` rounding.</span>
+<span class="c">//   The unsigned Stirling FIRST kind counts permutations by CYCLE count -- a</span>
+<span class="c">//     completely different sequence from the second kind. Do not mix them.</span>
+<span class="c">//   Surjections onto k LABELLED boxes is `k! * S2(n,k)`, not S2(n,k).</span>
+<span class="c">//   Modulus must be prime for the inverse factorials.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   partition n labelled items into exactly k         S2(n,k)</span>
+<span class="c">//     non-empty unlabelled groups</span>
+<span class="c">//   ... into ANY number of groups                     Bell(n)</span>
+<span class="c">//   surjections from n items onto k labels            k! * S2(n,k)</span>
+<span class="c">//   &quot;every box non-empty&quot;, boxes labelled             same</span>
+<span class="c">//   permutations with no fixed point                  derangements()</span>
+<span class="c">//   permutations with exactly k fixed points          C(n,k) * D(n-k)</span>
+<span class="c">//   permutations with exactly k CYCLES                Stirling first kind</span>
+<span class="c">//   &quot;n people, nobody gets their own hat&quot;             derangements()</span>
+<span class="c">//   n identical balls into k labelled boxes           C(n+k-1, k-1), stars and</span>
+<span class="c">//                                                     bars</span>
+<span class="c">//   ... each box non-empty                            C(n-1, k-1)</span>
+<span class="c">//   ... box i holds at most u_i                       inclusion-exclusion over</span>
+<span class="c">//                                                     the violated bounds --</span>
+<span class="c">//                                                     DP/incexc.cpp</span>
+<span class="c">//   partitions of the INTEGER n                       partitions() -- the</span>
+<span class="c">//                                                     pentagonal recurrence</span>
+<span class="c">//   partitions of n into exactly k parts              p(n,k) table below</span>
+<span class="c">//   count set partitions of a SUBSET-cost kind        DP/submask_partition.cpp</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   the groups are ordered / the boxes are labelled -&gt; multiply by k!, or use</span>
+<span class="c">//     the &quot;dist boxes&quot; row. Half of all errors here are this.</span>
+<span class="c">//   n &lt;= 20 and each group has an arbitrary cost    -&gt; DP/submask_partition.cpp.</span>
+<span class="c">//   counting up to SYMMETRY (rotations)             -&gt; combinatorics/burnside.cpp.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="t">ll</span> MOD = <span class="n">1000000007</span>;
+<span class="k">const</span> <span class="k">int</span> MX = <span class="n">2005</span>;
+
+<span class="t">ll</span> pw(<span class="t">ll</span> b, <span class="t">ll</span> e, <span class="t">ll</span> m = MOD) {
+    <span class="t">ll</span> r = <span class="n">1</span>; b %= m;
+    <span class="k">while</span> (e) { <span class="k">if</span> (e &amp; <span class="n">1</span>) r = r * b % m; b = b * b % m, e &gt;&gt;= <span class="n">1</span>; }
+    <span class="k">return</span> r;
+}
+
+<span class="t">ll</span> fact[MX], ifact[MX];
+<span class="k">void</span> init_fact() {
+    fact[<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>; i &lt; MX; i++) fact[i] = fact[i - <span class="n">1</span>] * i % MOD;
+    ifact[MX - <span class="n">1</span>] = pw(fact[MX - <span class="n">1</span>], MOD - <span class="n">2</span>);
+    <span class="k">for</span> (<span class="k">int</span> i = MX - <span class="n">1</span>; i &gt;= <span class="n">1</span>; i--) ifact[i - <span class="n">1</span>] = ifact[i] * i % MOD;
+}
+<span class="t">ll</span> C(<span class="k">int</span> n, <span class="k">int</span> r) {
+    <span class="k">if</span> (r &lt; <span class="n">0</span> || r &gt; n || n &lt; <span class="n">0</span>) <span class="k">return</span> <span class="n">0</span>;
+    <span class="k">return</span> fact[n] * ifact[r] % MOD * ifact[n - r] % MOD;
+}
+
+<span class="c">// ---- Stirling SECOND kind: partitions of n labelled items into k groups ---</span>
+<span class="c">//      S2(n,k) = k*S2(n-1,k) + S2(n-1,k-1)      (put item n in an existing</span>
+<span class="c">//                                                group, or start a new one)</span>
+<span class="t">ll</span> S2[MX][MX];
+<span class="k">void</span> build_stirling2(<span class="k">int</span> n) {
+    S2[<span class="n">0</span>][<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>; i &lt;= n; i++)
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">1</span>; j &lt;= i; j++)
+            S2[i][j] = (S2[i - <span class="n">1</span>][j] * j + S2[i - <span class="n">1</span>][j - <span class="n">1</span>]) % MOD;
+}
+<span class="c">// one value in O(k log n), no table. Signs alternate -- see the box.</span>
+<span class="t">ll</span> stirling2(<span class="k">int</span> n, <span class="k">int</span> k) {
+    <span class="k">if</span> (k &lt; <span class="n">0</span> || k &gt; n) <span class="k">return</span> (n == <span class="n">0</span> &amp;&amp; k == <span class="n">0</span>);
+    <span class="t">ll</span> r = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt;= k; j++) {
+        <span class="t">ll</span> t = C(k, j) * pw(k - j, n) % MOD;
+        <span class="k">if</span> (j &amp; <span class="n">1</span>) r = (r - t + MOD) % MOD;
+        <span class="k">else</span>       r = (r + t) % MOD;
+    }
+    <span class="k">return</span> r * ifact[k] % MOD;
+}
+
+<span class="c">// ---- Stirling FIRST kind (unsigned): permutations of n with k cycles ------</span>
+<span class="c">//      c(n,k) = (n-1)*c(n-1,k) + c(n-1,k-1)</span>
+<span class="t">ll</span> S1[MX][MX];
+<span class="k">void</span> build_stirling1(<span class="k">int</span> n) {
+    S1[<span class="n">0</span>][<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>; i &lt;= n; i++)
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">1</span>; j &lt;= i; j++)
+            S1[i][j] = (S1[i - <span class="n">1</span>][j] * (i - <span class="n">1</span>) + S1[i - <span class="n">1</span>][j - <span class="n">1</span>]) % MOD;
+}
+
+<span class="c">// ---- Bell: total set partitions. Bell(n) = sum_k S2(n,k) ------------------</span>
+<span class="c">// The triangle is O(n^2) and needs no factorials.</span>
+<span class="t">ll</span> bell(<span class="k">int</span> n) {
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; row{<span class="n">1</span>}, nxt;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        nxt.assign(row.size() + <span class="n">1</span>, <span class="n">0</span>);
+        nxt[<span class="n">0</span>] = row.back();
+        <span class="k">for</span> (<span class="t">size_t</span> j = <span class="n">0</span>; j &lt; row.size(); j++)
+            nxt[j + <span class="n">1</span>] = (nxt[j] + row[j]) % MOD;
+        row.swap(nxt);
+    }
+    <span class="k">return</span> row[<span class="n">0</span>];
+}
+
+<span class="c">// ---- derangements: D(n) = (n-1)*(D(n-1) + D(n-2)),  D(0)=1, D(1)=0 -------</span>
+<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; derangements(<span class="k">int</span> n) {
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; d(max(<span class="n">2</span>, n + <span class="n">1</span>));
+    d[<span class="n">0</span>] = <span class="n">1</span>, d[<span class="n">1</span>] = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">2</span>; i &lt;= n; i++) d[i] = (<span class="t">ll</span>)(i - <span class="n">1</span>) * ((d[i - <span class="n">1</span>] + d[i - <span class="n">2</span>]) % MOD) % MOD;
+    d.resize(n + <span class="n">1</span>);
+    <span class="k">return</span> d;
+}
+<span class="c">// permutations of n with EXACTLY k fixed points</span>
+<span class="t">ll</span> exactly_k_fixed(<span class="k">int</span> n, <span class="k">int</span> k, <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;d) { <span class="k">return</span> C(n, k) * d[n - k] % MOD; }
+
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">// INTEGER PARTITIONS</span>
+<span class="c">//</span>
+<span class="c">// p(n)     = number of ways to write n as a sum of positive integers,</span>
+<span class="c">//            order irrelevant. Pentagonal recurrence, O(n sqrt n):</span>
+<span class="c">//              p(n) = sum_k (-1)^(k-1) [ p(n - g(k)) + p(n - g(-k)) ]</span>
+<span class="c">//            with g(k) = k(3k-1)/2, and BOTH k and -k are needed.</span>
+<span class="c">//            The signs cycle + + - -.</span>
+<span class="c">// p(n,k)   = partitions of n into exactly k parts,  O(n*k):</span>
+<span class="c">//              p(n,k) = p(n-1, k-1) + p(n-k, k)</span>
+<span class="c">//            (a part equal to 1, or subtract 1 from every part)</span>
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="t">vector</span>&lt;<span class="t">ll</span>&gt; partitions(<span class="k">int</span> n) {
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; p(n + <span class="n">1</span>, <span class="n">0</span>);
+    p[<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>; i &lt;= n; i++) {
+        <span class="k">for</span> (<span class="k">int</span> k = <span class="n">1</span>;; k++) {
+            <span class="t">ll</span> g1 = (<span class="t">ll</span>)k * (<span class="n">3</span> * k - <span class="n">1</span>) / <span class="n">2</span>;             <span class="c">// generalised</span>
+            <span class="t">ll</span> g2 = (<span class="t">ll</span>)k * (<span class="n">3</span> * k + <span class="n">1</span>) / <span class="n">2</span>;             <span class="c">// pentagonal, +-k</span>
+            <span class="k">if</span> (g1 &gt; i &amp;&amp; g2 &gt; i) <span class="k">break</span>;
+            <span class="t">ll</span> s = <span class="n">0</span>;
+            <span class="k">if</span> (g1 &lt;= i) s += p[i - g1];
+            <span class="k">if</span> (g2 &lt;= i) s += p[i - g2];
+            <span class="k">if</span> (k &amp; <span class="n">1</span>) p[i] = (p[i] + s) % MOD;          <span class="c">// signs: + + - -</span>
+            <span class="k">else</span>       p[i] = (p[i] - s % MOD + MOD) % MOD;
+        }
+    }
+    <span class="k">return</span> p;
+}
+<span class="c">// partitions of n into exactly k parts</span>
+<span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; partitions_k(<span class="k">int</span> n, <span class="k">int</span> k) {
+    <span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; p(n + <span class="n">1</span>, <span class="t">vector</span>&lt;<span class="t">ll</span>&gt;(k + <span class="n">1</span>, <span class="n">0</span>));
+    p[<span class="n">0</span>][<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>; i &lt;= n; i++)
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">1</span>; j &lt;= k &amp;&amp; j &lt;= i; j++)
+            p[i][j] = (p[i - <span class="n">1</span>][j - <span class="n">1</span>] + p[i - j][j]) % MOD;
+    <span class="k">return</span> p;
+}</code></pre>
+</div>
+<div class="file" id="burnside">
+<h2>6.5 &nbsp;burnside</h2>
+<p class="path">combinatorics/burnside.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// BURNSIDE / POLYA -- counting up to rotation, reflection, relabelling</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// BURNSIDE&#x27;S LEMMA: the number of distinct objects under a symmetry group G is</span>
+<span class="c">// the AVERAGE number of objects each group element leaves unchanged:</span>
+<span class="c">//</span>
+<span class="c">//     answer = (1 / |G|) * sum over g in G of Fix(g)</span>
+<span class="c">//</span>
+<span class="c">// The whole job is computing Fix(g). When colours are UNLIMITED that is easy:</span>
+<span class="c">// a colouring is fixed by g exactly when every CYCLE of g is monochromatic, so</span>
+<span class="c">//</span>
+<span class="c">//     Fix(g) = c ^ (number of cycles of g)</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  c^cycles IS ONLY VALID WHEN EVERY COLOUR IS UNLIMITED</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  &quot;How many necklaces with n beads and c colours&quot; -&gt; c^cycles is right.</span>
+<span class="cbox">// #  &quot;How many with EXACTLY 3 red and 2 blue&quot;        -&gt; it is WRONG.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  With fixed colour counts you need the POLYA cycle index: each cycle of</span>
+<span class="cbox">// #  length L consumes L beads of one colour, so Fix(g) is a knapsack over</span>
+<span class="cbox">// #  the cycle lengths. polya_fixed_counts() below does exactly that.</span>
+<span class="cbox">// #  Using c^cycles here gives a number that is far too large and looks</span>
+<span class="cbox">// #  plausible.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  GET THE GROUP RIGHT, AND ALWAYS INCLUDE THE IDENTITY</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  rotations only            CYCLIC group, n elements</span>
+<span class="cbox">// #  rotations AND reflections DIHEDRAL group, 2n elements</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  The identity contributes c^n and it is easy to forget. Reflections split</span>
+<span class="cbox">// #  by parity:</span>
+<span class="cbox">// #      n ODD  : n axes, each through one bead -&gt; (n+1)/2 cycles</span>
+<span class="cbox">// #      n EVEN : n/2 axes through two beads    -&gt; n/2 + 1 cycles</span>
+<span class="cbox">// #               n/2 axes through no bead      -&gt; n/2 cycles</span>
+<span class="cbox">// #  Using one reflection formula for both parities is the classic wrong</span>
+<span class="cbox">// #  answer, and it is correct for exactly half the inputs.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   The division by |G| is MODULAR -- multiply by the inverse. |G| is small</span>
+<span class="c">//     and coprime to a prime modulus, so this is safe.</span>
+<span class="c">//   A rotation by k on n beads has exactly gcd(n, k) cycles, each of length</span>
+<span class="c">//     n/gcd(n,k). That one fact collapses the cyclic case to a divisor sum.</span>
+<span class="c">//   For n up to 1e9 you cannot enumerate rotations; use the phi form:</span>
+<span class="c">//     necklaces = (1/n) * sum over d | n of phi(d) * c^(n/d).</span>
+<span class="c">//   Burnside counts EQUIVALENCE CLASSES. If the problem asks for a</span>
+<span class="c">//     representative or for the class SIZES, this gives neither.</span>
+<span class="c">//   Reflections of a 2D grid / cube: enumerate the group explicitly and count</span>
+<span class="c">//     cycles by union-find. Do not guess the cycle structure.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   necklaces: n beads, c colours, up to ROTATION       necklaces()</span>
+<span class="c">//   ... up to rotation AND reflection (bracelets)        bracelets()</span>
+<span class="c">//   ... with EXACTLY k_i beads of colour i               polya_fixed_counts()</span>
+<span class="c">//   colour a cycle / ring / round table                  same as necklaces</span>
+<span class="c">//   count distinct grids up to 90-degree rotation        enumerate the 4 maps,</span>
+<span class="c">//                                                        count cycles by DSU,</span>
+<span class="c">//                                                        burnside_explicit()</span>
+<span class="c">//   ... up to rotation + reflection (8 symmetries)       same, 8 maps</span>
+<span class="c">//   count distinct graphs up to vertex relabelling       group = S_n; only</span>
+<span class="c">//                                                        feasible for tiny n</span>
+<span class="c">//   &quot;two arrangements are the same if one is a           necklaces / bracelets</span>
+<span class="c">//    rotation of the other&quot;</span>
+<span class="c">//   count binary strings up to rotation                  necklaces(n, 2)</span>
+<span class="c">//   distinct dice / cube colourings                      burnside_explicit()</span>
+<span class="c">//                                                        with the 24 rotations</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   &quot;the number of distinct ROTATIONS of one given string&quot; -&gt; n / smallest</span>
+<span class="c">//     period. That is a string question, not a Burnside one -- strings/lyndon.cpp.</span>
+<span class="c">//   the group is huge and unstructured -&gt; Burnside needs you to enumerate G</span>
+<span class="c">//     or to know its cycle statistics.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="t">ll</span> MOD = <span class="n">1000000007</span>;
+
+<span class="t">ll</span> pw(<span class="t">ll</span> b, <span class="t">ll</span> e, <span class="t">ll</span> m = MOD) {
+    <span class="t">ll</span> r = <span class="n">1</span>; b %= m;
+    <span class="k">while</span> (e) { <span class="k">if</span> (e &amp; <span class="n">1</span>) r = r * b % m; b = b * b % m, e &gt;&gt;= <span class="n">1</span>; }
+    <span class="k">return</span> r;
+}
+<span class="t">ll</span> inv(<span class="t">ll</span> a) { <span class="k">return</span> pw(a, MOD - <span class="n">2</span>); }
+
+<span class="t">ll</span> phi(<span class="t">ll</span> x) {                              <span class="c">// Euler totient of one number</span>
+    <span class="t">ll</span> r = x;
+    <span class="k">for</span> (<span class="t">ll</span> p = <span class="n">2</span>; p * p &lt;= x; p++)
+        <span class="k">if</span> (x % p == <span class="n">0</span>) { <span class="k">while</span> (x % p == <span class="n">0</span>) x /= p; r -= r / p; }
+    <span class="k">if</span> (x &gt; <span class="n">1</span>) r -= r / x;
+    <span class="k">return</span> r;
+}
+
+<span class="c">// ---- necklaces: n beads, c colours, rotations only ------------------------</span>
+<span class="c">// (1/n) * sum over d | n of phi(d) * c^(n/d).   Works for n up to ~1e18.</span>
+<span class="t">ll</span> necklaces(<span class="t">ll</span> n, <span class="t">ll</span> c) {
+    <span class="t">ll</span> total = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="t">ll</span> d = <span class="n">1</span>; d * d &lt;= n; d++) {
+        <span class="k">if</span> (n % d) <span class="k">continue</span>;
+        total = (total + phi(d) % MOD * pw(c, n / d)) % MOD;
+        <span class="k">if</span> (d != n / d) total = (total + phi(n / d) % MOD * pw(c, d)) % MOD;
+    }
+    <span class="k">return</span> total % MOD * inv(n % MOD) % MOD;
+}
+
+<span class="c">// ---- bracelets: rotations AND reflections. The parity split is in the box.</span>
+<span class="t">ll</span> bracelets(<span class="t">ll</span> n, <span class="t">ll</span> c) {
+    <span class="t">ll</span> rot = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="t">ll</span> d = <span class="n">1</span>; d * d &lt;= n; d++) {
+        <span class="k">if</span> (n % d) <span class="k">continue</span>;
+        rot = (rot + phi(d) % MOD * pw(c, n / d)) % MOD;
+        <span class="k">if</span> (d != n / d) rot = (rot + phi(n / d) % MOD * pw(c, d)) % MOD;
+    }
+    <span class="t">ll</span> refl;
+    <span class="k">if</span> (n &amp; <span class="n">1</span>) refl = n % MOD * pw(c, (n + <span class="n">1</span>) / <span class="n">2</span>) % MOD;         <span class="c">// n odd</span>
+    <span class="k">else</span> refl = (n / <span class="n">2</span> % MOD * pw(c, n / <span class="n">2</span> + <span class="n">1</span>) % MOD
+               + n / <span class="n">2</span> % MOD * pw(c, n / <span class="n">2</span>) % MOD) % MOD;         <span class="c">// n even</span>
+    <span class="k">return</span> (rot + refl) % MOD * inv(<span class="n">2</span> * (n % MOD) % MOD) % MOD;
+}
+
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">// POLYA WITH FIXED COLOUR COUNTS</span>
+<span class="c">//</span>
+<span class="c">// Each cycle of length L must be a single colour, consuming L beads of it.</span>
+<span class="c">// Fix(g) is therefore the number of ways to assign whole cycles to colours so</span>
+<span class="c">// that colour i receives exactly cnt[i] beads -- a multi-dimensional knapsack</span>
+<span class="c">// over the cycle lengths.</span>
+<span class="c">//</span>
+<span class="c">// Below: rotations only, colour counts in cnt[]. n must be small enough for</span>
+<span class="c">// the knapsack (n &lt;= ~50 with 2-3 colours, or use the multinomial shortcut</span>
+<span class="c">// when all cycles have the SAME length, which they do for a pure rotation).</span>
+<span class="c">//</span>
+<span class="c">// For a rotation by k, every cycle has length L = n/gcd(n,k) and there are</span>
+<span class="c">// g = gcd(n,k) of them. So Fix is 0 unless L divides every cnt[i], and</span>
+<span class="c">// otherwise it is the multinomial (g choose cnt[0]/L, cnt[1]/L, ...).</span>
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="t">ll</span> fact_[<span class="n">1000005</span>], ifact_[<span class="n">1000005</span>];
+<span class="k">void</span> init_fact(<span class="k">int</span> n) {
+    fact_[<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>; i &lt;= n; i++) fact_[i] = fact_[i - <span class="n">1</span>] * i % MOD;
+    ifact_[n] = pw(fact_[n], MOD - <span class="n">2</span>);
+    <span class="k">for</span> (<span class="k">int</span> i = n; i &gt;= <span class="n">1</span>; i--) ifact_[i - <span class="n">1</span>] = ifact_[i] * i % MOD;
+}
+
+<span class="c">// necklaces with exactly cnt[i] beads of colour i, up to rotation</span>
+<span class="t">ll</span> polya_fixed_counts(<span class="k">int</span> n, <span class="t">vector</span>&lt;<span class="k">int</span>&gt; cnt) {
+    <span class="t">ll</span> total = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> k = <span class="n">0</span>; k &lt; n; k++) {
+        <span class="k">int</span> g = __gcd(n, k == <span class="n">0</span> ? n : k);        <span class="c">// cycles; k=0 is the identity</span>
+        <span class="k">int</span> L = n / g;                           <span class="c">// each cycle has this length</span>
+        <span class="k">bool</span> ok = <span class="k">true</span>;
+        <span class="t">ll</span> f = fact_[g];
+        <span class="k">for</span> (<span class="k">int</span> x : cnt) {
+            <span class="k">if</span> (x % L) { ok = <span class="k">false</span>; <span class="k">break</span>; }
+            f = f * ifact_[x / L] % MOD;
+        }
+        <span class="k">if</span> (ok) total = (total + f) % MOD;       <span class="c">// the multinomial</span>
+    }
+    <span class="k">return</span> total * inv(n) % MOD;
+}
+
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">// EXPLICIT GROUP -- when you cannot reason about the cycle structure.</span>
+<span class="c">//</span>
+<span class="c">// Give each group element as a permutation of the m positions. Count its</span>
+<span class="c">// cycles directly, sum c^cycles, divide by |G|. This is the version to use for</span>
+<span class="c">// grids, cubes, and anything where guessing the cycle count is a coin flip.</span>
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="t">ll</span> burnside_explicit(<span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="k">int</span>&gt;&gt; &amp;G, <span class="t">ll</span> c) {
+    <span class="k">int</span> m = G[<span class="n">0</span>].size();
+    <span class="t">ll</span> total = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">auto</span> &amp;g : G) {
+        <span class="t">vector</span>&lt;<span class="k">int</span>&gt; vis(m, <span class="n">0</span>);
+        <span class="k">int</span> cycles = <span class="n">0</span>;
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; m; i++)
+            <span class="k">if</span> (!vis[i]) {
+                cycles++;
+                <span class="k">for</span> (<span class="k">int</span> j = i; !vis[j]; j = g[j]) vis[j] = <span class="n">1</span>;
+            }
+        total = (total + pw(c, cycles)) % MOD;
+    }
+    <span class="k">return</span> total * inv(G.size()) % MOD;
+}</code></pre>
+</div>
+<div class="file" id="counting_formulas">
+<h2>6.6 &nbsp;counting_formulas</h2>
+<p class="path">combinatorics/counting_formulas.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// LGV / BEST / RYSER / HOOK LENGTH / FUSS-CATALAN -- the determinant-and-</span>
+<span class="c">// formula counting family</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Five results that each turn a hard count into one determinant or one product.</span>
+<span class="c">// They share nothing but that shape, and each is unrecognisable until you have</span>
+<span class="c">// seen it once.</span>
+<span class="c">//</span>
+<span class="c">//   LGV          non-intersecting path systems      = det of single-path counts</span>
+<span class="c">//   BEST         Eulerian circuits in a digraph     = arborescences * prod(d-1)!</span>
+<span class="c">//   RYSER        permanent / &quot;one per row and col&quot;  = 2^n inclusion-exclusion</span>
+<span class="c">//   HOOK LENGTH  standard Young tableaux            = n! / prod(hooks)</span>
+<span class="c">//   FUSS-CATALAN k-ary trees, paths above a slope   = C(kn+n, n)/(kn+1)</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  LGV RETURNS A SIGNED SUM, NOT A COUNT</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  det(M) with M[i][j] = &quot;paths from start i to end j&quot; equals</span>
+<span class="cbox">// #      sum over permutations sigma of  sign(sigma) * (path systems realising</span>
+<span class="cbox">// #      sigma with no two paths crossing)</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  That equals the count of non-intersecting systems ONLY when the identity</span>
+<span class="cbox">// #  permutation is the sole one admitting a non-crossing connection. In a</span>
+<span class="cbox">// #  planar / &quot;sources and sinks in compatible order&quot; setup that holds. If it</span>
+<span class="cbox">// #  does not, the determinant is a signed sum and is not a count at all --</span>
+<span class="cbox">// #  it can even be negative.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  BEST COUNTS CIRCUITS UP TO A STARTING EDGE, AND NEEDS BALANCE FIRST</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  ec(G) = arborescences rooted at ANY fixed vertex * prod over v of</span>
+<span class="cbox">// #          (outdeg(v) - 1)!</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Preconditions: every vertex has indeg == outdeg, and the graph is</span>
+<span class="cbox">// #  connected on its edge-bearing vertices. The count is of Eulerian</span>
+<span class="cbox">// #  CIRCUITS as edge sequences up to rotation; multiply by outdeg(root) if</span>
+<span class="cbox">// #  the problem distinguishes the starting edge. The arborescence count is</span>
+<span class="cbox">// #  Matrix-Tree on the DIRECTED Laplacian -- graph/kirchhoff.cpp.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Ryser is O(2^n * n) and exact; the permanent has no polynomial algorithm.</span>
+<span class="c">//     n &lt;= 20 comfortably, n = 22 pushing it.</span>
+<span class="c">//   Ryser&#x27;s signs alternate with the parity of the EXCLUDED set size. Under a</span>
+<span class="c">//     modulus, add mod before storing.</span>
+<span class="c">//   Hook length: the hook of cell (i,j) is (arm to the right) + (leg below)</span>
+<span class="c">//     + 1 for the cell itself. Forgetting the +1 is the standard error.</span>
+<span class="c">//   Fuss-Catalan with k = 1 must reduce to the ordinary Catalan numbers --</span>
+<span class="c">//     check that before trusting it.</span>
+<span class="c">//   LGV needs the path counts themselves, usually binomials for grid paths.</span>
+<span class="c">//</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// SUBPROBLEMS</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">//   count non-crossing tuples of lattice paths      LGV determinant</span>
+<span class="c">//   k non-intersecting monotone paths in a grid      LGV with binomial entries</span>
+<span class="c">//   plane partitions / rhombus tilings               LGV or the hook formula</span>
+<span class="c">//   count Eulerian circuits of a digraph             BEST + Matrix-Tree</span>
+<span class="c">//   number of de Bruijn sequences of order k          BEST on the de Bruijn</span>
+<span class="c">//                                                    graph</span>
+<span class="c">//   permanent of a 0/1 matrix                        Ryser</span>
+<span class="c">//   &quot;assign one per row and column&quot;, weighted count   Ryser (counting), or</span>
+<span class="c">//                                                    Hungarian (optimising) --</span>
+<span class="c">//                                                    graph/matching/hungarian.cpp</span>
+<span class="c">//   count perfect matchings in a bipartite graph      = the permanent = Ryser</span>
+<span class="c">//   number of standard Young tableaux of a shape      hook_length()</span>
+<span class="c">//   ballot / Catalan generalised to k candidates      hook length on a</span>
+<span class="c">//                                                    rectangular shape</span>
+<span class="c">//   k-ary trees with n internal nodes                 Fuss-Catalan</span>
+<span class="c">//   paths staying above the line y = x/k              Fuss-Catalan</span>
+<span class="c">//   spanning trees of an undirected graph             Kirchhoff --</span>
+<span class="c">//                                                    graph/kirchhoff.cpp</span>
+<span class="c">//</span>
+<span class="c">// NOT THIS:</span>
+<span class="c">//   paths that MAY cross     -&gt; just multiply the individual counts.</span>
+<span class="c">//   the determinant of a 0/1 matrix is not the permanent -- signs matter, and</span>
+<span class="c">//     the two differ for n &gt;= 2.</span>
+<span class="c">// ============================================================================</span>
+<span class="k">const</span> <span class="t">ll</span> MOD = <span class="n">1000000007</span>;
+<span class="k">const</span> <span class="k">int</span> MX = <span class="n">2000005</span>;
+
+<span class="t">ll</span> pw(<span class="t">ll</span> b, <span class="t">ll</span> e, <span class="t">ll</span> m = MOD) {
+    <span class="t">ll</span> r = <span class="n">1</span>; b %= m;
+    <span class="k">while</span> (e) { <span class="k">if</span> (e &amp; <span class="n">1</span>) r = r * b % m; b = b * b % m, e &gt;&gt;= <span class="n">1</span>; }
+    <span class="k">return</span> r;
+}
+<span class="t">ll</span> fact[MX], ifact[MX];
+<span class="k">void</span> init_fact(<span class="k">int</span> n) {
+    fact[<span class="n">0</span>] = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">1</span>; i &lt;= n; i++) fact[i] = fact[i - <span class="n">1</span>] * i % MOD;
+    ifact[n] = pw(fact[n], MOD - <span class="n">2</span>);
+    <span class="k">for</span> (<span class="k">int</span> i = n; i &gt;= <span class="n">1</span>; i--) ifact[i - <span class="n">1</span>] = ifact[i] * i % MOD;
+}
+<span class="t">ll</span> C(<span class="t">ll</span> n, <span class="t">ll</span> r) {
+    <span class="k">if</span> (r &lt; <span class="n">0</span> || r &gt; n || n &lt; <span class="n">0</span>) <span class="k">return</span> <span class="n">0</span>;
+    <span class="k">return</span> fact[n] * ifact[r] % MOD * ifact[n - r] % MOD;
+}
+
+<span class="c">// determinant mod a prime, O(n^3). math/gauss.cpp has the same routine.</span>
+<span class="t">ll</span> det_mod(<span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; a) {
+    <span class="k">int</span> n = a.size();
+    <span class="t">ll</span> res = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        <span class="k">int</span> p = -<span class="n">1</span>;
+        <span class="k">for</span> (<span class="k">int</span> j = i; j &lt; n; j++) <span class="k">if</span> (a[j][i]) { p = j; <span class="k">break</span>; }
+        <span class="k">if</span> (p &lt; <span class="n">0</span>) <span class="k">return</span> <span class="n">0</span>;
+        <span class="k">if</span> (p != i) swap(a[p], a[i]), res = MOD - res;
+        res = res * a[i][i] % MOD;
+        <span class="t">ll</span> inv = pw(a[i][i], MOD - <span class="n">2</span>);
+        <span class="k">for</span> (<span class="k">int</span> j = i + <span class="n">1</span>; j &lt; n; j++) {
+            <span class="t">ll</span> f = a[j][i] * inv % MOD;
+            <span class="k">if</span> (!f) <span class="k">continue</span>;
+            <span class="k">for</span> (<span class="k">int</span> k = i; k &lt; n; k++)
+                a[j][k] = (a[j][k] - f * a[i][k] % MOD + MOD) % MOD;
+        }
+    }
+    <span class="k">return</span> res;
+}
+
+<span class="c">// ---- LGV: M[i][j] = number of paths from start i to end j -----------------</span>
+<span class="c">// The caller supplies M. Read the box before trusting the result as a count.</span>
+<span class="t">ll</span> lgv(<span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; M) { <span class="k">return</span> det_mod(M); }
+
+<span class="c">// grid-path helper: monotone paths from (x1,y1) to (x2,y2), right/up only</span>
+<span class="t">ll</span> grid_paths(<span class="t">ll</span> x1, <span class="t">ll</span> y1, <span class="t">ll</span> x2, <span class="t">ll</span> y2) {
+    <span class="k">if</span> (x2 &lt; x1 || y2 &lt; y1) <span class="k">return</span> <span class="n">0</span>;
+    <span class="k">return</span> C((x2 - x1) + (y2 - y1), x2 - x1);
+}
+
+<span class="c">// ---- RYSER: permanent of an n x n matrix, O(2^n * n) ----------------------</span>
+<span class="c">//   perm(A) = (-1)^n * sum over subsets S of (-1)^|S| * prod_i sum_{j in S} A[i][j]</span>
+<span class="t">ll</span> permanent(<span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; &amp;A) {
+    <span class="k">int</span> n = A.size();
+    <span class="t">ll</span> total = <span class="n">0</span>;
+    <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; rowsum(n, <span class="n">0</span>);
+    <span class="k">for</span> (<span class="k">int</span> S = <span class="n">1</span>; S &lt; (<span class="n">1</span> &lt;&lt; n); S++) {
+        <span class="k">int</span> b = __builtin_ctz(S);
+        <span class="c">// incremental: S differs from S ^ (1&lt;&lt;b) by adding column b</span>
+        <span class="c">// (rebuild plainly for clarity; O(2^n * n) either way)</span>
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+            <span class="t">ll</span> s = <span class="n">0</span>;
+            <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; n; j++) <span class="k">if</span> (S &gt;&gt; j &amp; <span class="n">1</span>) s += A[i][j];
+            rowsum[i] = s % MOD;
+        }
+        (<span class="k">void</span>)b;
+        <span class="t">ll</span> prod = <span class="n">1</span>;
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) prod = prod * rowsum[i] % MOD;
+        <span class="k">if</span> ((n - __builtin_popcount(S)) &amp; <span class="n">1</span>) total = (total - prod + MOD) % MOD;
+        <span class="k">else</span>                                 total = (total + prod) % MOD;
+    }
+    <span class="k">return</span> total;
+}
+
+<span class="c">// ---- HOOK LENGTH: standard Young tableaux of shape lambda -----------------</span>
+<span class="c">//   n! / product over cells of hook(cell),   hook = arm + leg + 1</span>
+<span class="t">ll</span> hook_length(<span class="t">vector</span>&lt;<span class="k">int</span>&gt; lam) {
+    <span class="k">int</span> n = <span class="n">0</span>;
+    <span class="k">for</span> (<span class="k">int</span> x : lam) n += x;
+    <span class="c">// conjugate shape: col[j] = how many rows reach column j</span>
+    <span class="k">int</span> W = lam.empty() ? <span class="n">0</span> : lam[<span class="n">0</span>];
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; col(W, <span class="n">0</span>);
+    <span class="k">for</span> (<span class="k">int</span> x : lam) <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; x; j++) col[j]++;
+    <span class="t">ll</span> denom = <span class="n">1</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; (<span class="k">int</span>)lam.size(); i++)
+        <span class="k">for</span> (<span class="k">int</span> j = <span class="n">0</span>; j &lt; lam[i]; j++) {
+            <span class="t">ll</span> arm = lam[i] - j - <span class="n">1</span>;             <span class="c">// cells to the right</span>
+            <span class="t">ll</span> leg = col[j] - i - <span class="n">1</span>;             <span class="c">// cells below</span>
+            denom = denom * ((arm + leg + <span class="n">1</span>) % MOD) % MOD;   <span class="c">// +1 = the cell</span>
+        }
+    <span class="k">return</span> fact[n] * pw(denom, MOD - <span class="n">2</span>) % MOD;
+}
+
+<span class="c">// ---- FUSS-CATALAN: A(n, k) = C(kn + n, n) / (kn + 1) ----------------------</span>
+<span class="c">// k = 1 gives the ordinary Catalan numbers. Counts k-ary trees with n internal</span>
+<span class="c">// nodes, and lattice paths staying weakly above a slope-1/k line.</span>
+<span class="t">ll</span> fuss_catalan(<span class="t">ll</span> n, <span class="t">ll</span> k) {
+    <span class="k">return</span> C(k * n + n, n) * pw((k * n + <span class="n">1</span>) % MOD, MOD - <span class="n">2</span>) % MOD;
+}
+
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="c">// BEST THEOREM -- Eulerian circuits of a directed graph</span>
+<span class="c">//</span>
+<span class="c">//   ec(G) = tw(G, r) * product over v of (outdeg(v) - 1)!</span>
+<span class="c">//</span>
+<span class="c">// tw(G, r) = number of arborescences ORIENTED TOWARDS r, which is any cofactor</span>
+<span class="c">// of the directed Laplacian L = D_out - A. Preconditions: indeg == outdeg at</span>
+<span class="c">// every vertex, and connectivity on edge-bearing vertices. The result counts</span>
+<span class="c">// circuits up to the choice of starting edge; multiply by outdeg(r) if the</span>
+<span class="c">// starting edge is distinguished.</span>
+<span class="c">//</span>
+<span class="c">// See graph/kirchhoff.cpp for the undirected Matrix-Tree version.</span>
+<span class="c">////////////////////////////////////////////////////////////////////////////////</span>
+<span class="t">ll</span> best_theorem(<span class="k">int</span> n, <span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="k">int</span>&gt;&gt; &amp;cntEdge, <span class="k">int</span> root) {
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; outd(n, <span class="n">0</span>), ind(n, <span class="n">0</span>);
+    <span class="k">for</span> (<span class="k">int</span> u = <span class="n">0</span>; u &lt; n; u++)
+        <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++) outd[u] += cntEdge[u][v], ind[v] += cntEdge[u][v];
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++) <span class="k">if</span> (outd[v] != ind[v]) <span class="k">return</span> <span class="n">0</span>;   <span class="c">// not Eulerian</span>
+
+    <span class="c">// ISOLATED VERTICES MUST BE DROPPED. A vertex with outdeg 0 contributes an</span>
+    <span class="c">// all-zero Laplacian row and forces the determinant to 0, reporting &quot;no</span>
+    <span class="c">// Eulerian circuit&quot; for a graph that has one.</span>
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; keep;
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++) <span class="k">if</span> (outd[v] &gt; <span class="n">0</span> &amp;&amp; v != root) keep.push_back(v);
+
+    <span class="c">// directed Laplacian over `keep` (root already deleted), determinant</span>
+    <span class="t">vector</span>&lt;<span class="t">vector</span>&lt;<span class="t">ll</span>&gt;&gt; L;
+    <span class="k">for</span> (<span class="k">int</span> i : keep) {
+        <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; row;
+        <span class="k">for</span> (<span class="k">int</span> j : keep) {
+            <span class="t">ll</span> v = (i == j) ? outd[i] : -cntEdge[i][j];
+            row.push_back(((v % MOD) + MOD) % MOD);
+        }
+        L.push_back(row);
+    }
+    <span class="t">ll</span> tw = L.empty() ? <span class="n">1</span> : det_mod(L);
+    <span class="t">ll</span> res = tw;
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">0</span>; v &lt; n; v++)
+        <span class="k">if</span> (outd[v] &gt; <span class="n">0</span>) res = res * fact[outd[v] - <span class="n">1</span>] % MOD;
+    <span class="k">return</span> res;
+}</code></pre>
+</div>
+</div>

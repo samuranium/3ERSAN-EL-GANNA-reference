@@ -1,0 +1,464 @@
+<title>Template, Snippets and Testing — 3ERSAN EL GANNA</title>
+<style>
+:root{
+  --paper:#ffffff; --ink:#16181c; --soft:#5a6470; --faint:#8b939d;
+  --rule:#d5dade; --rule2:#aeb6bd;
+  --accent:#0d5f6b;
+  --c:#4f7a5e;        /* comment            */
+  --cbox:#8a5a12;     /* #### box comment   */
+  --k:#1f4f9c;        /* keyword            */
+  --t:#0d6b6b;        /* type               */
+  --s:#8a4520;        /* string             */
+  --n:#8a3d6b;        /* number             */
+  --pp:#6a3d9c;       /* preprocessor       */
+  --codebg:#fafbfb;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+    --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+    --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+    --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1317; --ink:#e3e8ec; --soft:#98a3ad; --faint:#6d7883;
+  --rule:#2a333b; --rule2:#3d4952; --accent:#5cc0cc;
+  --c:#8fbf9f; --cbox:#e0ad55; --k:#7fb0f0; --t:#5fc9c9;
+  --s:#e0a077; --n:#e08fc0; --pp:#b79ae8; --codebg:#151a20;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:10.5pt; line-height:1.5;
+}
+.wrap{max-width:52rem;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+h1{font-size:1.9rem;line-height:1.15;margin:0 0 .35rem;letter-spacing:-.01em}
+.blurb{color:var(--soft);margin:0 0 .3rem;max-width:52ch}
+.meta{color:var(--faint);font-size:.85em;margin:0}
+hr{border:none;border-top:3px double var(--rule2);margin:1.6rem 0}
+
+h2{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:1.02rem;margin:0 0 .1rem;letter-spacing:-.01em;
+  color:var(--accent);
+  break-after:avoid; page-break-after:avoid;
+}
+.path{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.78em;color:var(--faint);margin:0 0 .45rem;
+  break-after:avoid; page-break-after:avoid;
+}
+.file{ margin:0 0 1.5rem; break-inside:auto; }
+
+/* ---- table of contents ---- */
+.toc{margin:0 0 1rem}
+.toc h2{color:var(--ink);font-size:1.05rem;margin-bottom:.5rem}
+.toc .grp{
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--faint);margin:.75rem 0 .2rem;
+}
+.toc ol{list-style:none;margin:0;padding:0;
+  columns:2; column-gap:2rem;}
+.toc li{break-inside:avoid;margin:.08rem 0;font-size:.92em}
+.toc a{color:var(--ink);text-decoration:none;
+  display:flex;justify-content:space-between;gap:.5rem;align-items:baseline}
+.toc a:hover{color:var(--accent)}
+.toc .num{color:var(--faint);font-size:.85em;
+  font-family:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  font-variant-numeric:tabular-nums}
+
+/* ---- code ---- */
+pre{
+  margin:0; background:var(--codebg);
+  border:1px solid var(--rule); border-radius:3px;
+  padding:.6rem .75rem;
+  font-family:ui-monospace,"Cascadia Mono","DejaVu Sans Mono",Consolas,Menlo,monospace;
+  font-size:8.6pt; line-height:1.38;
+  white-space:pre-wrap;
+  overflow-wrap:break-word;
+  padding-left:2.2em; text-indent:-1.6em;   /* hanging indent on wrapped lines */
+  tab-size:4;
+}
+code{font-family:inherit}
+.c{color:var(--c)}
+.cbox{color:var(--cbox);font-weight:600}
+.k{color:var(--k);font-weight:600}
+.t{color:var(--t)}
+.s{color:var(--s)}
+.n{color:var(--n)}
+.pp{color:var(--pp)}
+
+/* ---- prose blocks (the already-markdown index files) ---- */
+.prose{font-size:.95em}
+.prose table{border-collapse:collapse;width:100%;margin:.5rem 0;font-size:.88em}
+.prose th,.prose td{border:1px solid var(--rule);padding:.28rem .5rem;
+  text-align:left;vertical-align:top}
+.prose th{background:var(--codebg);font-weight:650}
+.prose h3{font-size:1rem;margin:1rem 0 .3rem;color:var(--accent);
+  break-after:avoid;page-break-after:avoid}
+.prose h4{font-size:.92rem;margin:.8rem 0 .25rem;
+  break-after:avoid;page-break-after:avoid}
+.prose code{background:var(--codebg);padding:.05em .3em;border-radius:2px;
+  font-size:.9em;border:1px solid var(--rule)}
+.prose ul,.prose ol{padding-left:1.2rem;margin:.4rem 0}
+.prose li{margin:.15rem 0}
+.prose p{margin:.4rem 0}
+
+/* ---- print ---- */
+@page{ size:A4; margin:13mm 11mm; }
+@media print{
+  :root{
+    --paper:#fff; --ink:#000; --soft:#333; --faint:#555;
+    --rule:#bbb; --rule2:#888; --codebg:#fbfbfb; --accent:#0a4a55;
+  }
+  body{font-size:10pt}
+  .wrap{max-width:none;padding:0;margin:0}
+  .noprint{display:none !important}
+  pre{font-size:8.2pt;border-color:#ccc;break-inside:auto}
+  h2{break-after:avoid;page-break-after:avoid}
+  .path{break-after:avoid;page-break-after:avoid}
+  .file{break-inside:auto}
+  .toc{break-after:page;page-break-after:always}
+  a{color:inherit;text-decoration:none}
+  .prose tr{break-inside:avoid}
+}
+
+.hint{
+  background:var(--codebg);border:1px solid var(--rule);
+  border-left:4px double var(--rule2);
+  border-radius:3px;padding:.7rem .9rem;margin:0 0 1.4rem;
+  font-size:.9em;color:var(--soft)
+}
+.hint b{color:var(--ink)}
+</style>
+<div class="wrap">
+<h1>8. Template, Snippets and Testing</h1>
+<p class="blurb">The boilerplate everything pastes into, plus the stress-test generators.</p>
+<p class="meta">4 files · 3ERSAN EL GANNA team reference</p>
+<div class="hint noprint"><b>To make the PDF:</b> Ctrl+P → Destination <b>Save as PDF</b> → turn ON <b>Background graphics</b> (for the coloured code) and <b>Headers and footers</b> (for page numbers) → Margins <b>Default</b>. This box does not print.</div>
+<div class="toc"><h2>Contents</h2>
+<ol>
+<li><a href="#template"><span>template</span><span class="num">8.1</span></a></li>
+<li><a href="#ordered_set"><span>ordered_set</span><span class="num">8.2</span></a></li>
+<li><a href="#compress"><span>compress</span><span class="num">8.3</span></a></li>
+<li><a href="#gen"><span>gen</span><span class="num">8.4</span></a></li>
+</ol>
+</div>
+<div class="file" id="template">
+<h2>8.1 &nbsp;template</h2>
+<p class="path">template/template.cpp</p>
+<pre><code><span class="pp">#include &lt;bits/stdc++.h&gt;</span>
+<span class="k">typedef</span> <span class="k">long</span> <span class="k">long</span> <span class="t">ll</span>;
+<span class="pp">#define el &#x27;\n&#x27;</span>
+<span class="pp">#define fio ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);</span>
+<span class="k">using</span> <span class="k">namespace</span> std;
+<span class="k">void</span> solve() { }
+<span class="k">signed</span> main() {
+    fio
+    <span class="k">int</span> t = <span class="n">1</span>;
+    cin &gt;&gt; t;
+    <span class="k">while</span> (t--)
+        solve();
+    <span class="k">return</span> <span class="n">0</span>;
+}</code></pre>
+</div>
+<div class="file" id="ordered_set">
+<h2>8.2 &nbsp;ordered_set</h2>
+<p class="path">snippet/ordered_set.cpp</p>
+<pre><code><span class="pp">#include &lt;ext/pb_ds/assoc_container.hpp&gt;</span>
+<span class="pp">#include &lt;ext/pb_ds/tree_policy.hpp&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> __gnu_pbds;
+<span class="pp">#define ordered_set tree &lt;int, null_type, less&lt;&gt;, rb_tree_tag, tree_order_statistics_node_update&gt;</span>
+<span class="c">/////////////////////////////////////////////////////////////////////////////////////////////////</span>
+<span class="k">template</span> &lt;<span class="k">typename</span> T&gt;
+<span class="k">using</span> ordered_set = tree&lt;T, null_type, <span class="t">less</span>&lt;T&gt;, rb_tree_tag, tree_order_statistics_node_update&gt;;
+<span class="k">template</span> &lt;<span class="k">typename</span> T&gt;
+<span class="k">using</span> ordered_multiset = tree&lt;T, null_type, less_equal&lt;T&gt;, rb_tree_tag, tree_order_statistics_node_update&gt;;
+<span class="c">//s.erase(s.upper_bound(value))</span></code></pre>
+</div>
+<div class="file" id="compress">
+<h2>8.3 &nbsp;compress</h2>
+<p class="path">snippet/compress.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// COORDINATE COMPRESSION -- map arbitrary values into [0, k)</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Four lines, used constantly. Written down because the two variants below are</span>
+<span class="c">// easy to confuse and the wrong one is a silent off-by-one.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  RANK vs INDEX -- decide which you need</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #   DENSE RANK (this file): equal values get the SAME id, ids are 0..k-1</span>
+<span class="cbox">// #                           with no gaps. Use for &quot;value -&gt; array slot&quot;.</span>
+<span class="cbox">// #   ORDER INDEX:            every element gets a DISTINCT id (ties broken by</span>
+<span class="cbox">// #                           position). Use for permutation-style problems.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Using dense rank where you needed distinct ids collapses duplicates and</span>
+<span class="cbox">// #  silently loses elements. Using distinct ids as array slots wastes k = n</span>
+<span class="cbox">// #  slots and breaks &quot;count values equal to x&quot;.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// PITFALLS:</span>
+<span class="c">//   Compress ALL values that will ever be looked up -- query bounds too, not</span>
+<span class="c">//     just the array. A lookup of an uncompressed value returns a neighbour&#x27;s</span>
+<span class="c">//     id with no error.</span>
+<span class="c">//   For a range query [l, r] on compressed values, compress l and r with</span>
+<span class="c">//     lower_bound / upper_bound respectively, not both the same way.</span>
+<span class="c">//   If the values are already small (&lt; 1e6) do not compress -- indexing</span>
+<span class="c">//     directly is faster and shorter.</span>
+<span class="c">//</span>
+<span class="c">// SUBPROBLEMS:</span>
+<span class="c">//   values up to 1e9, need an array indexed by value   this</span>
+<span class="c">//   Fenwick / segment tree over values                 this first</span>
+<span class="c">//   count distinct values                              k, the compressed size</span>
+<span class="c">//   &quot;how many distinct values ≤ x&quot;                     upper_bound on `vals`</span>
+<span class="c">//   offline queries touching arbitrary points          compress array + queries</span>
+<span class="c">//   2D: compress x and y independently                 two of these</span>
+<span class="c">// ============================================================================</span>
+
+<span class="c">// dense rank: returns the sorted unique values; a[] is rewritten to ids 0..k-1</span>
+<span class="k">template</span> &lt;<span class="k">class</span> T&gt;
+<span class="t">vector</span>&lt;T&gt; compress(<span class="t">vector</span>&lt;T&gt; &amp;a) {
+    <span class="t">vector</span>&lt;T&gt; vals = a;
+    sort(vals.begin(), vals.end());
+    vals.erase(unique(vals.begin(), vals.end()), vals.end());
+    <span class="k">for</span> (<span class="k">auto</span> &amp;x : a)
+        x = lower_bound(vals.begin(), vals.end(), x) - vals.begin();
+    <span class="k">return</span> vals;                       <span class="c">// vals[id] recovers the original value</span>
+}
+<span class="c">// look a value up afterwards; -1 if it was never compressed</span>
+<span class="k">template</span> &lt;<span class="k">class</span> T&gt;
+<span class="k">int</span> id_of(<span class="k">const</span> <span class="t">vector</span>&lt;T&gt; &amp;vals, T x) {
+    <span class="k">auto</span> it = lower_bound(vals.begin(), vals.end(), x);
+    <span class="k">return</span> (it != vals.end() &amp;&amp; *it == x) ? it - vals.begin() : -<span class="n">1</span>;
+}
+<span class="c">// how many compressed values are &lt; x  /  &lt;= x  -- for range bounds</span>
+<span class="k">template</span> &lt;<span class="k">class</span> T&gt;
+<span class="k">int</span> lt(<span class="k">const</span> <span class="t">vector</span>&lt;T&gt; &amp;vals, T x) {
+    <span class="k">return</span> lower_bound(vals.begin(), vals.end(), x) - vals.begin();
+}
+<span class="k">template</span> &lt;<span class="k">class</span> T&gt;
+<span class="k">int</span> le(<span class="k">const</span> <span class="t">vector</span>&lt;T&gt; &amp;vals, T x) {
+    <span class="k">return</span> upper_bound(vals.begin(), vals.end(), x) - vals.begin();
+}
+<span class="c">// ORDER INDEX: every element a distinct id, ties broken by original position</span>
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; order_index(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">ll</span>&gt; &amp;a) {
+    <span class="k">int</span> n = a.size();
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; ord(n);
+    iota(ord.begin(), ord.end(), <span class="n">0</span>);
+    sort(ord.begin(), ord.end(),
+         [&amp;](<span class="k">int</span> x, <span class="k">int</span> y) { <span class="k">return</span> a[x] != a[y] ? a[x] &lt; a[y] : x &lt; y; });
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; id(n);
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) id[ord[i]] = i;
+    <span class="k">return</span> id;
+}</code></pre>
+</div>
+<div class="file" id="gen">
+<h2>8.4 &nbsp;gen</h2>
+<p class="path">stress/gen.cpp</p>
+<pre><code><span class="c">// ============================================================================</span>
+<span class="c">// STRESS TESTING -- generators, the compare loop, and shrinking</span>
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// The driver (compile two solutions, feed both, diff) is short and standard.</span>
+<span class="c">// The GENERATORS are the part that decides whether stress testing finds</span>
+<span class="c">// anything, and they are what is usually missing.</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  UNIFORM RANDOM TREES ARE SHALLOW. THEY WILL NOT FIND YOUR BUG.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  A random-parent tree has depth ~O(log n). Every recursive DFS in this</span>
+<span class="cbox">// #  reference survives it. The bug you are hunting -- stack overflow, an</span>
+<span class="cbox">// #  O(depth) walk that is really O(n), a wrong base case at the root -- only</span>
+<span class="cbox">// #  appears on a PATH, a STAR, or a CATERPILLAR.</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Always generate several SHAPES, not just several seeds. tree_path() and</span>
+<span class="cbox">// #  tree_star() find more real bugs than a million random trees.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="cbox">// ############################################################################</span>
+<span class="cbox">// #  SMALL n IS WHAT FINDS BUGS, NOT LARGE n</span>
+<span class="cbox">// #</span>
+<span class="cbox">// #  Run with n in 1..8 first. A counterexample you can read by eye is worth</span>
+<span class="cbox">// #  more than one with 200 nodes, and brute force is only affordable there.</span>
+<span class="cbox">// #  Raise n ONLY after small cases pass, and then you are testing performance</span>
+<span class="cbox">// #  and overflow, not logic.</span>
+<span class="cbox">// #  Test n = 1 and n = 2 explicitly. Most off-by-ones live there.</span>
+<span class="cbox">// ############################################################################</span>
+<span class="c">//</span>
+<span class="c">// THE DRIVER, as a shell loop (simpler than the C++ system() version):</span>
+<span class="c">//     for i in $(seq 1 10000); do</span>
+<span class="c">//       ./gen $i &gt; in.txt</span>
+<span class="c">//       ./brute &lt; in.txt &gt; b.txt</span>
+<span class="c">//       ./fast  &lt; in.txt &gt; f.txt</span>
+<span class="c">//       if ! diff -q b.txt f.txt &gt;/dev/null; then echo &quot;WA on seed $i&quot;; break; fi</span>
+<span class="c">//     done</span>
+<span class="c">// Take the seed from argv so a failing case is reproducible: gen 4242.</span>
+<span class="c">//</span>
+<span class="c">// SHRINKING -- once it fails, do not debug the failing case. Shrink it:</span>
+<span class="c">//   halve n and rerun the same seed; if it still fails, halve again. Stop when</span>
+<span class="c">//   it stops failing, then step back up one. Two minutes of this turns a</span>
+<span class="c">//   200-node counterexample into a 4-node one you can trace by hand.</span>
+<span class="c">//</span>
+<span class="c">// WHAT TO COMPARE AGAINST when there is no obvious brute force:</span>
+<span class="c">//   an INVARIANT          the output is a tree / a permutation / sums to n</span>
+<span class="c">//   a SLOWER version      O(n^2) of your own O(n log n)</span>
+<span class="c">//   a DIFFERENT algorithm two independent implementations rarely share a bug</span>
+<span class="c">//   ITSELF                same input in a different order must give the same</span>
+<span class="c">//                         answer; a data structure vs a plain array</span>
+<span class="c">//   the SAMPLES           run them first, always</span>
+<span class="c">// ============================================================================</span>
+<span class="t">mt19937_64</span> rng(chrono::steady_clock::now().time_since_epoch().count());
+<span class="c">// reproducible: mt19937_64 rng(seed_from_argv);</span>
+
+<span class="t">ll</span> rnd(<span class="t">ll</span> l, <span class="t">ll</span> r) { <span class="k">return</span> uniform_int_distribution&lt;<span class="t">ll</span>&gt;(l, r)(rng); }
+
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; rnd_array(<span class="k">int</span> n, <span class="k">int</span> lo, <span class="k">int</span> hi) {
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; a(n);
+    <span class="k">for</span> (<span class="k">auto</span> &amp;x : a) x = rnd(lo, hi);
+    <span class="k">return</span> a;
+}
+<span class="t">vector</span>&lt;<span class="k">int</span>&gt; rnd_perm(<span class="k">int</span> n) {            <span class="c">// 0-indexed permutation</span>
+    <span class="t">vector</span>&lt;<span class="k">int</span>&gt; p(n);
+    iota(p.begin(), p.end(), <span class="n">0</span>);
+    shuffle(p.begin(), p.end(), rng);
+    <span class="k">return</span> p;
+}
+<span class="t">string</span> rnd_string(<span class="k">int</span> n, <span class="k">int</span> alpha) {    <span class="c">// alpha = 2 finds far more than 26</span>
+    <span class="t">string</span> s;
+    <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; n; i++) s += <span class="k">char</span>(<span class="s">&#x27;a&#x27;</span> + rnd(<span class="n">0</span>, alpha - <span class="n">1</span>));
+    <span class="k">return</span> s;
+}
+
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// TREES -- edges are (parent, child), 0-indexed, always exactly n-1 edges</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// shallow, depth ~log n. The DEFAULT, and the least useful for finding bugs.</span>
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; tree_random(<span class="k">int</span> n) {
+    <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; e;
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">1</span>; v &lt; n; v++) e.push_back({(<span class="k">int</span>)rnd(<span class="n">0</span>, v - <span class="n">1</span>), v});
+    <span class="k">return</span> e;
+}
+<span class="c">// a single path: depth n. Finds stack overflows and O(depth) walks.</span>
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; tree_path(<span class="k">int</span> n) {
+    <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; e;
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">1</span>; v &lt; n; v++) e.push_back({v - <span class="n">1</span>, v});
+    <span class="k">return</span> e;
+}
+<span class="c">// one centre, n-1 leaves: degree n-1. Finds O(deg) inner loops.</span>
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; tree_star(<span class="k">int</span> n) {
+    <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; e;
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">1</span>; v &lt; n; v++) e.push_back({<span class="n">0</span>, v});
+    <span class="k">return</span> e;
+}
+<span class="c">// a spine with legs -- the shape that breaks centroid/HLD assumptions</span>
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; tree_caterpillar(<span class="k">int</span> n) {
+    <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; e;
+    <span class="k">int</span> spine = max(<span class="n">1</span>, n / <span class="n">2</span>);
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">1</span>; v &lt; spine; v++) e.push_back({v - <span class="n">1</span>, v});
+    <span class="k">for</span> (<span class="k">int</span> v = spine; v &lt; n; v++) e.push_back({(<span class="k">int</span>)rnd(<span class="n">0</span>, spine - <span class="n">1</span>), v});
+    <span class="k">return</span> e;
+}
+<span class="c">// depth ~log n but wide; good for LCA and binary lifting</span>
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; tree_binary(<span class="k">int</span> n) {
+    <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; e;
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">1</span>; v &lt; n; v++) e.push_back({(v - <span class="n">1</span>) / <span class="n">2</span>, v});
+    <span class="k">return</span> e;
+}
+<span class="c">// bushy near the root, deep at the end: mixes the failure modes</span>
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; tree_broom(<span class="k">int</span> n) {
+    <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; e;
+    <span class="k">int</span> half = max(<span class="n">1</span>, n / <span class="n">2</span>);            <span class="c">// max(1,..): at n=1 the tail must not start at 0</span>
+    <span class="k">for</span> (<span class="k">int</span> v = <span class="n">1</span>; v &lt; half; v++) e.push_back({<span class="n">0</span>, v});
+    <span class="k">for</span> (<span class="k">int</span> v = half; v &lt; n; v++) e.push_back({v - <span class="n">1</span>, v});
+    <span class="k">return</span> e;
+}
+<span class="c">// pick a shape at random -- use this in the generator, not tree_random alone</span>
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; tree_any(<span class="k">int</span> n) {
+    <span class="k">switch</span> (rnd(<span class="n">0</span>, <span class="n">5</span>)) {
+        <span class="k">case</span> <span class="n">0</span>: <span class="k">return</span> tree_random(n);
+        <span class="k">case</span> <span class="n">1</span>: <span class="k">return</span> tree_path(n);
+        <span class="k">case</span> <span class="n">2</span>: <span class="k">return</span> tree_star(n);
+        <span class="k">case</span> <span class="n">3</span>: <span class="k">return</span> tree_caterpillar(n);
+        <span class="k">case</span> <span class="n">4</span>: <span class="k">return</span> tree_binary(n);
+        <span class="k">default</span>: <span class="k">return</span> tree_broom(n);
+    }
+}
+<span class="c">// relabel so the shape is not visible from the vertex numbering</span>
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; relabel(<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; e, <span class="k">int</span> n) {
+    <span class="k">auto</span> p = rnd_perm(n);
+    <span class="k">for</span> (<span class="k">auto</span> &amp;[u, v] : e) {
+        u = p[u], v = p[v];
+        <span class="k">if</span> (rnd(<span class="n">0</span>, <span class="n">1</span>)) swap(u, v);
+    }
+    shuffle(e.begin(), e.end(), rng);
+    <span class="k">return</span> e;
+}
+
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// GRAPHS</span>
+<span class="c">// ---------------------------------------------------------------------------</span>
+<span class="c">// connected: a random spanning tree first, then extra edges</span>
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; graph_connected(<span class="k">int</span> n, <span class="k">int</span> m, <span class="k">bool</span> simple = <span class="k">true</span>) {
+    <span class="k">auto</span> e = tree_random(n);
+    <span class="t">set</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; seen;
+    <span class="k">for</span> (<span class="k">auto</span> [u, v] : e) seen.insert({min(u, v), max(u, v)});
+    <span class="k">int</span> guard = <span class="n">0</span>;
+    <span class="k">while</span> ((<span class="k">int</span>)e.size() &lt; m &amp;&amp; guard++ &lt; <span class="n">50</span> * m) {
+        <span class="k">int</span> u = rnd(<span class="n">0</span>, n - <span class="n">1</span>), v = rnd(<span class="n">0</span>, n - <span class="n">1</span>);
+        <span class="k">if</span> (u == v) <span class="k">continue</span>;
+        <span class="k">auto</span> key = make_pair(min(u, v), max(u, v));
+        <span class="k">if</span> (simple &amp;&amp; seen.count(key)) <span class="k">continue</span>;
+        seen.insert(key), e.push_back({u, v});
+    }
+    <span class="k">return</span> relabel(e, n);
+}
+<span class="c">// may be disconnected; allows self-loops and parallel edges on request</span>
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; graph_random(<span class="k">int</span> n, <span class="k">int</span> m, <span class="k">bool</span> loops, <span class="k">bool</span> multi) {
+    <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; e;
+    <span class="t">set</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; seen;
+    <span class="k">int</span> guard = <span class="n">0</span>;
+    <span class="k">while</span> ((<span class="k">int</span>)e.size() &lt; m &amp;&amp; guard++ &lt; <span class="n">50</span> * m + <span class="n">100</span>) {
+        <span class="k">int</span> u = rnd(<span class="n">0</span>, n - <span class="n">1</span>), v = rnd(<span class="n">0</span>, n - <span class="n">1</span>);
+        <span class="k">if</span> (u == v &amp;&amp; !loops) <span class="k">continue</span>;
+        <span class="k">auto</span> key = make_pair(min(u, v), max(u, v));
+        <span class="k">if</span> (!multi &amp;&amp; seen.count(key)) <span class="k">continue</span>;
+        seen.insert(key), e.push_back({u, v});
+    }
+    <span class="k">return</span> e;
+}
+<span class="c">// acyclic by construction: every edge points from a lower to a higher label</span>
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; graph_dag(<span class="k">int</span> n, <span class="k">int</span> m) {
+    <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; e;
+    <span class="t">set</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; seen;
+    <span class="k">int</span> guard = <span class="n">0</span>;
+    <span class="k">while</span> ((<span class="k">int</span>)e.size() &lt; m &amp;&amp; guard++ &lt; <span class="n">50</span> * m + <span class="n">100</span>) {
+        <span class="k">int</span> u = rnd(<span class="n">0</span>, n - <span class="n">2</span>), v = rnd(u + <span class="n">1</span>, n - <span class="n">1</span>);
+        <span class="k">if</span> (seen.count({u, v})) <span class="k">continue</span>;
+        seen.insert({u, v}), e.push_back({u, v});
+    }
+    <span class="k">return</span> e;                                    <span class="c">// do NOT relabel: that is the invariant</span>
+}
+<span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; graph_bipartite(<span class="k">int</span> nl, <span class="k">int</span> nr, <span class="k">int</span> m) {
+    <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; e;
+    <span class="t">set</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; seen;
+    <span class="k">int</span> guard = <span class="n">0</span>;
+    <span class="k">while</span> ((<span class="k">int</span>)e.size() &lt; m &amp;&amp; guard++ &lt; <span class="n">50</span> * m + <span class="n">100</span>) {
+        <span class="k">int</span> u = rnd(<span class="n">0</span>, nl - <span class="n">1</span>), v = rnd(<span class="n">0</span>, nr - <span class="n">1</span>);
+        <span class="k">if</span> (seen.count({u, v})) <span class="k">continue</span>;
+        seen.insert({u, v}), e.push_back({u, v});
+    }
+    <span class="k">return</span> e;
+}
+<span class="c">// weights, including negatives -- the case people forget to test</span>
+<span class="t">vector</span>&lt;<span class="t">array</span>&lt;<span class="k">int</span>, <span class="n">3</span>&gt;&gt; add_weights(<span class="k">const</span> <span class="t">vector</span>&lt;<span class="t">pair</span>&lt;<span class="k">int</span>, <span class="k">int</span>&gt;&gt; &amp;e, <span class="k">int</span> lo, <span class="k">int</span> hi) {
+    <span class="t">vector</span>&lt;<span class="t">array</span>&lt;<span class="k">int</span>, <span class="n">3</span>&gt;&gt; w;
+    <span class="k">for</span> (<span class="k">auto</span> [u, v] : e) w.push_back({u, v, (<span class="k">int</span>)rnd(lo, hi)});
+    <span class="k">return</span> w;
+}</code></pre>
+</div>
+</div>

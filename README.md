@@ -9,6 +9,28 @@ Geometry and number theory are the other team's printed PDFs, not in here;
 
 ---
 
+## PRINTING
+
+Nine ready-to-print documents live in [`reference/`](reference/) — open
+[`reference/index.html`](reference/index.html), pick one, **Ctrl+P → Save as PDF**.
+Turn ON *Background graphics* so the code colouring survives, and *Headers and
+footers* if you want page numbers.
+
+Each document also exists as portable markdown (`reference/NN-*.md`) with fenced
+`cpp` blocks and a clickable contents list.
+
+Both are **generated** — edit the source files, then re-run:
+
+```
+python tools/build_reference.py
+```
+
+New files are picked up automatically. The five second-copies of duplicated
+algorithms are excluded; the list is `DROP` at the top of that script, and
+deleting a line puts one back.
+
+---
+
 ## PRINT ORDER
 
 If page count is limited, print in this order — it front-loads what gets
