@@ -113,10 +113,10 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 
 | you see | reach for | the tell |
 |---|---|---|
-| `h(S) = sum over DISJOINT A + B = S of f(A)g(B)` | **subset-sum convolution**: add a popcount-rank dimension, zeta each rank, convolve ranks, inverse zeta. O(2^n n^2) | plain OR-convolution over-counts overlapping pairs; the rank enforces disjointness |
+| `h(S) = sum over DISJOINT A + B = S of f(A)g(B)` | **subset-sum convolution** — `DP/subset_sum_convolution.cpp` | plain OR-convolution over-counts overlapping pairs; the rank enforces disjointness |
 | convolution indexed by OR / AND | zeta over subsets / supersets, pointwise multiply, Mobius back. O(2^n n) | — |
 | "at least these bits set", counts over supersets | **superset zeta** — invert the BIT TEST in the SOS loop, not the mask loop | — |
-| partition n <= 22 items with arbitrary group cost | subset-sum convolution / set-power-series exp, O(2^n n^2) | beats 3^n once n is about 20 |
+| partition n <= 22 items with arbitrary group cost | subset-sum convolution — `DP/subset_sum_convolution.cpp`; below n=18 prefer `DP/submask_partition.cpp` | beats 3^n once n is about 20 |
 | you enumerate submasks but want **unordered** partitions | force the lowest set bit into one side | otherwise every partition is counted twice |
 
 ## DIGIT-LIKE DP
@@ -216,7 +216,7 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 | a self-loop in a probability DP | a geometric series | divide by (1 - p_self) |
 | digit DP | DP on the automaton recognising "<= N"; `tight` IS the automaton state | extra conditions = product automaton |
 | SOS / zeta over subsets | multidimensional prefix sums over {0,1}^n; Mobius is the difference transform | same shape as the divisor-lattice transform |
-| subset-sum convolution | ordinary OR-convolution once a popcount RANK dimension is added | rank is what enforces disjointness |
+| subset-sum convolution (`DP/subset_sum_convolution.cpp`) | ordinary OR-convolution once a popcount RANK dimension is added | rank is what enforces disjointness |
 | tree knapsack with a numeric capacity | 1D knapsack over the Euler tour with skip-jumps (`DP/tree_knapsack.cpp`) | removes child merging entirely |
 | "delete one element, recompute" | D&C over the index range carrying the outside-DP | n recomputations become log n |
 | counting up to symmetry | Burnside — `combinatorics/burnside.cpp` | — |

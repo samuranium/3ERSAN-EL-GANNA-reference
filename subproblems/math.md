@@ -110,9 +110,9 @@ All of it: `math/bitwise.cpp`, and `DS/bitset.cpp` for the ÷64 loop shapes.
 | `f[n]` defined by a convolution of f with itself | relaxed / online (D&C) convolution, O(n log^2 n) | plain FFT is circular here |
 | a product of many small polynomials | D&C, or a priority queue merging by degree | O(n log^2 n) vs O(n^2) |
 | given power sums, want elementary symmetric (or reverse) | Newton's identities | "sum of a_i^k" against "sum over subsets of products" |
-| non-crossing families of paths | **Lindstrom-Gessel-Viennot** determinant | count of non-intersecting path systems = det of single-path counts |
-| count Eulerian circuits in a digraph | **BEST theorem**: arborescence count (Matrix-Tree) x product of (outdeg-1)! | pairs with the Kirchhoff you already have |
-| permanent / "one per row and column", n <= 20 | Ryser inclusion-exclusion, O(2^n n) | determinant only works if signs are allowed |
+| non-crossing families of paths | **Lindstrom-Gessel-Viennot** determinant — `combinatorics/counting_formulas.cpp` | count of non-intersecting path systems = det of single-path counts |
+| count Eulerian circuits in a digraph | **BEST theorem** — `combinatorics/counting_formulas.cpp` | pairs with the Kirchhoff you already have |
+| permanent / "one per row and column", n <= 20 | Ryser — `combinatorics/counting_formulas.cpp` | determinant only works if signs are allowed |
 
 ## PROBABILITY AND EXPECTATION
 
@@ -144,7 +144,7 @@ All of it: `math/bitwise.cpp`, and `DS/bitset.cpp` for the ÷64 loop shapes.
 | "are these two multisets equal" | Zobrist XOR hashing with random 64-bit values | O(1) comparison and O(1) incremental update |
 | "count subarrays with property P" | prefix-transform until P becomes an equality of two prefix values | XOR-prefix, sum-prefix, count-of-a minus count-of-b |
 | "grid paths avoiding k obstacles" | sort obstacles, DP over "first obstacle hit" with inclusion-exclusion | O(k^2) regardless of grid size |
-| "non-crossing tuples of paths / plane partitions" | LGV determinant, or the hook length formula | — |
+| "non-crossing tuples of paths / plane partitions" | LGV or hook length — `combinatorics/counting_formulas.cpp` | — |
 | "piecewise-linear convex cost, add/shift/clamp repeatedly" | slope trick — `DP/slope_trick.cpp` | each operation is a heap push |
 | "probability where states revisit each other" | linear system + Gauss, not memoisation | the cycle is the tell |
 | "closest fraction with bounded denominator" | continued fractions / Stern-Brocot | convergents plus semiconvergents |

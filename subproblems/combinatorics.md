@@ -87,8 +87,8 @@
 | count **connected** labelled structures | EGF: `C = log(All)`, or the rooted-subtraction recurrence | "connected" is almost never counted directly |
 | labelled objects, composition matters | **EGF** (divide by n!); "multiset of components" is exp, "extract components" is log | multinomials in the statement mean EGF |
 | unlabelled sequences | **OGF**, a product of series, one FFT | — |
-| count standard Young tableaux of a shape | **hook length formula**: `n! / product of hooks` | generalises ballot/Catalan to k candidates |
-| lattice paths above a slope-k line, k-ary trees | **Fuss-Catalan** `(1/(kn+1)) C(kn+n, n)`; cycle lemma | the natural extension of Catalan |
+| count standard Young tableaux of a shape | **hook length formula** — `combinatorics/counting_formulas.cpp` | generalises ballot/Catalan to k candidates |
+| lattice paths above a slope-k line, k-ary trees | **Fuss-Catalan** — `combinatorics/counting_formulas.cpp` | the natural extension of Catalan |
 | colourings up to rotation, unrestricted colour counts | Burnside, `c^cycles(g)` — `combinatorics/burnside.cpp` | the group is small and explicit |
 | colourings up to symmetry with **fixed counts of each colour** | **Polya** cycle index — `combinatorics/burnside.cpp` `polya_fixed_counts` | Burnside alone cannot track colour multiplicities |
 | convolution indexed by **gcd or lcm** | divisor / multiple zeta-Mobius transform, O(n log log n) | same machinery as SOS, different lattice |
