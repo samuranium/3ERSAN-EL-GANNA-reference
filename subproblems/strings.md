@@ -168,8 +168,8 @@
 
 | you see | reach for |
 |---|---|
-| max/min XOR against a **prefix or range** | persistent binary trie over prefix XORs |
-| count pairs with XOR < K, or k-th largest XOR | binary trie descent carrying subtree counts |
+| max/min XOR against a **prefix or range** | persistent binary trie — `DS/Trie/persistent_binary_trie.cpp` |
+| count pairs with XOR < K, or k-th largest XOR | binary trie descent carrying subtree counts — `DS/Trie/persistent_binary_trie.cpp` |
 | XOR-MST | Boruvka on a binary trie (recursive split at the highest differing bit) — the trie IS the recursion tree |
 | dictionary that **changes** (patterns inserted online) | logarithmic rebuilding: O(log n) Aho automata of sizes 2^k, merge on insert |
 | prefix-count queries over a **static** set | sort + binary search — no trie needed unless you also traverse |

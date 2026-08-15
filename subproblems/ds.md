@@ -126,8 +126,8 @@
 | you see | reach for | the tell |
 |---|---|---|
 | structure supports insert but not delete, all ops known | **offline deletion** (segment tree on time + rollback) | needs rollback and **no** path compression / no amortisation |
-| "for each query, the earliest moment it becomes satisfiable" | **parallel binary search** | all queries share one time axis; process the common midpoint once |
-| three simultaneous inequalities / dynamic 2D counting | **CDQ divide and conquer** | sort dim 1, D&C on dim 2, BIT on dim 3. The D&C is over TIME when the problem is insert-then-query |
+| "for each query, the earliest moment it becomes satisfiable" | **parallel binary search** — `DS/offline/parallel_binary_search.cpp` | all queries share one time axis; process the common midpoint once |
+| three simultaneous inequalities / dynamic 2D counting | **CDQ divide and conquer** — `DS/offline/cdq.cpp` | sort dim 1, D&C on dim 2, BIT on dim 3. The D&C is over TIME when the problem is insert-then-query |
 | only a static structure exists but you need insertions | **logarithmic method / binary counter**: keep log n static structures of size 2^k, merge on carry | amortised O(log n) rebuilds per insert; query = fold over log n structures |
 | the problem is **forced online** | persistence / dynamic segtree / LCT are the only options | Mo's, CDQ, parallel binary search and offline sweeps are all disqualified — check this FIRST |
 | "count pairs satisfying a 2D condition" | offline sweep by one coordinate + BIT on the other | the sort order IS the second dimension |
@@ -153,7 +153,7 @@
 | `dp[i] = dp[i-1] + abs(x - a_i)`-shaped convex piecewise-linear cost | **slope trick** — heap of slope-change points | cost is convex, piecewise linear, continuous |
 | sliding-window median / k-th | two heaps with **lazy deletion**, or a BIT over compressed values | mark evicted, pop only when it surfaces |
 | "delete an arbitrary element from a priority queue" | a second "deleted" heap, pop while the tops match | avoids multiset's constant factor |
-| max XOR over a **subarray** | **persistent** binary trie over prefix XORs | version subtraction gives the range restriction |
+| max XOR over a **subarray** | **persistent** binary trie over prefix XORs — `DS/Trie/persistent_binary_trie.cpp` | version subtraction gives the range restriction |
 | connectivity queries that must be undone | DSU with rollback: union by size, **no** path compression | O(log n), not alpha(n) — the price of undo |
 | D&C where the split point is the range min/max | **Cartesian tree** — `DS/cartesian_tree.cpp` | makes "sum over subarrays of f(min)" a subtree-contribution problem; also O(1) RMQ via LCA |
 | "count subarrays whose gcd / AND / OR equals k" | stack of (value, count) per right endpoint — `DS/swag.cpp` | only O(log C) distinct values of gcd/AND/OR over suffixes ending at r |
@@ -170,8 +170,8 @@
 | "assign v to all of [l,r]; also range sum" | ODT / interval map — `DS/odt.cpp` | assignment is destructive — interval count only shrinks |
 | "add x to every node within distance d of v" | centroid decomposition, or Euler tour + depth-indexed BIT | distance factors through O(log n) ancestor centroids |
 | "query on a root-to-node path", invertible op | prefix(u) o prefix(v) o prefix(lca)^-2 | no HLD needed when the op has inverses |
-| "for each query, the first time a condition holds" | parallel binary search | every query searches the same axis |
-| "count triples dominated in 3 dimensions" | CDQ: sort dim1, D&C dim2, BIT dim3 | update time is one of the dimensions |
+| "for each query, the first time a condition holds" | parallel binary search — `DS/offline/parallel_binary_search.cpp` | every query searches the same axis |
+| "count triples dominated in 3 dimensions" | CDQ — `DS/offline/cdq.cpp` | update time is one of the dimensions |
 | "sliding window of min / gcd / OR / matrix product" | SWAG — `DS/swag.cpp` | non-invertible means no prefix subtraction |
 | "sum over all subarrays of f(min)" | monotonic stack / Cartesian tree contribution — `DS/cartesian_tree.cpp` | each element is the min of a rectangle of (l,r) pairs |
 | "maintain a multiset, how many <= x" | BIT over compressed values, **not** multiset | multiset has no rank; std::distance is O(n) |
