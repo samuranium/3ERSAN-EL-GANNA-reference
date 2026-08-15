@@ -40,7 +40,7 @@
 | is s[l..r] a palindrome | hash forward vs reverse | `hashing/hash.cpp` |
 | palindromes **with updates** | hashing on a segment tree | `hashing/hash_seg.cpp` |
 | count palindromic substrings | Manacher, sum the radii | `separate manacher.cpp` |
-| least / greatest cyclic rotation | Booth, or SA of s+s | `hashing/hash.cpp` |
+| least / greatest cyclic rotation | Duval on s+s, O(n) O(1) | `strings/lyndon.cpp` |
 | is t a rotation of s | t is a substring of s+s | — |
 | are two ranges anagrams | Zobrist multiset hash | `hashing/hash_ms.cpp` |
 | is a range a permutation of 1..len | Zobrist | `hashing/hash_ms.cpp` |
@@ -100,9 +100,9 @@
 
 | you see | reach for | the tell |
 |---|---|---|
-| count **distinct** palindromic substrings, or per-palindrome occurrences | **eertree** | Manacher counts ALL palindromic substrings, not distinct. There are <= n distinct — that bound is why eertree is linear |
-| palindromes **ending at each position** | eertree suffix-link chain, or Manacher + difference array | — |
-| min / count of **palindromic factorisations** | eertree with **series links**, O(n log n) | plain chain walk is O(n) per position -> O(n^2). Series links group the chain into O(log n) arithmetic progressions |
+| count **distinct** palindromic substrings, or per-palindrome occurrences | **eertree** — `strings/eertree.cpp` | Manacher counts ALL palindromic substrings, not distinct. There are <= n distinct — that bound is why eertree is linear |
+| palindromes **ending at each position** | eertree suffix-link chain (`num[last]` counts them), or Manacher + difference array | `strings/eertree.cpp` |
+| min / count of **palindromic factorisations** | eertree with **series links**, O(n log n) — `strings/eertree.cpp` `PalFactor` | plain chain walk is O(n) per position -> O(n^2). Series links group the chain into O(log n) arithmetic progressions |
 | palindromes common to two strings | joint eertree (build over s, continue over t sharing nodes) | same trick as generalised SAM |
 | min chars to **prepend** to make a palindrome | longest palindromic PREFIX = KMP on `rev(s) + '#' + s` | mirror it for appending |
 | min insertions/deletions to make a palindrome | `n - LCS(s, rev s)` | not a Manacher problem at all |
@@ -118,11 +118,11 @@
 | "s is a concatenation of copies of t" | `k = n - pi[n-1]`; valid only if **k divides n** | if k does not divide n, s is NOT a repetition, though k is still the smallest period |
 | all periods of a **substring**, many queries | period queries: O(n) structure, O(log n) per query, periods as disjoint APs | Fine-Wilf forces the AP structure |
 | two periods p, q with `len >= p + q - gcd(p,q)` | **Fine and Wilf**: gcd(p,q) is also a period | use it to prove only O(log n) candidate periods survive |
-| minimal rotation, tight memory | **Booth or Duval on s+s** — O(n) time, O(1) extra space | beats SA of s+s by a large constant |
-| maximum rotation | Duval on the inverted alphabet | same code, flipped comparator |
+| minimal rotation, tight memory | **Duval on s+s** — O(n) time, O(1) extra space — `strings/lyndon.cpp` | beats SA of s+s by a large constant |
+| maximum rotation | Duval, comparisons flipped — `strings/lyndon.cpp` `max_rotation` | same code, flipped comparator |
 | count **distinct** rotations | `n / p` where p is the smallest period dividing n, else n | pure number theory once you have the period |
-| split into the fewest lexicographically non-increasing pieces | **Lyndon factorisation (Duval)** — it IS that decomposition, and it is unique | the definition is the answer |
-| lexicographically smallest **suffix** | the last block of the Lyndon factorisation | O(n), no SA |
+| split into the fewest lexicographically non-increasing pieces | **Lyndon factorisation (Duval)** — `strings/lyndon.cpp` | the definition is the answer |
+| lexicographically smallest **suffix** | the last block of the Lyndon factorisation — `strings/lyndon.cpp` | O(n), no SA |
 | find all squares / tandem repeats | **Main-Lorentz**, O(n log n), output as compressed triples | the explicit list can be Theta(n^2) |
 | find all **runs** (maximal repetitions) | runs theorem via the **Lyndon array** — linear | the number of runs is < n; use it as an output-size sanity check |
 | "every repetition in s" with n >= 1e5 | runs, not squares | squares are Theta(n^2); every square sits inside a run |
@@ -155,9 +155,9 @@
 
 | you see | reach for | the tell |
 |---|---|---|
-| "is t a subsequence of s", **many** queries | **subsequence automaton** `nxt[i][c]` | O(len t) per query, O(n sigma) memory |
-| shortest string **not** a subsequence of s | BFS/DP on the subsequence automaton | the answer length is O(log_sigma n) |
-| count **distinct** subsequences | DP with last-occurrence subtraction | the subtraction IS the automaton's determinism |
+| "is t a subsequence of s", **many** queries | **subsequence automaton** `nxt[i][c]` — `strings/subsequence_automaton.cpp` | O(len t) per query, O(n sigma) memory |
+| shortest string **not** a subsequence of s | DP on the subsequence automaton — `strings/subsequence_automaton.cpp` | the answer length is O(log_sigma n) |
+| count **distinct** subsequences | DP with last-occurrence subtraction — `strings/subsequence_automaton.cpp` | the subtraction IS the automaton's determinism |
 | count subsequences satisfying a **regular** constraint | product DP: subsequence automaton x DFA of the constraint | works for "divisible by k", "avoids substring", etc. |
 | LCS of two **permutations** / all-distinct strings | relabel by position in the first: **LCS becomes LIS**, O(n log n) | — |
 | LCS with n*m ~ 1e8 | bit-parallel LCS, O(nm/64) | length only |
@@ -194,7 +194,7 @@
 | set operations on occurrence positions | segment tree **merge** over the SAM link tree |
 | "sort all rotations, read the last column" | BWT = SA of s + sentinel, take `s[sa[i]-1]` |
 | shortest superstring, n <= 20 patterns | overlap graph + bitmask DP = Hamiltonian path |
-| sequence containing every length-k string exactly once | de Bruijn: Eulerian circuit, or concatenate all Lyndon words of length dividing k in lex order |
+| sequence containing every length-k string exactly once | de Bruijn: Eulerian circuit (`graph/SCC/eulerian_path.cpp`), or concatenate all Lyndon words of length dividing k (`strings/lyndon.cpp` `de_bruijn`) |
 
 ## TRANSFORMATIONS
 
