@@ -76,7 +76,7 @@
 // SUBPROBLEMS -- what bitwise turns into
 // ----------------------------------------------------------------------------
 //   subset DP over n <= 20 items        [B] iterate submasks, O(3^n)
-//   "for each mask, sum over submasks"  SOS DP -- DP/optimization/sos_dp.cpp
+//   "for each mask, sum over submasks"  SOS DP -- DP/sos.cpp
 //   maximum xor of a pair               binary trie, DS/Trie/binary_trie.cpp
 //   max xor of a SUBSET                 xor basis, DP/sub-problems xorbasis.cpp
 //   count pairs with a&b == 0           SOS over the complement
