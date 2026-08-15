@@ -51,14 +51,14 @@ under pressure.
 | "xor of a subset" | xor basis | `DP/sub-problems xorbasis.cpp` |
 | "max xor of a **pair**" | binary trie | `DS/Trie/binary_trie.cpp` |
 | combine every pair, index by the **sum** | convolution (FFT/NTT) | `math/fft_ntt.cpp` |
-| combine every pair, index by **xor/and/or** | FWHT, **not** FFT | `math.md` |
+| combine every pair, index by **xor/and/or** | FWHT, **not** FFT | `math/fwht.cpp` |
 | "for each mask, aggregate over submasks" | SOS DP | `DP/sos.cpp`, `dp.md` |
 | a range op where each cell is touched **once** | DSU as next-pointer | `graph/dsu/dsu_marking.cpp` [A] |
 | queries offline, edges appear/disappear | segment tree on time + rollback DSU | `graph/dsu/dsu_rollback.cpp` [1] |
 | tree path queries **with updates** | HLD | `DS/HLD/` |
 | tree path queries, **no** updates | LCA + prefix sums | `DS/LCA/binary lifting.cpp` |
 | "answer for every root" | rerooting DP | `DP/rerooting.cpp` |
-| k marked nodes, Σk bounded, n huge | virtual tree | `DS/LCA/binary lifting.cpp` [T6] |
+| k marked nodes, Σk bounded, n huge | virtual tree | `DS/LCA/virtual_tree.cpp` |
 | "repeat this operation k times", k ≤ 1e18 | binary lifting / matrix power | `DS/LCA/binary lifting.cpp` [T7], `DP/matrix/` |
 | a boolean inner loop over n | bitset, ÷64 | `DS/bitset.cpp` |
 | "is sum s reachable" (not: how many ways) | bitset subset-sum | `DS/bitset.cpp` [1] |

@@ -44,10 +44,22 @@ Number-theory specific questions (primes, divisors, factorisation) are in
 | ... modulo 1e9+7 | 3 NTTs + CRT, or split FFT | `math/fft_ntt.cpp` |
 | ... real or floating data | FFT | `math/fft_ntt.cpp` |
 | count pairs by SUM | convolution | `math/fft_ntt.cpp` |
-| count pairs by XOR / AND / OR | FWHT, **not** FFT | their Math PDF |
+| count pairs by XOR / AND / OR | FWHT, **not** FFT | `math/fwht.cpp` |
 | big integer multiplication | FFT on digits, then carry | `math/fft_ntt.cpp` |
 | string matching with wildcards | 3 convolutions | `math/fft_ntt.cpp` |
 | polynomial inverse / exp / division | Newton on top of NTT | their Math PDF |
+
+## RANDOMIZED
+
+| you see | do this | file |
+|---|---|---|
+| verify `A*B == C` without the product | Freivalds, O(n²) | `math/randomization.cpp` |
+| an adversarial worst case (sort, hash) | shuffle first | `math/randomization.cpp` |
+| `unordered_map` being hacked | splitmix64 custom hash | `math/randomization.cpp` |
+| "a value covering > half the range" | sample 30 positions | `math/randomization.cpp` |
+| need a unique minimum | random tie-break (isolation lemma) | `math/randomization.cpp` |
+| NP-hard with a generous limit | random restarts / annealing | `math/randomization.cpp` |
+| generating tests | `stress/gen.cpp` |
 
 ## BITS
 

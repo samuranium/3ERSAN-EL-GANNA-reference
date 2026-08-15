@@ -26,8 +26,10 @@
 | k-th set bit / k-th free slot | same | `fenwick_kth.cpp` |
 | rank of a value | `pre(v)` | `fenwick_kth.cpp` |
 | number of inversions | Fenwick sweep | `fenwick_kth.cpp` |
-| k-th smallest in a **range** | persistent segment tree, or wavelet | `DS/segment tree/persistent/persistent.cpp` |
-| count values ≤ x in a range | merge sort tree | `DS/segment tree/merge/` |
+| k-th smallest in a **range** | wavelet tree, or persistent segtree | `DS/wavelet_tree.cpp` |
+| ... and you also need rank / quantile | wavelet tree | `DS/wavelet_tree.cpp` |
+| ... across persistent versions | persistent segment tree | `DS/segment tree/persistent/persistent.cpp` |
+| count values ≤ x in a range | wavelet tree, or merge sort tree | `DS/wavelet_tree.cpp` |
 | first index ≥ L with value ≥ x | segment tree descend | `DS/segment tree/lazy.cpp` [1] |
 | nearest smaller / greater element | monotonic stack | `DS/monotonic_stack.cpp` |
 | largest rectangle in a histogram | monotonic stack | `monotonic_stack.cpp` |

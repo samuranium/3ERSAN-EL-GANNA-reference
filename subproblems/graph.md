@@ -62,7 +62,9 @@
 | minimum path cover of a DAG | n − matching on the split graph | `kuhn.cpp` |
 | maximum antichain in a poset | Dilworth → path cover | `kuhn.cpp` |
 | does a perfect matching exist | Hall: every S has \|N(S)\| ≥ \|S\| | — |
-| matching with **costs** | MCMF / Hungarian | `graph/flows/MCMF.cpp` |
+| matching with **costs**, n = m | Hungarian, O(n³) | `graph/matching/hungarian.cpp` |
+| matching with costs + capacities | MCMF | `graph/flows/MCMF.cpp` |
+| minimise the **maximum** assigned cost | binary search + Kuhn, **not** Hungarian | `graph/matching/kuhn.cpp` |
 | each edge has a lower bound too | flow with lower bounds | — |
 | vertex capacities | split the vertex | `Dinics.cpp` |
 | matching in a **general** graph | Blossom — not in the repo | — |
@@ -80,7 +82,7 @@
 | answer for **every** root | rerooting DP | `DP/rerooting.cpp` |
 | the farthest node from each vertex | rerooting, best-two form | `DP/rerooting.cpp` B |
 | diameter | two BFS, or max eccentricity | `DP/rerooting.cpp` |
-| k marked nodes, Σk small, n huge | virtual tree | `binary lifting.cpp` [T6] |
+| k marked nodes, Σk small, n huge | virtual tree | `DS/LCA/virtual_tree.cpp` |
 | count paths with a property | centroid decomposition | `DS/centroid/centroid.cpp` |
 | meeting point of three nodes | deepest of the three pairwise LCAs | `binary lifting.cpp` [T3] |
 | LCA when re-rooted at r | deepest of lca(u,v), lca(u,r), lca(v,r) | `binary lifting.cpp` [T4] |
