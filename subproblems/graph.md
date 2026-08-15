@@ -89,6 +89,7 @@
 | number of spanning trees | Kirchhoff | `graph/kirchhoff.cpp` |
 | second-best spanning tree | MST + max edge on path | `graph/MST/second_best_mst.cpp` |
 | queries on subtrees, offline | small-to-large, or DSU on tree | — |
+| distinct values on a path, offline | Mo's on the tree | `DS/SQRT/mo_on_tree.cpp` |
 | tree isomorphism | canonical hash of the subtree | `hashing/hash_tree.cpp` |
 | path as a string | path hash | `hashing/hash_tree.cpp` |
 
@@ -110,6 +111,7 @@
 | you see | tool | file |
 |---|---|---|
 | chromatic number, n ≤ 20 | subset DP inclusion–exclusion | `graph/graph_coloring.cpp` |
+| BFS / components of the COMPLEMENT graph | unvisited-set walk, O(n+m) | `graph/inverse_graph.cpp` |
 | is it bipartite | BFS 2-colour, or DSU parity | `graph/dsu/dsu parity.cpp` |
 | minimum spanning tree | Kruskal / Prim | `graph/MST/` |
 | bottleneck path between two nodes | max edge on the MST path | `second_best_mst.cpp` |

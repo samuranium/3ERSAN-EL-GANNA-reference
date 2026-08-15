@@ -40,6 +40,8 @@
 | range gcd **with** range add | segment tree over the difference array | `lazy.cpp` [3] |
 | ordered set with `k-th` and `rank` | pb_ds, or Fenwick | `snippet/ordered_set.cpp` |
 | range queries, no updates, offline | Mo's algorithm | `DS/SQRT/mo.cpp` |
+| the same, but on TREE PATHS | Mo's on the Euler tour | `DS/SQRT/mo_on_tree.cpp` |
+| values up to 1e9, need array slots | coordinate compression | `snippet/compress.cpp` |
 | distinct values in a range | Mo's, or persistent segment tree | `DS/segment tree/persistent/persistent count distinct.cpp` |
 | assign each element once, over ranges | DSU next-pointer | `graph/dsu/dsu_marking.cpp` |
 | reverse a subarray / cut and paste | implicit treap | `DS/bst/treap_implicit.cpp` |
