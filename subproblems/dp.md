@@ -139,7 +139,7 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 | "expected number of steps until ..." | linearity over indicators, or the tail sum `sum P(not done by t)` | often removes the DP entirely |
 | variance / E[X^2] | carry (E[X], E[X^2]); the square transition needs the cross term `2 E[X] delta` | E[X^2] does not compose like E[X] |
 | two players each maximising **their own** score | minimax DP storing (my total - their total) as ONE value | collapses two arrays into one |
-| a game where moves may return to a prior position, or draws exist | **retrograde BFS** from terminals with an out-degree counter | memoised win/lose DFS loops forever or mislabels draws as losses |
+| a game where moves may return to a prior position, or draws exist | **retrograde BFS** — `game/retrograde.cpp` | memoised win/lose DFS loops forever or mislabels draws as losses |
 | a move **splits** the game into pieces | Grundy of the split = XOR of the pieces | — |
 
 ## OPTIMISATION AND CONVEXITY
@@ -151,11 +151,11 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 | (max,+) convolution where **one** array is convex | SMAWK, O(n) | the standard knapsack-layer speed-up |
 | (max,+) convolution where **both** are convex | merge their difference sequences (Minkowski sum of epigraphs), O(n+m) | the slopes just get sorted |
 | lines get **mutated** (`b_i += t*a_i` on a range), queries non-monotone | kinetic segment tree | Li Chao wants static lines; CHT wants monotone queries |
-| piecewise-linear convex cost; transitions are `+abs(x-a)`, `+max(0,x-a)`, prefix-min, shift | **slope trick** (two heaps of slope-change points), O(n log n) | cost shaped like distance-to-a-target |
-| the same, merged up a tree | slope trick + small-to-large heap merging | — |
+| piecewise-linear convex cost; transitions are `+abs(x-a)`, `+max(0,x-a)`, prefix-min, shift | **slope trick** — `DP/slope_trick.cpp` | cost shaped like distance-to-a-target |
+| the same, merged up a tree | slope trick (`DP/slope_trick.cpp`) + small-to-large heap merging | — |
 | convex cost, "move units between positions" | min-cost flow modelled as a **greedy with a regret heap** (push an undo option when you commit) | successive shortest paths collapses to a priority queue |
-| the answer is a polynomial in n of degree <= d, n huge | brute d+1 values, **Lagrange interpolation**, O(d) | — |
-| you suspect a linear recurrence but cannot derive it | brute ~2d terms, **Berlekamp-Massey**, then Kitamasa / Bostan-Mori | O(d^2 log n), no matrix cube |
+| the answer is a polynomial in n of degree <= d, n huge | brute d+1 values, **Lagrange interpolation** — `math/interpolation.cpp` | — |
+| you suspect a linear recurrence but cannot derive it | brute ~2d terms, **Berlekamp-Massey** then Kitamasa — `math/linear_recurrence.cpp` | O(d^2 log n), no matrix cube |
 | `dp[n]` depends on a convolution **containing dp itself** | **relaxed / online convolution** (CDQ + NTT), O(n log^2 n) | you cannot FFT what you have not computed |
 | counting "sets of connected pieces", recurrence full of binomials | **EGF**: `exp(C)` = sets of C, `log` inverts | — |
 
@@ -202,13 +202,13 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 | bitmask DP with weighted transitions | shortest path on the subset lattice | Dijkstra / 0-1 BFS instead of a fixed layer order |
 | a "count of pieces" dimension you cannot afford | Lagrangian relaxation — a penalty lambda **replaces** the dimension | drops a factor of k |
 | slope trick vs aliens trick | the same object: slope trick keeps all of convex f(k); aliens evaluates ONE tangent | choose by whether you need all k or one |
-| slope trick | min-cost-flow simulation with a regret heap | three vocabularies for one convexity fact |
+| slope trick (`DP/slope_trick.cpp`) | min-cost-flow simulation with a regret heap | three vocabularies for one convexity fact |
 | (max,+) convolution of two convex arrays | Minkowski sum of epigraphs = merging difference sequences | O(n^2) to O(n) |
 | D&C optimisation | SMAWK on a monotone matrix | SMAWK is strictly stronger and linear |
 | Knuth optimisation | optimal-BST / Hu-Tucker structure | recognisable from "merge two adjacent parts, cost = size" |
 | CHT | lower envelope of lines = min-plus convolution against a linear array = convex hull of the dual points | lets you reuse a hull routine |
 | matrix power of a linear recurrence | polynomial multiplication mod the characteristic polynomial (Kitamasa) | O(d^3 log n) to O(d^2 log n) |
-| DP values obeying an unknown linear recurrence | Berlekamp-Massey on a brute-forced prefix | you never need to derive the recurrence |
+| DP values obeying an unknown linear recurrence | Berlekamp-Massey on a brute-forced prefix — `math/linear_recurrence.cpp` | you never need to derive the recurrence |
 | counting DP with a product structure | a generating-function product; "sets of connected things" = exp of an EGF | closed forms, FFT, Newton |
 | self-referential convolution DP | an implicit power-series equation | relaxed convolution / Newton |
 | tree DP + point updates | a (max,+) matrix product along HLD chains | static DP becomes O(log^2 n) per update |

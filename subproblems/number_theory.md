@@ -75,8 +75,8 @@ Entries route to a section there. What we have locally is only
 
 | you see | reach for | the tell |
 |---|---|---|
-| `sum floor((a*i+b)/m)` for i in [0,n) | **floor_sum**, Euclidean-like recursion, O(log) | also: lattice points under a line, points in a right triangle |
-| `sum f(floor(n/i))` over i = 1..n | **divisor-block loop** `i = n/(n/i) + 1` | harmonic lemma: only ~2 sqrt n distinct quotients |
+| `sum floor((a*i+b)/m)` for i in [0,n) | **floor_sum** — `math/floor_sum.cpp` | also: lattice points under a line, points in a right triangle |
+| `sum f(floor(n/i))` over i = 1..n | **divisor-block loop** — `math/floor_sum.cpp` | harmonic lemma: only ~2 sqrt n distinct quotients |
 | prefix sum of phi, mu, d, sigma for n up to 1e10 | **Dirichlet hyperbola / Du sieve**, O(n^(2/3)) | "sum over i=1..N of a multiplicative function", N far past the sieve range |
 | pi(n) or the sum of primes <= n, n up to 1e13 | **Lucy_Hedgehog** DP, O(n^(3/4)) time, O(sqrt n) memory | "count or sum primes" with n far past sieving |
 | the sum of an arbitrary multiplicative f | **Min_25 sieve** | needs f(p^k) computable fast |

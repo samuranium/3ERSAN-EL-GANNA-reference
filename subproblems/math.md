@@ -98,12 +98,12 @@ All of it: `math/bitwise.cpp`, and `DS/bitset.cpp` for the ÷64 loop shapes.
 
 | you see | reach for | the tell |
 |---|---|---|
-| a sequence you can brute-force but need term k ~ 1e18 | **Berlekamp-Massey** to recover the recurrence, then **Bostan-Mori** | any DP with a fixed finite state and linear transitions IS a linear recurrence, even unnamed |
-| a known recurrence of order d, huge k | Bostan-Mori O(d log d log k), or Kitamasa O(d^2 log k) | beats matrix power O(d^3 log k) once d is about 60 |
+| a sequence you can brute-force but need term k ~ 1e18 | **Berlekamp-Massey** then Kitamasa — `math/linear_recurrence.cpp` | any DP with a fixed finite state and linear transitions IS a linear recurrence, even unnamed |
+| a known recurrence of order d, huge k | Kitamasa O(d^2 log k) — `math/linear_recurrence.cpp`; Bostan-Mori O(d log d log k) | beats matrix power O(d^3 log k) once d is about 60 |
 | matrix power with big d but you need one entry | Cayley-Hamilton: reduce `x^k mod charpoly` | d^3 log k becomes d^2 log k |
 | `[x^n]` of a rational function P/Q | Bostan-Mori directly | a rational GF is exactly a linear recurrence — skip BM |
-| the answer looks like a polynomial in n of degree <= d | **Lagrange interpolation** on d+2 CONSECUTIVE points, O(d) | confirm by finite differences flattening to a constant |
-| `sum i^k` for n up to 1e18 | interpolate degree k+1, or Faulhaber / Bernoulli | the prefix sum of a degree-k polynomial is degree k+1 |
+| the answer looks like a polynomial in n of degree <= d | **Lagrange interpolation** on consecutive points, O(d) — `math/interpolation.cpp` | confirm by finite differences flattening to a constant |
+| `sum i^k` for n up to 1e18 | interpolate degree k+1 — `math/interpolation.cpp` `sum_powers` | the prefix sum of a degree-k polynomial is degree k+1 |
 | 1/A, log A, exp A, sqrt A, A^k mod x^n | Newton iteration, all O(n log n) | exp/log are the combinatorial workhorses |
 | evaluate one polynomial at n points | multipoint evaluation, O(n log^2 n) via a product tree | the inverse direction is fast interpolation |
 | evaluate at a geometric progression, or convolve at an awkward length | Chirp-Z / Bluestein | turns evaluation into one convolution |
@@ -129,10 +129,10 @@ All of it: `math/bitwise.cpp`, and `DS/bitset.cpp` for the ÷64 loop shapes.
 
 | shape | actually is | note |
 |---|---|---|
-| "find a_k, k up to 1e18, no formula given" | generate 2d+ terms, Berlekamp-Massey, Bostan-Mori | any bounded-state linear DP is linear-recurrent |
-| "the answer behaves smoothly in n" | a polynomial in n, Lagrange interpolation | verify: finite differences become constant |
-| "count lattice points under a line or inside a triangle" | `sum floor((ai+b)/m)`, floor_sum | also handles the `i * floor(...)` and squared variants |
-| "sum over i of something depending on n/i" | O(sqrt n) divisor blocks | the entry point to Du and Min_25 sieves |
+| "find a_k, k up to 1e18, no formula given" | generate 2d+ terms, Berlekamp-Massey, Kitamasa — `math/linear_recurrence.cpp` | any bounded-state linear DP is linear-recurrent |
+| "the answer behaves smoothly in n" | a polynomial in n, Lagrange interpolation — `math/interpolation.cpp` | verify: finite differences become constant |
+| "count lattice points under a line or inside a triangle" | `sum floor((ai+b)/m)` — `math/floor_sum.cpp` | also handles the `i * floor(...)` and squared variants |
+| "sum over i of something depending on n/i" | O(sqrt n) divisor blocks — `math/floor_sum.cpp` | the entry point to Du and Min_25 sieves |
 | "sum over pairs of gcd or lcm" | Mobius / divisor-lattice convolution | the divisor lattice is the subset lattice with primes as bits |
 | `max or min of abs(x_i-x_j) + abs(y_i-y_j)` | 2^d sign enumeration: `abs(a)+abs(b) = max(+-a +- b)` | generalises Manhattan-Chebyshev to d dimensions |
 | diagonal-only constraints (bishops) | rotate 45 degrees into two independent rook problems | black and white diagonals never interact |
@@ -145,7 +145,7 @@ All of it: `math/bitwise.cpp`, and `DS/bitset.cpp` for the ÷64 loop shapes.
 | "count subarrays with property P" | prefix-transform until P becomes an equality of two prefix values | XOR-prefix, sum-prefix, count-of-a minus count-of-b |
 | "grid paths avoiding k obstacles" | sort obstacles, DP over "first obstacle hit" with inclusion-exclusion | O(k^2) regardless of grid size |
 | "non-crossing tuples of paths / plane partitions" | LGV determinant, or the hook length formula | — |
-| "piecewise-linear convex cost, add/shift/clamp repeatedly" | slope trick | each operation is a heap push |
+| "piecewise-linear convex cost, add/shift/clamp repeatedly" | slope trick — `DP/slope_trick.cpp` | each operation is a heap push |
 | "probability where states revisit each other" | linear system + Gauss, not memoisation | the cycle is the tell |
 | "closest fraction with bounded denominator" | continued fractions / Stern-Brocot | convergents plus semiconvergents |
 | "constraints on base-p digits of n and r" | Lucas (mod p) / Kummer (divisibility) | digits are the native language of these theorems |
