@@ -130,9 +130,9 @@
 
 | you see | reach for | the tell |
 |---|---|---|
-| per-subtree most frequent / distinct count, offline | **DSU on tree (sack)** — keep the heavy child's counters, re-add light subtrees | O(n log n) with plain arrays, no map log |
-| merge sets/maps up the tree, answer per node | small-to-large, or **segment tree merging** | segtree merge is O(n log n) total AND supports k-th / range-count; maps cannot |
-| "choose exactly k in each subtree" | tree knapsack, loop capped by **merged subtree size** | looks O(n^3), is O(n^2) — every pair is charged once, at its LCA |
+| per-subtree most frequent / distinct count, offline | **DSU on tree (sack)** — `DS/dsu_on_tree.cpp` | O(n log n) with plain arrays, no map log |
+| merge sets/maps up the tree, answer per node | small-to-large (`DS/dsu_on_tree.cpp`), or **segment tree merging** (`DS/segment tree/merge/segtree_merge.cpp`) | segtree merge is O(n log n) total AND supports k-th / range-count; maps cannot |
+| "choose exactly k in each subtree" | tree knapsack, loop capped by **merged subtree size** — `DP/tree_knapsack.cpp` | looks O(n^3), is O(n^2) — every pair is charged once, at its LCA |
 | max independent set / min vertex cover / dominating set on a tree | 2-state (3-state for dominating) tree DP | NP-hard in general, linear here |
 | "delete edges so each component satisfies P" | tree DP carrying the component statistic, cut bottom-up | deepest-valid-cut greedy is optimal for monotone P |
 | sum of distances over all pairs / count pairs at distance >= d | **contribution per edge**: each edge splits into a*b pairs | turns a path sum into n independent O(1) counts |
@@ -158,7 +158,7 @@
 
 | you see | do this |
 |---|---|
-| edge from u to **every node in [l,r]** | **segment tree graph**: out-tree (parent to child, w=0) + in-tree (child to parent, w=0); 2n nodes, O(n log n) edges, then plain Dijkstra |
+| edge from u to **every node in [l,r]** | **segment tree graph** — `graph/segment_tree_graph.cpp`. Out-tree (parent to child, w=0) + in-tree (child to parent, w=0), then plain Dijkstra |
 | "all nodes of this colour/row are mutually connected at cost w" | one virtual node per group, in-edge 0 / out-edge w — collapses an implicit clique to a star |
 | path labels must match a pattern | product graph with the automaton: Dijkstra on (vertex, DFA state) |
 | at most k edges / exactly k transfers | layered Bellman-Ford dp[i][v]; **copy** the previous layer or you silently allow more than k |
@@ -189,11 +189,11 @@
 
 | you see | reach for |
 |---|---|
-| "min possible max weight on a route", "smallest w making u,v connected", "everything reachable using edges <= w" | **Kruskal reconstruction tree** — node per merge, LCA value = bottleneck, "reachable with weight <= w" becomes a SUBTREE |
+| "min possible max weight on a route", "smallest w making u,v connected", "everything reachable using edges <= w" | **Kruskal reconstruction tree** — `graph/MST/kruskal_tree.cpp`. LCA value = bottleneck; "reachable with weight <= w" becomes a SUBTREE |
 | reach everything **from the capital**, one-way | Chu-Liu / Edmonds arborescence — Kruskal is simply wrong |
 | complete graph, weights from a formula (xor, abs diff, Manhattan) | **Boruvka** + a structure giving the cheapest edge leaving a component |
 | is edge e in **some** / **every** MST | some: endpoints in different components before its weight class; every: it is a bridge within that class |
-| connect k special cities, others optional | **Steiner tree DP** dp[mask][v], O(3^k n + 2^k(m + n log n)), k <= ~12 |
+| connect k special cities, others optional | **Steiner tree DP** dp[mask][v], O(3^k n + 2^k(m + n log n)), k <= ~12 — `graph/steiner_tree.cpp` |
 
 ## SPECIAL GRAPH CLASSES — the class IS the gift
 
@@ -206,7 +206,7 @@
 | the problem is about edges being adjacent to each other | **line graph**: edge colouring becomes vertex colouring, Euler in G becomes Hamiltonian in L(G). L(G) has sum(deg^2)/2 edges — explodes on stars |
 | "reach t in an even number of steps" | **bipartite double cover**: duplicate to (v,0)/(v,1) |
 | walk every road at least once and return | **Chinese postman**: pair odd-degree vertices by shortest paths + min-weight matching (bitmask if <= 20 odd) |
-| cyclic string containing every length-k word once | **de Bruijn**: Eulerian circuit on (k-1)-mers |
+| cyclic string containing every length-k word once | **de Bruijn**: Eulerian circuit on (k-1)-mers, or `strings/lyndon.cpp` `de_bruijn` |
 | "does a graph exist with these degrees" | Erdos-Gallai (test) / Havel-Hakimi (construct) — **simple graphs only** |
 | edges appear/vanish **online** plus path queries | link-cut tree (Euler tour tree if connectivity only). Deletions only? Reverse time and use plain DSU |
 

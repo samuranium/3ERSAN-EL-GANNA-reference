@@ -32,7 +32,7 @@ Most failures are step 1. If the transition is awkward, the state is wrong.
 | you see | do this |
 |---|---|
 | visit every vertex once (TSP) | dp[mask][last] — `DP/bitmask_tsp.cpp` |
-| partition into groups | iterate submasks, O(3ⁿ) |
+| partition into groups | iterate submasks, O(3ⁿ) — `DP/submask_partition.cpp` |
 | "for each mask, aggregate over submasks" | SOS DP / zeta, O(2ⁿ·n) — `DP/sos.cpp` |
 | ... and back again ("exactly" from "at least") | Mobius inverse, same loop, minus sign — `DP/sos.cpp` |
 | count pairs with `a & b == 0` | SOS over the complement |
@@ -107,7 +107,7 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 | Hamiltonian path (not cycle) in a grid | plug DP + a dimension for the number of unmatched endpoints (0/1/2) | endpoints are plugs with no partner |
 | plug-DP state count nominally huge, most states illegal | hash map over the **minimum representation** (relabel connectivity classes to lexicographically smallest) | legal states are exponentially sparse; canonicalisation collapses aliases |
 | grid cells have k > 2 states | profile as a **base-k number**, map-backed if k^W is loose | bitmask generalises to a k-ary digit per column |
-| connect <= 15 terminals in a weighted graph | **Steiner tree DP** `d[v][S]`: submask merge + Dijkstra relax, O(3^k n + 2^k(n log n + m)) | "minimum network joining these k nodes" |
+| connect <= 15 terminals in a weighted graph | **Steiner tree DP** `d[v][S]` — `graph/steiner_tree.cpp` | "minimum network joining these k nodes" |
 
 ## SUBSET DP BEYOND SOS
 
@@ -163,10 +163,10 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 
 | you see | reach for | the tell |
 |---|---|---|
-| merge children arrays indexed by "#chosen in subtree" | tree knapsack with loops capped at `min(k, size)` -> O(n*k) | each pair is charged once at its LCA — but only with the caps |
-| tree knapsack with a numeric capacity W | flatten to DFS order, **take / skip-whole-subtree (jump to tout)**, O(n*W) | a 1D knapsack with jumps, no child merging |
+| merge children arrays indexed by "#chosen in subtree" | tree knapsack, loops capped at `min(k, size)` — `DP/tree_knapsack.cpp` | each pair is charged once at its LCA — but only with the caps |
+| tree knapsack with a numeric capacity W | flatten to DFS order, **take / skip-whole-subtree (jump to tout)**, O(n*W) — `DP/tree_knapsack.cpp` | a 1D knapsack with jumps, no child merging |
 | DP arrays indexed by **depth**, merged up the tree | **long-path decomposition** with shared arrays + pointer offsets, O(n) total | each vertex is copied only at the top of its long path |
-| DP arrays indexed by **value**, merged up the tree | segment tree merging, O(n log n) | amortised by nodes destroyed during merge |
+| DP arrays indexed by **value**, merged up the tree | segment tree merging — `DS/segment tree/merge/segtree_merge.cpp` | amortised by nodes destroyed during merge |
 | vertex weights point-updated, reprint the whole-tree DP each time | **dynamic DP**: transition as a (max,+) matrix, chain matrices in a segment tree over HLD, O(log^2 n) per update | recompute-from-scratch is O(n) per query |
 
 ## OFFLINE / DYNAMIC DP
@@ -217,7 +217,7 @@ Submask enumeration and all the bit primitives: `math/bitwise.cpp`.
 | digit DP | DP on the automaton recognising "<= N"; `tight` IS the automaton state | extra conditions = product automaton |
 | SOS / zeta over subsets | multidimensional prefix sums over {0,1}^n; Mobius is the difference transform | same shape as the divisor-lattice transform |
 | subset-sum convolution | ordinary OR-convolution once a popcount RANK dimension is added | rank is what enforces disjointness |
-| tree knapsack with a numeric capacity | 1D knapsack over the Euler tour with skip-jumps | removes child merging entirely |
+| tree knapsack with a numeric capacity | 1D knapsack over the Euler tour with skip-jumps (`DP/tree_knapsack.cpp`) | removes child merging entirely |
 | "delete one element, recompute" | D&C over the index range carrying the outside-DP | n recomputations become log n |
 | counting up to symmetry | Burnside: one DP per group element over its cycle structure | — |
 | LIS via patience / BIT | DP over a segment tree indexed by value | generalises to weighted LIS |

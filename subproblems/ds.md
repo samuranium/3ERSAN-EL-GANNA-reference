@@ -108,9 +108,9 @@
 
 | you see | reach for | the tell |
 |---|---|---|
-| range `a[i] = min(a[i], x)` **plus range sum** | **segment tree beats** — node keeps (max, 2nd max, count of max, sum) | chmin does not compose as a lazy tag; amortised O(n log n), O(n log^2 n) with range add |
+| range `a[i] = min(a[i], x)` **plus range sum** | **segment tree beats** — `DS/segment tree/beats.cpp` | chmin does not compose as a lazy tag; amortised O(n log n), O(n log^2 n) with range add |
 | `min over [l,r] of (a_i + b_i*t)`, t **non-decreasing across queries** | **kinetic segment tree** — node stores winner + melt time | one out-of-order t destroys the amortisation |
-| many per-node value-indexed structures merged up a tree | **segment tree merging** | O(n log n) total because each recursion destroys a node; beats small-to-large's extra log |
+| many per-node value-indexed structures merged up a tree | **segment tree merging** — `DS/segment tree/merge/segtree_merge.cpp` | O(n log n) total because each recursion destroys a node; beats small-to-large's extra log |
 | "count of elements with **value** in [a,b]" | segment tree indexed by **value**, not position | the tell: the query range is on the value axis |
 | coordinates to 1e9 and **forced online** (queries xor'd with the last answer) | dynamic / sparse segment tree | cannot compress offline — future coordinates are unknown |
 | "as of prefix i" / "as of version t" | persistent segment tree over prefixes; subtract version l-1 from r | gives k-th, count <= x, distinct-in-range, all **online** |
@@ -118,7 +118,7 @@
 | track "max value this cell ever held" under range add | **historic segment tree**: tag = (current, historic max of the tag prefix) | tags do not commute; `hist = max(hist, own_lazy + child_hist)` |
 | point update, query = a linear-recurrence / automaton DP over a range | **segment tree of matrices** | node = the transfer operator for its range; merge = matrix product, order matters |
 | range min **and how many achieve it** | node = (min, count) | needed before any beats-style trick |
-| **range assignment** dominates the operation mix | **Chtholly tree / ODT** (map of equal-value intervals) | each assign destroys at least as many intervals as it creates. Adversarial input with no assign is O(n) per op |
+| **range assignment** dominates the operation mix | **Chtholly tree / ODT** — `DS/odt.cpp` | each assign destroys at least as many intervals as it creates. Adversarial input with no assign is O(n) per op |
 | offline deletions from an insert-only structure | segment tree over the **time axis** + rollback | each element occupies O(log q) nodes covering its live interval |
 
 ## OFFLINE <-> ONLINE CONVERSION
@@ -149,14 +149,14 @@
 
 | you see | reach for | the tell |
 |---|---|---|
-| sliding window fold with an **associative non-invertible** op (min, gcd, OR, matrix product) | **SWAG** — queue of two stacks with prefix folds, amortised O(1) | monotonic deque only does min/max; SWAG does any monoid |
+| sliding window fold with an **associative non-invertible** op (min, gcd, OR, matrix product) | **SWAG** — `DS/swag.cpp` | monotonic deque only does min/max; SWAG does any monoid |
 | `dp[i] = dp[i-1] + abs(x - a_i)`-shaped convex piecewise-linear cost | **slope trick** — heap of slope-change points | cost is convex, piecewise linear, continuous |
 | sliding-window median / k-th | two heaps with **lazy deletion**, or a BIT over compressed values | mark evicted, pop only when it surfaces |
 | "delete an arbitrary element from a priority queue" | a second "deleted" heap, pop while the tops match | avoids multiset's constant factor |
 | max XOR over a **subarray** | **persistent** binary trie over prefix XORs | version subtraction gives the range restriction |
 | connectivity queries that must be undone | DSU with rollback: union by size, **no** path compression | O(log n), not alpha(n) — the price of undo |
-| D&C where the split point is the range min/max | **Cartesian tree** (build in O(n) with a monotonic stack) | makes "sum over subarrays of f(min)" a subtree-contribution problem; also O(1) RMQ via LCA |
-| "count subarrays whose gcd / AND / OR equals k" | stack of (value, count) per right endpoint | only O(log C) distinct values of gcd/AND/OR over suffixes ending at r |
+| D&C where the split point is the range min/max | **Cartesian tree** — `DS/cartesian_tree.cpp` | makes "sum over subarrays of f(min)" a subtree-contribution problem; also O(1) RMQ via LCA |
+| "count subarrays whose gcd / AND / OR equals k" | stack of (value, count) per right endpoint — `DS/swag.cpp` | only O(log C) distinct values of gcd/AND/OR over suffixes ending at r |
 | maintain intervals with merge-on-insert (booking, free space) | map of start -> end, or Chtholly if values are assigned | each merge deletes at least one interval |
 
 ## TRANSFORMATIONS
@@ -166,17 +166,17 @@
 | "count pairs i<j with a_i > a_j" | BIT over compressed values, swept left to right | each element queries the suffix already inserted |
 | "how many intervals contain point x" | difference array + prefix sum, events sorted | the 2D-looking query collapses once you sort by one axis |
 | "k-th smallest in [l,r]" | persistent segtree on prefixes, walk down on (right - left) | version subtraction gives the range's multiset free |
-| "max edge on path u,v" / "reachable using weights <= w" | Kruskal reconstruction tree | threshold becomes an ancestor, component becomes a subtree |
-| "assign v to all of [l,r]; also range sum" | ODT / interval map | assignment is destructive — interval count only shrinks |
+| "max edge on path u,v" / "reachable using weights <= w" | Kruskal reconstruction tree — `graph/MST/kruskal_tree.cpp` | threshold becomes an ancestor, component becomes a subtree |
+| "assign v to all of [l,r]; also range sum" | ODT / interval map — `DS/odt.cpp` | assignment is destructive — interval count only shrinks |
 | "add x to every node within distance d of v" | centroid decomposition, or Euler tour + depth-indexed BIT | distance factors through O(log n) ancestor centroids |
 | "query on a root-to-node path", invertible op | prefix(u) o prefix(v) o prefix(lca)^-2 | no HLD needed when the op has inverses |
 | "for each query, the first time a condition holds" | parallel binary search | every query searches the same axis |
 | "count triples dominated in 3 dimensions" | CDQ: sort dim1, D&C dim2, BIT dim3 | update time is one of the dimensions |
-| "sliding window of min / gcd / OR / matrix product" | SWAG | non-invertible means no prefix subtraction |
-| "sum over all subarrays of f(min)" | monotonic stack / Cartesian tree contribution | each element is the min of a rectangle of (l,r) pairs |
+| "sliding window of min / gcd / OR / matrix product" | SWAG — `DS/swag.cpp` | non-invertible means no prefix subtraction |
+| "sum over all subarrays of f(min)" | monotonic stack / Cartesian tree contribution — `DS/cartesian_tree.cpp` | each element is the min of a rectangle of (l,r) pairs |
 | "maintain a multiset, how many <= x" | BIT over compressed values, **not** multiset | multiset has no rank; std::distance is O(n) |
 | "repeatedly assign to unassigned positions" | DSU next-pointer, or process queries in reverse | each cell is written once |
-| "merge the sets of two children, answer per node" | small-to-large / DSU on tree / segment tree merging | choose by cost per element: map insert -> small-to-large; array counter -> sack; value-indexed aggregate -> segtree merge |
+| "merge the sets of two children, answer per node" | small-to-large / sack (`DS/dsu_on_tree.cpp`) / segtree merge (`DS/segment tree/merge/segtree_merge.cpp`) | choose by cost per element: map insert -> small-to-large; array counter -> sack; value-indexed aggregate -> segtree merge |
 | "historic maximum under range add" | segment tree with a (current, historic) tag pair | historic is a PREFIX max over the tag sequence |
 | "insert-only structure but the problem deletes" | offline deletion, or the logarithmic method | both trade a log for the missing operation |
 
