@@ -7,9 +7,13 @@ typedef long double ld;
 #define fio ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 const int N = 2e5+9;
 ll t[18][N], a[N];
-// n ? 
+// 1-INDEXED: a[1..n], query on the inclusive range [l, r].
+// FOR 0-INDEXED only these two build loops change:
+//     for (int i = 0; i <  n; i++) t[0][i] = a[i];
+//     for (int i = 0; i + (1 << k) <= n; i++)
+// query() is identical in both -- nothing in it depends on the base.
 void build(int n) {
-    for (int i = 1; i < n; i++) t[0][i] = a[i];
+    for (int i = 1; i <= n; i++) t[0][i] = a[i];
     for (int k = 1; k < 18; k++) {
         for (int i = 1; i + (1 << k)-1<=n; i++) {
             t[k][i] = gcd(t[k-1][i], t[k-1][i + (1 << (k-1))]);

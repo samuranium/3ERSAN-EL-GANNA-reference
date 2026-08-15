@@ -45,7 +45,7 @@ public:
   // lower_bound on prefix sum
   int lower_bound(int k) {
     int pos = 0;
-    for (int i = 20; i >= 0; i--) {
+    for (int i = 20; i >= 0; i--) { // change 20 as N changes
       if (pos + (1 << i) <= n && data[pos + (1 << i) - 1] < k) {
         pos += (1 << i);
         k -= data[pos - 1];
